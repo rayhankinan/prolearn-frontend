@@ -1,6 +1,6 @@
 # File: .gitlab-ci.yml
 variables:
-  SERVICE_NAME: "prolearn-frontend-prod"
+  SERVICE_NAME: "prolearn-frontend-production"
 
 stages:
   - deploy
