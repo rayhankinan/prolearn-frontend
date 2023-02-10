@@ -1,6 +1,6 @@
 # File: .gitlab-ci.yml
 variables:
-  SERVICE_NAME: "prolearn-frontend-production"
+  SERVICE_NAME: "prolearn-frontend-staging"
 
 stages:
   - deploy
@@ -8,7 +8,7 @@ stages:
 deploy:
   stage: deploy
   only:
-    - prod # This pipeline stage will run on this branch alone
+    - staging # This pipeline stage will run on this branch alone
 
   image: google/cloud-sdk:latest # We'll use Google Cloud SDK for Cloud Run related commands
   script:
