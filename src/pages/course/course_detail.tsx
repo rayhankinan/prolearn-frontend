@@ -10,9 +10,12 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { styled } from '@mui/material/styles';
 import ReactMarkdown from 'react-markdown'
 import { Material } from "@/components/material";
+import Modal from "@/components/modal";
+import GridComponent from '@/components/GridComponent';
 
 
 function Copyright() {
+
     return (
         <Typography variant="body2" color="text.secondary" align="center">
             {"Copyright © "}
@@ -96,7 +99,7 @@ const theme = createTheme();
 
 
 export default function CourseDetail() {
-
+    const [showModal, setShowModal] = useState(false);
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
@@ -106,6 +109,7 @@ export default function CourseDetail() {
                     <Grid container direction="row" justifyContent="space-between" alignItems="center" sx={{ justifyContent: 'center' }}>
                         <Box sx={{ display: "flex", alignItems: "center" }}>
                             <Button
+                                onClick={() => setShowModal(true)}
                                 size="small"
                                 variant="contained"
                                 className="w-32 rounded-full bg-blackbutton text-white"
@@ -113,6 +117,9 @@ export default function CourseDetail() {
                             >
                                 Edit
                             </Button>
+                            <Modal show={showModal} onClose={() => setShowModal(false)}>
+                                <GridComponent />
+                            </Modal>
                             <Typography variant="h4" className="text-4xl font-bold mt-10 mx-4">
                                 COURSE X
                             </Typography>
