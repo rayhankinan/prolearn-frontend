@@ -112,6 +112,11 @@ export default function CourseDetail() {
         setShowEditButton(false);
     }
 
+    const handleClose = () => {
+        setShowModal(false);
+    }
+
+
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
@@ -197,7 +202,12 @@ export default function CourseDetail() {
             {/* End footer */}
             {selectedMaterial && (
                 <Modal show={showModal} onClose={() => setShowModal(false)}>
+
                     <GridComponent material={selectedMaterial} />
+                    <div className="flex justify-center mt-5">
+                        <button onClick={handleClose} className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mr-4">Cancel</button>
+                    </div>
+
                 </Modal>
             )}
         </ThemeProvider>

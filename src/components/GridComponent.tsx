@@ -94,7 +94,6 @@ const GridComponent = ({ material }) => {
             <Grid item xs={12}>
                 <div className="flex justify-center mt-5">
                     <button onClick={handleSave} className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mr-4">Save</button>
-                    <button className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">Cancel</button>
                 </div>
             </Grid>
         </Grid>
