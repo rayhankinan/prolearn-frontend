@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
-import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
-import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Link from "@mui/material/Link";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -12,6 +9,7 @@ import ReactMarkdown from 'react-markdown'
 import { Material } from "@/components/material";
 import Modal from "@/components/modal";
 import GridComponent from '@/components/GridComponent';
+import { Button, Grid, Typography } from "@mui/material";
 
 
 function Copyright() {
@@ -100,6 +98,20 @@ const theme = createTheme();
 
 export default function CourseDetail() {
     const [showModal, setShowModal] = useState(false);
+    const [selectedMaterial, setSelectedMaterial] = useState(null);
+    const [showEditButton, setShowEditButton] = useState(false);
+
+    const handleEditMaterial = (material) => {
+        setSelectedMaterial(material);
+        setShowModal(true);
+    };
+    const handleShowEditButton = () => {
+        setShowEditButton(true);
+    };
+    const handleCancel = () => {
+        setShowEditButton(false);
+    }
+
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
@@ -108,46 +120,63 @@ export default function CourseDetail() {
                 <Grid sx={{ width: "70%", margin: "0 auto", marginTop: "30px" }}>
                     <Grid container direction="row" justifyContent="space-between" alignItems="center" sx={{ justifyContent: 'center' }}>
                         <Box sx={{ display: "flex", alignItems: "center" }}>
-                            <Button
-                                onClick={() => setShowModal(true)}
-                                size="small"
-                                variant="contained"
-                                className="w-32 rounded-full bg-blackbutton text-white"
-                                sx={{ height: "40px", marginTop: "30px" }}
-                            >
-                                Edit
-                            </Button>
-                            <Modal show={showModal} onClose={() => setShowModal(false)}>
-                                <GridComponent />
-                            </Modal>
-                            <Typography variant="h4" className="text-4xl font-bold mt-10 mx-4">
+                            <Typography variant="h4" className="text-4xl font-bold mt-10 mx-4 mb-5" sx={{ marginRight: "10px" }}>
                                 COURSE X
                             </Typography>
+                            {!showEditButton && (
+                                <button
+                                    onClick={() => handleShowEditButton()}
+                                    className=" bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mt-10 mx-4 mb-5"
+                                >
+                                    Edit Course
+                                </button>
+                            )}
+
+                            {showEditButton && (<Button
+                                className=" bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mt-10 mx-4 mb-5"
+                            >
+                                Save Change
+                            </Button>
+                            )}
+                            {showEditButton && (<Button
+                                onClick={() => handleCancel()}
+                                className=" bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mt-10 mx-4 mb-5"
+                            >
+                                Cancel
+                            </Button>
+                            )}
                         </Box>
-                        <img src="logo.png" alt="Logo" className="h-12 mr-4" />
                     </Grid>
                     {/* horizontal line that have space on the left and right */}
                     <hr className="border-t-3 border-black " />
                 </Grid>
                 {/* End hero unit */}
                 <Grid sx={{ width: "70%", margin: "0 auto", marginTop: "30px" }}>
-
                     <Grid container spacing={2}>
                         <Grid xs={3} sx={{ borderRight: '1px solid #ccc' }}>
                             <Grid container direction="column">
                                 {materials.map((material) => (
-                                    <Grid sx={{ marginBottom: "10px" }}>{material.name}</Grid>
-
+                                    <Grid sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "10px" }}>
+                                        <div>{material.name}</div>
+                                        {showEditButton && (<Button
+                                            onClick={() => handleEditMaterial(material)}
+                                            size="small"
+                                            // variant="contained"
+                                            className=" bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mr-4"
+                                            sx={{ height: "40px", width: "10px" }} // added width property
+                                        >
+                                            <i class="fas fa-edit"></i>
+                                        </Button>
+                                        )}
+                                    </Grid>
                                 ))}
                             </Grid>
                         </Grid>
                         <Grid xs={9} sx={{ paddingLeft: '20px' }}>
                             <ReactMarkdown>*React-Markdown* is **Awesome**</ReactMarkdown>
-
                         </Grid>
                     </Grid>
                 </Grid>
-
             </main>
             {/* Footer */}
             <Box sx={{ bgcolor: "background.paper", p: 6 }} component="footer">
@@ -165,6 +194,11 @@ export default function CourseDetail() {
                 <Copyright />
             </Box>
             {/* End footer */}
-        </ThemeProvider >
-    );
-}
+            {selectedMaterial && (
+                <Modal show={showModal} onClose={() => setShowModal(false)}>
+                    <GridComponent material={selectedMaterial} />
+                </Modal>
+            )}
+        </ThemeProvider>
+    )
+};
