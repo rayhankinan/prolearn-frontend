@@ -154,9 +154,9 @@ export default function CourseDetail() {
                 <Grid sx={{ width: "70%", margin: "0 auto", marginTop: "30px" }}>
                     <Grid container spacing={2}>
                         <Grid xs={3} sx={{ borderRight: '1px solid #ccc' }}>
-                            <Grid container direction="column">
+                            <Grid item container direction="column">
                                 {materials.map((material) => (
-                                    <Grid sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "10px" }}>
+                                    <Grid sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "10px" }} key={material.id}>
                                         <div>{material.name}</div>
                                         {showEditButton && (<Button
                                             onClick={() => handleEditMaterial(material)}
@@ -165,7 +165,7 @@ export default function CourseDetail() {
                                             className=" bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mr-4"
                                             sx={{ height: "40px", width: "10px" }} // added width property
                                         >
-                                            <i class="fas fa-edit"></i>
+                                            <i className="fas fa-edit"></i>
                                         </Button>
                                         )}
                                     </Grid>
@@ -173,7 +173,8 @@ export default function CourseDetail() {
                             </Grid>
                         </Grid>
                         <Grid xs={9} sx={{ paddingLeft: '20px' }}>
-                            <ReactMarkdown>*React-Markdown* is **Awesome**</ReactMarkdown>
+                            <Grid item><ReactMarkdown>*React-Markdown* is **Awesome**</ReactMarkdown></Grid>
+
                         </Grid>
                     </Grid>
                 </Grid>

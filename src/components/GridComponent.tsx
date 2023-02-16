@@ -27,44 +27,77 @@ const materials: Material[] = [
         course_id: 1,
     },]
 
-const GridComponent = () => {
-    const [body, setBody] = useState("");
+const GridComponent = ({ material }) => {
+    const [name, setName] = useState(material.name || "");
+    const [videoUrl, setVideoUrl] = useState(material.video_url || "");
+    const [body, setBody] = useState(material.text || "");
 
-    const handleBody = (e) => {
-        console.log(e);
-        setBody(e);
-    }
+    const handleNameChange = (event) => {
+        setName(event.target.value);
+    };
+
+    const handleVideoUrlChange = (event) => {
+        setVideoUrl(event.target.value);
+    };
+
+    const handleBodyChange = (value) => {
+        setBody(value);
+    };
+
+    const handleSave = () => {
+        // Gather all the values and do something with them (e.g. save to database, update state)
+        const updatedMaterial = {
+            ...material,
+            name: name,
+            video_url: videoUrl,
+            text: body,
+        };
+        console.log(updatedMaterial);
+    };
 
     return (
-        < Grid container spacing={3} justify="center" alignItems="center" >
-            <Grid item xs={3}>
+        <Grid container spacing={3}>
+            <Grid item xs={3} style={{ marginTop: "16px" }}>
                 <label>Material Name</label>
             </Grid>
             <Grid item xs={9}>
                 <TextField
-                    variant="outlined" fullWidth
-                    defaultValue={materials[1].name}
+                    variant="outlined"
+                    fullWidth
+                    value={name}
+                    onChange={handleNameChange}
                 />
             </Grid>
-            <Grid item xs={3}>
+            <Grid item xs={3} style={{ marginTop: "16px" }}>
                 <label>Video</label>
             </Grid>
             <Grid item xs={9}>
-                <TextField variant="outlined" fullWidth />
+                <TextField
+                    variant="outlined"
+                    fullWidth
+                    value={videoUrl}
+                    onChange={handleVideoUrlChange}
+                />
             </Grid>
-            <Grid item xs={3}>
+            <Grid item xs={3} style={{ marginTop: "16px" }}>
                 <label>Material Text</label>
             </Grid>
             <Grid item xs={9}>
                 <DynamicReactQuill
-                    placeholder='Write something amazing'
+                    placeholder="Write something amazing"
                     modules={GridComponent.modules}
                     formats={GridComponent.formats}
-                    onChange={handleBody}
+                    onChange={handleBodyChange}
                     value={body}
                 />
             </Grid>
-        </Grid >
+            <Grid item xs={12}>
+                <div className="flex justify-center mt-5">
+                    <button onClick={handleSave} className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mr-4">Save</button>
+                    <button className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">Cancel</button>
+                </div>
+            </Grid>
+        </Grid>
     );
 };
 
