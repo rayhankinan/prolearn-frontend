@@ -138,16 +138,10 @@ export default function CourseDetail() {
                             )}
 
                             {showEditButton && (<Button
+                                onClick={() => handleCancel()}
                                 className=" bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mt-10 mx-4 mb-5"
                             >
-                                Save Change
-                            </Button>
-                            )}
-                            {showEditButton && (<Button
-                                onClick={() => handleCancel()}
-                                className=" bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mt-10 mx-4 mb-5"
-                            >
-                                Cancel
+                                Done
                             </Button>
                             )}
                         </Box>
