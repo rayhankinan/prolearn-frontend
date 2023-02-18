@@ -8,44 +8,36 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import TextField from "@material-ui/core/TextField";
-import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { InputAdornment } from "@material-ui/core";
-import http from "@/http-common";
 import authService from "@/services/auth-service";
+import { PersonOutlined } from "@mui/icons-material";
+import { useRouter } from "next/router";
 
 // create login page
 const theme = createTheme();
 
 export default function Login() {
-    const [formData, setFormData] = useState({
-        email: '',
-        password: ''
-      });
-      const [loading, setLoading] = useState(false);
-      const [error, setError] = useState('');
-    
-      const handleChange = (event) => {
-        const { name, value } = event.target;
-        setFormData(prevFormData => ({
-          ...prevFormData,
-          [name]: value
-        }));
-      };
-    
-      const handleSubmit = (event) => {
+    const router = useRouter();
+
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+
+    const handleLogin = (event: any) => {
         event.preventDefault();
-        setLoading(true);
-        authService.logIn(formData)
-          .then(data => {
-            setLoading(false);
-            console.log(data.username);
-          })
-          .catch(error => {
-            setLoading(false);
-            setError(error.message);
-          });
-      };
+        const dataUser = {
+            username,
+            password
+        }
+
+        authService.logIn(dataUser).then((response) => {
+            console.log(response.data)
+            router.push('/')
+        }).catch((error) => {
+            console.log(error)
+            alert("Username or password is incorrect")
+        })
+    }
 
     return (
         <ThemeProvider theme={theme}>
@@ -69,25 +61,25 @@ export default function Login() {
                             <Typography component="h1" variant="h4" className="mt-10" sx={{fontFamily: "Poppins", fontStyle: "bold", fontSize: "5vh"}}>
                                 Sign in
                             </Typography>
-                            <Box component="form" noValidate sx={{ mt: 1 }} onSubmit={handleSubmit}>
+                            <Box component="form" noValidate sx={{ mt: 1 }} onSubmit={handleLogin}>
                             <TextField
                                 margin="normal"
                                 required
                                 fullWidth
-                                id="email"
-                                label="Email Address"
-                                name="email"
-                                autoComplete="email"
+                                id="username"
+                                label="Username"
+                                name="username"
+                                autoComplete="current-username"
                                 autoFocus
                                 InputProps={{
                                     startAdornment: (
                                     <InputAdornment position="start">
-                                        <MailOutlineIcon />
+                                        <PersonOutlined />
                                     </InputAdornment>
-                                    ),
+                                    )
                                 }}
-                                value={formData.email}
-                                onChange={handleChange}
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
                                 />
                                 <TextField
                                 margin="normal"
@@ -105,8 +97,8 @@ export default function Login() {
                                     </InputAdornment>
                                     ),
                                 }}
-                                value={formData.password}
-                                onChange={handleChange}
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
                                 />
                                 <Button
                                     type="submit"
