@@ -9,6 +9,7 @@ const DynamicReactQuill = dynamic(() => import('react-quill'), {
     ssr: false,
 });
 
+
 const materials: Material[] = [
     {
         id: 1,
@@ -44,6 +45,8 @@ const GridComponent = ({ material }) => {
         setBody(value);
     };
 
+
+
     const handleSave = () => {
         // Gather all the values and do something with them (e.g. save to database, update state)
         const updatedMaterial = {
@@ -68,28 +71,32 @@ const GridComponent = ({ material }) => {
                     onChange={handleNameChange}
                 />
             </Grid>
-            <Grid item xs={3} style={{ marginTop: "16px" }}>
+            <Grid item xs={3} style={{ marginTop: "5px" }}>
                 <label>Video</label>
             </Grid>
-            <Grid item xs={9}>
-                <TextField
+            <Grid item xs={9} >
+                {/* <TextField
                     variant="outlined"
                     fullWidth
                     value={videoUrl}
                     onChange={handleVideoUrlChange}
-                />
+                /> */}
+                <input type="file" onChange={handleVideoUrlChange} />
             </Grid>
             <Grid item xs={3} style={{ marginTop: "16px" }}>
                 <label>Material Text</label>
             </Grid>
             <Grid item xs={9}>
-                <DynamicReactQuill
-                    placeholder="Write something amazing"
-                    modules={GridComponent.modules}
-                    formats={GridComponent.formats}
-                    onChange={handleBodyChange}
-                    value={body}
-                />
+                <div style={{ height: "400px", overflow: "auto" }}>
+                    <DynamicReactQuill
+                        placeholder="Write something amazing"
+                        modules={GridComponent.modules}
+                        formats={GridComponent.formats}
+                        onChange={handleBodyChange}
+                        value={body}
+
+                    />
+                </div>
             </Grid>
             <Grid item xs={12}>
                 <div className="flex justify-center mt-5">
