@@ -1,4 +1,4 @@
-import React, { useState , useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import { Pagination } from "@mui/material";
@@ -15,7 +15,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import SearchBar from "@/components/search";
 import usePagination from "@/components/pagination";
 import { Course } from "@/components/pagination";
-import{Plus} from "@/components/plus";
+import { Plus } from "@/components/plus";
 import { AddCourseModal } from "@/components/addCourseModal";
 
 function Copyright() {
@@ -113,18 +113,18 @@ export default function Album() {
     courses.push(course);
     setIsModalOpen(false);
   };
-  
+
   let [page, setPage] = React.useState(1);
-  
+
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
-    
+
     setPage(value);
     _DATA.jump(value);
   };
 
 
   //view all course button is clicked, show all courses remove pagination
-  
+
   const handleShowAll = () => {
     setShowAll(!showAll);
   };
@@ -165,30 +165,30 @@ export default function Album() {
   } else {
     pagination = (
       <Pagination
-            count={count}
-            size="large"
-            page={page}
-            variant="outlined"
-            shape="rounded"
-            onChange={handleChange}
-          />
+        count={count}
+        size="large"
+        page={page}
+        variant="outlined"
+        shape="rounded"
+        onChange={handleChange}
+      />
     );
 
     rightButton = (
       <Button
-                  component={Link}
-                  href="#"
-                  underline="none"
-                  onClick={handleShowAll}
-                >
-                  <Typography className="text-s font-bold text-black">
-                    View All Courses
-                  </Typography>
-                </Button>
+        component={Link}
+        href="#"
+        underline="none"
+        onClick={handleShowAll}
+      >
+        <Typography className="text-s font-bold text-black">
+          View All Courses
+        </Typography>
+      </Button>
     );
 
     leftButton = null;
-  } 
+  }
 
 
   return (
@@ -249,85 +249,88 @@ export default function Album() {
             {/* INI PAKE TERNARY SEMENTARA BUAT NENTUIN DIA ALL COURSE ATO BEBERAPA DOANG */}
             {showAll
               ? courses.map((card) => (
-                  <Grid item key={card.id} xs={12} sm={6} md={4}>
-                    <Card
-                      sx={{
-                        height: "100%",
-                        display: "flex",
-                        flexDirection: "column",
-                      }}
-                    >
-                      <CardMedia
-                        component="img"
-                        image={card.img}
-                        alt="random"
-                        sx={{ height: "300px", objectFit: "cover" }}
-                      />
-                      <CardContent sx={{ flexGrow: 1 }}>
-                        <Typography
-                          gutterBottom
-                          variant="h5"
-                          component="h2"
-                          className="font-bold"
-                        >
-                          {card.name}
-                        </Typography>
-                        <Typography>{card.description}</Typography>
-                      </CardContent>
-                      <CardActions className="flex justify-center">
-                        <Button
-                          size="small"
-                          variant="contained"
-                          className="w-64 rounded-full bg-blackbutton text-white"
-                        >
-                          Edit
-                        </Button>
-                      </CardActions>
-                    </Card>
-                  </Grid>
-                ))
+                <Grid item key={card.id} xs={12} sm={6} md={4}>
+                  <Card
+                    sx={{
+                      height: "100%",
+                      display: "flex",
+                      flexDirection: "column",
+                    }}
+                  >
+                    <CardMedia
+                      component="img"
+                      image={card.img}
+                      alt="random"
+                      sx={{ height: "300px", objectFit: "cover" }}
+                    />
+                    <CardContent sx={{ flexGrow: 1 }}>
+                      <Typography
+                        gutterBottom
+                        variant="h5"
+                        component="h2"
+                        className="font-bold"
+                      >
+                        {card.name}
+                      </Typography>
+                      <Typography>{card.description}</Typography>
+                    </CardContent>
+                    <CardActions className="flex justify-center">
+                      <Button
+                        size="small"
+                        variant="contained"
+                        className="w-64 rounded-full bg-blackbutton text-white"
+                      >
+                        Edit
+                      </Button>
+                    </CardActions>
+                  </Card>
+                </Grid>
+              ))
               : _DATA.currentData().map((card) => (
-                  <Grid item key={card.id} xs={12} sm={6} md={4}>
-                    <Card
-                      sx={{
-                        height: "100%",
-                        display: "flex",
-                        flexDirection: "column",
-                      }}
-                    >
-                      <CardMedia
-                        component="img"
-                        image={card.img}
-                        alt="random"
-                        sx={{ height: "300px", objectFit: "cover" }}
-                      />
-                      <CardContent sx={{ flexGrow: 1 }}>
-                        <Typography
-                          gutterBottom
-                          variant="h5"
-                          component="h2"
-                          className="font-bold"
-                        >
-                          {card.name}
-                        </Typography>
-                        <Typography>{card.description}</Typography>
-                      </CardContent>
-                      <CardActions className="flex justify-center">
-                        <Button
-                          size="small"
-                          variant="contained"
-                          className="w-64 rounded-full bg-blackbutton text-white"
-                        >
-                          Edit
-                        </Button>
-                      </CardActions>
-                    </Card>
-                  </Grid>
-                ))}
+                <Grid item key={card.id} xs={12} sm={6} md={4}>
+                  <Card
+                    sx={{
+                      height: "100%",
+                      display: "flex",
+                      flexDirection: "column",
+                    }}
+                  >
+                    <CardMedia
+                      component="img"
+                      image={card.img}
+                      alt="random"
+                      sx={{ height: "300px", objectFit: "cover" }}
+                    />
+                    <CardContent sx={{ flexGrow: 1 }}>
+                      <Typography
+                        gutterBottom
+                        variant="h5"
+                        component="h2"
+                        className="font-bold"
+                      >
+                        {card.name}
+                      </Typography>
+                      <Typography>{card.description}</Typography>
+                    </CardContent>
+                    <CardActions className="flex justify-center">
+                      <Link href="/course/1/1">
+                        <a>
+                          <Button
+                            size="small"
+                            variant="contained"
+                            className="w-64 rounded-full bg-blackbutton text-white">
+                            Edit
+                          </Button>
+                        </a>
+                      </Link>
+                    </CardActions>
+                  </Card>
+                </Grid>
+              ))}
             {/*a plus button to add new course*/}
 
             <Grid item>
-              <Plus handlePlusClick= {handlePlusClick}/>
+              <Plus handlePlusClick={handlePlusClick} />
             </Grid>
           </Grid>
           {/* INI PAKE TERNARY SEMENTARA BUAT NENTUIN DIA ALL COURSE ATO BEBERAPA DOANG */}
