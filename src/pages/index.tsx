@@ -15,6 +15,8 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import SearchBar from "@/components/search";
 import usePagination from "@/components/pagination";
 import { Course } from "@/components/pagination";
+import{Plus} from "@/components/plus";
+import { AddCourseModal } from "@/components/addCourseModal";
 
 function Copyright() {
   return (
@@ -92,27 +94,102 @@ const courses: Course[] = [
 const theme = createTheme();
 
 export default function Album() {
-
-  const PERPAGE = 6;
+  const [showAll, setShowAll] = useState(false);
+  let PERPAGE = 6;
   const count = Math.ceil(courses.length / PERPAGE);
   const _DATA = usePagination(courses, PERPAGE);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handlePlusClick = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleModalSubmit = (course: Course) => {
+    console.log(course)
+    courses.push(course);
+    setIsModalOpen(false);
+  };
+  
   let [page, setPage] = React.useState(1);
+  
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    
     setPage(value);
     _DATA.jump(value);
   };
 
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filteredCourses, setCourses] = useState<Course[]>(courses);
 
-  useEffect(() => {
-    setCourses(
-      courses.filter((course) =>
-        course.name.toLowerCase().includes(searchTerm.toLowerCase())
-      )
+  //view all course button is clicked, show all courses remove pagination
+  
+  const handleShowAll = () => {
+    setShowAll(!showAll);
+  };
+
+
+  const [searchTerm, setSearchTerm] = useState("");
+
+  let pagination;
+  let rightButton;
+  let leftButton;
+
+  if (showAll) {
+    pagination = null;
+
+    rightButton = (
+      <Button
+        component={Link}
+        href="#"
+        underline="none"
+      >
+        <Typography className="text-s font-bold text-black">
+          Add Course
+        </Typography>
+      </Button>
     );
-    _DATA.currentData = () => filteredCourses;
-  }, [searchTerm, filteredCourses]);
+
+    leftButton = (
+      <Button
+        component={Link}
+        href="#"
+        underline="none"
+        onClick={handleShowAll}
+      >
+        <Typography className="text-s font-bold text-black">
+          View Less Courses
+        </Typography>
+      </Button>);
+  } else {
+    pagination = (
+      <Pagination
+            count={count}
+            size="large"
+            page={page}
+            variant="outlined"
+            shape="rounded"
+            onChange={handleChange}
+          />
+    );
+
+    rightButton = (
+      <Button
+                  component={Link}
+                  href="#"
+                  underline="none"
+                  onClick={handleShowAll}
+                >
+                  <Typography className="text-s font-bold text-black">
+                    View All Courses
+                  </Typography>
+                </Button>
+    );
+
+    leftButton = null;
+  } 
+
 
   return (
     <ThemeProvider theme={theme}>
@@ -133,7 +210,9 @@ export default function Album() {
           {/* End hero unit */}
           <Grid container direction="row" justify-content="space-between">
             <Grid container>
-              <Grid item xs={0} sm={0} md={4}></Grid>
+              <Grid item xs={0} sm={0} md={4}>
+                {leftButton}
+              </Grid>
 
               <Grid
                 item
@@ -161,66 +240,107 @@ export default function Album() {
                 alignItems="center"
                 paddingBottom={4}
               >
-                <Button component={Link} href="#" underline="none">
-                  <Typography className="text-s font-bold text-black">
-                    View All Courses
-                  </Typography>
-                </Button>
+                {rightButton}
               </Grid>
             </Grid>
           </Grid>
 
           <Grid container spacing={10}>
-            {_DATA.currentData().map((card) => (
-              <Grid item key={card.id} xs={12} sm={6} md={4}>
-                <Card
-                  sx={{
-                    height: "100%",
-                    display: "flex",
-                    flexDirection: "column",
-                  }}
-                >
-                  <CardMedia
-                    component="img"
-                    image={card.img}
-                    alt="random"
-                    sx={{ height: "300px", objectFit: "cover" }}
-                  />
-                  <CardContent sx={{ flexGrow: 1 }}>
-                    <Typography
-                      gutterBottom
-                      variant="h5"
-                      component="h2"
-                      className="font-bold"
+            {/* INI PAKE TERNARY SEMENTARA BUAT NENTUIN DIA ALL COURSE ATO BEBERAPA DOANG */}
+            {showAll
+              ? courses.map((card) => (
+                  <Grid item key={card.id} xs={12} sm={6} md={4}>
+                    <Card
+                      sx={{
+                        height: "100%",
+                        display: "flex",
+                        flexDirection: "column",
+                      }}
                     >
-                      {card.name}
-                    </Typography>
-                    <Typography>{card.description}</Typography>
-                  </CardContent>
-                  <CardActions className="flex justify-center">
-                    <Button
-                      size="small"
-                      variant="contained"
-                      className="w-64 rounded-full bg-blackbutton text-white"
+                      <CardMedia
+                        component="img"
+                        image={card.img}
+                        alt="random"
+                        sx={{ height: "300px", objectFit: "cover" }}
+                      />
+                      <CardContent sx={{ flexGrow: 1 }}>
+                        <Typography
+                          gutterBottom
+                          variant="h5"
+                          component="h2"
+                          className="font-bold"
+                        >
+                          {card.name}
+                        </Typography>
+                        <Typography>{card.description}</Typography>
+                      </CardContent>
+                      <CardActions className="flex justify-center">
+                        <Button
+                          size="small"
+                          variant="contained"
+                          className="w-64 rounded-full bg-blackbutton text-white"
+                        >
+                          Edit
+                        </Button>
+                      </CardActions>
+                    </Card>
+                  </Grid>
+                ))
+              : _DATA.currentData().map((card) => (
+                  <Grid item key={card.id} xs={12} sm={6} md={4}>
+                    <Card
+                      sx={{
+                        height: "100%",
+                        display: "flex",
+                        flexDirection: "column",
+                      }}
                     >
-                      Edit
-                    </Button>
-                  </CardActions>
-                </Card>
-              </Grid>
-            ))}
+                      <CardMedia
+                        component="img"
+                        image={card.img}
+                        alt="random"
+                        sx={{ height: "300px", objectFit: "cover" }}
+                      />
+                      <CardContent sx={{ flexGrow: 1 }}>
+                        <Typography
+                          gutterBottom
+                          variant="h5"
+                          component="h2"
+                          className="font-bold"
+                        >
+                          {card.name}
+                        </Typography>
+                        <Typography>{card.description}</Typography>
+                      </CardContent>
+                      <CardActions className="flex justify-center">
+                        <Button
+                          size="small"
+                          variant="contained"
+                          className="w-64 rounded-full bg-blackbutton text-white"
+                        >
+                          Edit
+                        </Button>
+                      </CardActions>
+                    </Card>
+                  </Grid>
+                ))}
+            {/*a plus button to add new course*/}
+
+            <Grid item>
+              <Plus handlePlusClick= {handlePlusClick}/>
+            </Grid>
           </Grid>
+          {/* INI PAKE TERNARY SEMENTARA BUAT NENTUIN DIA ALL COURSE ATO BEBERAPA DOANG */}
         </Container>
         <Grid container direction="row" justifyContent="center" marginTop={2}>
-          <Pagination
-            count={count}
-            size="large"
-            page={page}
-            variant="outlined"
-            shape="rounded"
-            onChange={handleChange}
-          />
+          {pagination}
         </Grid>
+
+        <AddCourseModal
+          open={isModalOpen}
+          onClose={handleModalClose}
+          onSubmit={handleModalSubmit}
+        />
       </main>
       {/* Footer */}
       <Box sx={{ bgcolor: "background.paper", p: 6 }} component="footer">
