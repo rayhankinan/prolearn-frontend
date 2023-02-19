@@ -14,7 +14,7 @@ import Link from "@mui/material/Link";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import SearchBar from "@/components/search";
 import usePagination from "@/components/pagination";
-import{Plus} from "@/components/plus";
+import { Plus } from "@/components/plus";
 import { AddCourseModal } from "@/components/addCourseModal";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
@@ -39,7 +39,7 @@ function Copyright() {
 const [courses, setCourses] = useState<Course[]>([]);
 
 useEffect(() => {
-  CourseService.getAll({page: 1 })
+  CourseService.getAll({ page: 1 })
     .then((response) => setCourses(response.data))
     .catch((error) => console.log(error));
 }, []);
@@ -87,7 +87,7 @@ export default function Album() {
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
 
     setPage(value);
-    
+
   };
 
 
@@ -130,7 +130,7 @@ export default function Album() {
           View Less Courses
         </Typography>
       </Button>
-      );
+    );
   } else {
     pagination = (
       <Pagination
@@ -156,7 +156,7 @@ export default function Album() {
       </Button>
     );
 
-    
+
     leftButton = (
       <Autocomplete
         disablePortal
@@ -169,8 +169,8 @@ export default function Album() {
 
 
 
-    
-  } 
+
+  }
 
 
   return (
@@ -198,7 +198,7 @@ export default function Album() {
           >
             <Grid container>
               <Grid item xs={0} sm={0} md={4} direction="row">
-                  {leftButton}
+                {leftButton}
               </Grid>
 
               <Grid

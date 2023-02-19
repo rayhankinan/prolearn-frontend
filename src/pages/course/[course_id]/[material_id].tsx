@@ -104,7 +104,10 @@ export default function CourseDetail() {
     // const { course, course_detail } = router.query
     // console.log("router: " + router.query)
     // console.log("course: " + course)
-    const { course_id } = router.query
+    const { course_id, material_id } = router.query
+    const course_idInt = parseInt(course_id)
+    const material_idInt = parseInt(material_id)
+    console.log("id: " + material_idInt)
 
     const handleEditMaterial = (material) => {
         setSelectedMaterial(material);
@@ -121,6 +124,14 @@ export default function CourseDetail() {
         setShowModal(false);
     }
 
+    // const currentMaterial = materials.find(m => m.id === material_idInt);
+    // console.log("material id: " + currentMaterial.id);
+    // if (currentMaterial) {
+    //     const currentText = currentMaterial.text;
+    //     console.log("text: " + currentText);
+    // } else {
+    //     console.log(`Material with id ${material_idInt} not found.`);
+    // }
 
     return (
         <ThemeProvider theme={theme}>
@@ -161,7 +172,20 @@ export default function CourseDetail() {
                             <Grid item container direction="column">
                                 {materials.map((material) => (
                                     <Grid sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "10px" }} key={material.id}>
-                                        <div>{material.name}</div>
+                                        {(material.id == material_idInt) &&
+                                            <Link href={`/course/1/${material.id}`}>
+                                                <a style={{ color: "black" }}>
+                                                    <div>{material.name}</div>
+                                                </a>
+                                            </Link>
+                                        }
+                                        {(material.id != material_idInt) &&
+                                            <Link href={`/course/1/${material.id}`} style={{ textDecoration: "none" }}>
+                                                <a style={{ color: "black" }}>
+                                                    <div>{material.name}</div>
+                                                </a>
+                                            </Link>
+                                        }
                                         {showEditButton && (<Button
                                             onClick={() => handleEditMaterial(material)}
                                             size="small"
@@ -177,8 +201,7 @@ export default function CourseDetail() {
                             </Grid>
                         </Grid>
                         <Grid xs={9} sx={{ paddingLeft: '20px' }}>
-                            <Grid item><ReactMarkdown>*React-Markdown* is **Awesome**</ReactMarkdown></Grid>
-
+                            <Grid item><ReactMarkdown>Bla b;a bla</ReactMarkdown></Grid>
                         </Grid>
                     </Grid>
                 </Grid>
@@ -199,16 +222,18 @@ export default function CourseDetail() {
                 <Copyright />
             </Box>
             {/* End footer */}
-            {selectedMaterial && (
-                <Modal show={showModal} onClose={() => setShowModal(false)}>
+            {
+                selectedMaterial && (
+                    <Modal show={showModal} onClose={() => setShowModal(false)}>
 
-                    <GridComponent material={selectedMaterial} />
-                    <div className="flex justify-center mt-5">
-                        <button onClick={handleClose} className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mr-4">Cancel</button>
-                    </div>
+                        <GridComponent material={selectedMaterial} />
+                        <div className="flex justify-center mt-5">
+                            <button onClick={handleClose} className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mr-4">Cancel</button>
+                        </div>
 
-                </Modal>
-            )}
-        </ThemeProvider>
+                    </Modal>
+                )
+            }
+        </ThemeProvider >
     )
 };
