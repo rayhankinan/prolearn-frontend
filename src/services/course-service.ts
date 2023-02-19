@@ -1,13 +1,18 @@
 import http from "../http-common";
 
+export interface thumbnail{
+    id?: number;
+    name: string;
+}
 export interface Course {
     id?: number;
     title: string;
     description: string;
     difficulty: string;
-    __categories__ : Category[];
+    __categories__ : number[];
     status: string;
-    img : string;
+    imgFile?: File|null;
+    __thumbnail__?: thumbnail;
 }
 
 export interface Category {
@@ -23,7 +28,7 @@ class CourseService {
         return http.get(`/course/${id}`);
     }
 
-    create(data: any) {
+    create(data: FormData) {
         return http.post("/course", data)
             .then(response => response.data);
     }

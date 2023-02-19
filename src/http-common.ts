@@ -5,7 +5,6 @@ const API_URL = "http://localhost:80/api";
 const http = axios.create({
   baseURL: API_URL,
   headers: {
-    "Content-type": "application/json"
   }
 });
 

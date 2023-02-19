@@ -13,7 +13,6 @@ import Container from "@mui/material/Container";
 import Link from "@mui/material/Link";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import SearchBar from "@/components/search";
-import usePagination from "@/components/pagination";
 import { Plus } from "@/components/plus";
 import { AddCourseModal } from "@/components/addCourseModal";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -40,21 +39,31 @@ function Copyright() {
 const theme = createTheme();
 
 export default function Album() {
-  let length = 0;
+  const [length, setLength] = useState(0);
+  const [count , setCount] = useState(0);
   let PERPAGE = 6;
+  let [page, setPage] = React.useState(1);
   const [courses, setCourses] = useState<Course[]>([]);
+  const APINEMBAK = "/api/file"
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedDifficulty, setSelectedDifficulty] = useState<string | null>(
+    ""
+  );
   useEffect(() => {
     CourseService.getAll({
-      page: 1,
-      limit: 6
+      page: page,
+      limit: PERPAGE,
+      title: searchTerm,
+      
     })
       .then((response) => {
         console.log(response.data.data);
         setCourses(response.data.data);
-        length = response.data.data.length;
+        setLength(response.data.meta.totalPage * PERPAGE);
+        setCount(response.data.meta.totalPage);
       })
       .catch((error) => console.log(error));
-  }, []);
+  }, [page]);
 
   const [categories, setCategories] = useState<Category[]>([]);
     useEffect(() => {
@@ -76,24 +85,40 @@ export default function Album() {
       .then((response) => {
         console.log(response.data.data);
         setCourses(response.data.data);
+        setPage(1)
+        setLength(response.data.meta.totalPage * PERPAGE);
+        setCount(response.data.meta.totalPage);
+        
+        
       })
       .catch((error) => console.log(error));
   };
 
-  const [searchTerm, setSearchTerm] = useState("");
+  
+
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
       search(searchTerm);
     }, 500);
 
     return () => clearTimeout(delayDebounceFn); 
-  }, [searchTerm]);
-
+  }, [searchTerm, selectedDifficulty]);
   
+   const handleCategoryChange = (
+     event: React.SyntheticEvent<Element, Event>,
+     value: string
+   ) => {
+     // handle category change here
+   };
 
-  
+   const handleDifficultyChange = (
+     value: string| null
+   ) => {
+     setSelectedDifficulty(value);
+   };
+
   const [showAll, setShowAll] = useState(false);
-  const count = Math.ceil(length / PERPAGE);
+  
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -107,14 +132,23 @@ export default function Album() {
 
 const handleModalSubmit = (course: Course) => {
   //add course to setCourses
+  if(course.imgFile == null){
+    alert("Please upload an image");
+    return;
+  }
+  const formData = new FormData();
+  console.log("disini kontol")
+  console.log(course.imgFile)
+  formData.append("title", course.title);
+  formData.append("description", course.description);
+  formData.append("difficulty", course.difficulty);
+  formData.append("status", course.status);
+  for (let i = 0; i < course.__categories__.length; i++) {
+    formData.append("categoryIDs[]" , course.__categories__[i].toString());
+  }
+  formData.append("file", course.imgFile, course.imgFile.name);
 
-  CourseService.create({
-    title: course.title,
-    description: course.description,
-    difficulty: course.difficulty,
-    categoryIDs: course.__categories__,
-    status: course.status,
-  })
+  CourseService.create(formData)
     .then((newCourse) => {
       console.log(newCourse);
 
@@ -129,11 +163,12 @@ const handleModalSubmit = (course: Course) => {
     });
 };
 
-  let [page, setPage] = React.useState(1);
+  
 
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
 
     setPage(value);
+
 
   };
 
@@ -150,6 +185,7 @@ const handleModalSubmit = (course: Course) => {
   let pagination;
   let rightButton;
   let leftButton;
+  let leftButton2;
 
   if (showAll) {
     pagination = null;
@@ -210,8 +246,18 @@ const handleModalSubmit = (course: Course) => {
         disablePortal
         id="combo-box-demo"
         options={categories.map((category) => category.title)}
-        sx={{ width: 300, height: 10 }}
+        sx={{ width: 150, height: 10, marginRight: 2 }}
         renderInput={(params) => <TextField {...params} label="Categories" />}
+      />
+    );
+    leftButton2 = (
+      <Autocomplete
+        disablePortal
+        id="combo-box-demo2"
+        options = {["Beginner", "Intermediate", "Advanced"]}
+        sx={{ width: 150, height: 10 }}
+        renderInput={(params) => <TextField {...params} label="Difficulty" />}
+        onChange= {(event, inputValue) => handleDifficultyChange(inputValue)}
       />
     );
 
@@ -245,8 +291,16 @@ const handleModalSubmit = (course: Course) => {
             className="mb-2"
           >
             <Grid container>
-              <Grid item xs={0} sm={0} md={4} direction="row">
+              <Grid
+                container
+                xs={0}
+                sm={0}
+                md={4}
+                direction="row"
+                justifyContent="space-between"
+              >
                 {leftButton}
+                {leftButton2}
               </Grid>
 
               <Grid
@@ -291,46 +345,44 @@ const handleModalSubmit = (course: Course) => {
           </Grid>
 
           <Grid container spacing={10}>
-            
             {courses.map((card) => (
-                <Grid item key={card.id} xs={12} sm={6} md={4}>
-                  <Card
-                    sx={{
-                      height: "100%",
-                      display: "flex",
-                      flexDirection: "column",
-                    }}
-                  >
-                    <CardMedia
-                      component="img"
-                      image={card.img}
-                      alt="random"
-                      sx={{ height: "300px", objectFit: "cover" }}
-                    />
-                    <CardContent sx={{ flexGrow: 1 }}>
-                      <Typography
-                        gutterBottom
-                        variant="h5"
-                        component="h2"
-                        className="font-bold"
-                      >
-                        {card.title}
-                      </Typography>
-                      <Typography>{card.description}</Typography>
-                    </CardContent>
-                    <CardActions className="flex justify-center">
-                      <Button
-                        size="small"
-                        variant="contained"
-                        className="w-64 rounded-full bg-blackbutton text-white"
-                      >
-                        Edit
-                      </Button>
-                    </CardActions>
-                  </Card>
-                </Grid>
-              ))
-            }
+              <Grid item key={card.id} xs={12} sm={6} md={4}>
+                <Card
+                  sx={{
+                    height: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
+                  <CardMedia
+                    component="img"
+                    image={ card.__thumbnail__? `${APINEMBAK}/${card.__thumbnail__.id}` : "https://source.unsplash.com/random"}
+                    alt="random"
+                    sx={{ height: "300px", objectFit: "cover" }}
+                  />
+                  <CardContent sx={{ flexGrow: 1 }}>
+                    <Typography
+                      gutterBottom
+                      variant="h5"
+                      component="h2"
+                      className="font-bold"
+                    >
+                      {card.title}
+                    </Typography>
+                    <Typography>{card.description}</Typography>
+                  </CardContent>
+                  <CardActions className="flex justify-center">
+                    <Button
+                      size="small"
+                      variant="contained"
+                      className="w-64 rounded-full bg-blackbutton text-white"
+                    >
+                      Edit
+                    </Button>
+                  </CardActions>
+                </Card>
+              </Grid>
+            ))}
             {/*a plus button to add new course*/}
 
             <Grid item>
@@ -347,7 +399,7 @@ const handleModalSubmit = (course: Course) => {
           open={isModalOpen}
           onClose={handleModalClose}
           onSubmit={handleModalSubmit}
-          categories = {categories}
+          categories={categories}
         />
       </main>
       {/* Footer */}
