@@ -2,15 +2,15 @@ import http from "../http-common";
 
 class CategoryService {
     getAll() {
-        return http.get("/categories/list");
+        return http.get("/category/all");
     }
 
     getByTitle(title: string) {
-        return http.get(`/categories?title=${title}`);
+        return http.get(`/category?title=${title}`);
     }
 
     create(data: any) {
-        return http.post("/categories", data)
+        return http.post("/category", data)
         .then(response => {
             if (response.data.title) {
                 console.log(response.data.title)
@@ -21,11 +21,11 @@ class CategoryService {
     }
 
     delete(id: any) {
-        return http.delete(`/categories/:${id}`);
+        return http.delete(`/category/:${id}`);
     }
 
     update(id: any) {
-        return http.put(`/categories/:${id}`);
+        return http.put(`/category/:${id}`);
     }
 }
 

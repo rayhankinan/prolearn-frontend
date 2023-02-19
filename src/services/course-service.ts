@@ -1,18 +1,22 @@
 import http from "../http-common";
 
 export interface Course {
-  id: number;
-  title: string;
-  description: string;
-  difficulty: string;
-  categoryIDs: number[];
-  status: string;
-  img : string;
+    id?: number;
+    title: string;
+    description: string;
+    difficulty: string;
+    __categories__ : Category[];
+    status: string;
+    img : string;
 }
 
+export interface Category {
+    title: string;
+    id: number;
+}
 class CourseService {
     getAll(params?: any) {
-        return http.get("/courses", { params });
+        return http.get("/course", { params });
     }
 
     getById(id: number) {

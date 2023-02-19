@@ -20,6 +20,8 @@ import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import CourseService from "@/services/course-service";
 import { Course } from "@/services/course-service";
+import CategoryService from "@/services/category-service";
+import { Category } from "@/services/course-service";
 
 function Copyright() {
   return (
@@ -35,36 +37,43 @@ function Copyright() {
 }
 
 
-
-const [courses, setCourses] = useState<Course[]>([]);
-
-useEffect(() => {
-  CourseService.getAll({page: 1 })
-    .then((response) => setCourses(response.data))
-    .catch((error) => console.log(error));
-}, []);
-
-type categories = string;
-
-const categories: categories[] = [
-  "All",
-  "Web Development",
-  "JavaScript",
-  "ReactJS",
-  "NodeJS",
-  "CSS",
-  "Full Stack",
-  "Data Structures",
-  "Python",
-];
-
-
 const theme = createTheme();
 
 export default function Album() {
-  const [showAll, setShowAll] = useState(false);
+  let length = 0;
   let PERPAGE = 6;
-  const count = Math.ceil(courses.length / PERPAGE);
+  const [courses, setCourses] = useState<Course[]>([]);
+  useEffect(() => {
+    CourseService.getAll({
+      page: 1,
+      limit: 6
+    })
+      .then((response) => {
+        console.log(response.data.data);
+        setCourses(response.data.data);
+        length = response.data.data.length;
+      })
+      .catch((error) => console.log(error));
+  }, []);
+
+  const [categories, setCategories] = useState<Category[]>([]);
+    useEffect(() => {
+      CategoryService.getAll()
+        .then((response) => {
+          console.log(response.data.data);
+          setCategories(response.data.data);
+        })
+        .catch((error) => console.log(error));
+    }, []);
+
+
+  //get all category
+
+  
+
+  
+  const [showAll, setShowAll] = useState(false);
+  const count = Math.ceil(length / PERPAGE);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -76,11 +85,29 @@ export default function Album() {
     setIsModalOpen(false);
   };
 
-  const handleModalSubmit = (course: Course) => {
-    console.log(course)
-    //courses.push(course);
-    setIsModalOpen(false);
-  };
+const handleModalSubmit = (course: Course) => {
+  //add course to setCourses
+
+  CourseService.create({
+    title: course.title,
+    description: course.description,
+    difficulty: course.difficulty,
+    categoryIDs: course.__categories__,
+    status: course.status,
+  })
+    .then((newCourse) => {
+      console.log(newCourse);
+
+      //sementara reload dulu karena aing stres
+      
+      window.location.reload();
+      
+    
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+};
 
   let [page, setPage] = React.useState(1);
 
@@ -161,7 +188,7 @@ export default function Album() {
       <Autocomplete
         disablePortal
         id="combo-box-demo"
-        options={categories}
+        options={categories.map((category) => category.title)}
         sx={{ width: 300, height: 10 }}
         renderInput={(params) => <TextField {...params} label="Categories" />}
       />
@@ -243,9 +270,8 @@ export default function Album() {
           </Grid>
 
           <Grid container spacing={10}>
-            {/* INI PAKE TERNARY SEMENTARA BUAT NENTUIN DIA ALL COURSE ATO BEBERAPA DOANG */}
-            {showAll
-              ? courses.map((card) => (
+            
+            {courses.map((card) => (
                 <Grid item key={card.id} xs={12} sm={6} md={4}>
                   <Card
                     sx={{
@@ -267,7 +293,7 @@ export default function Album() {
                         component="h2"
                         className="font-bold"
                       >
-                        {card.name}
+                        {card.title}
                       </Typography>
                       <Typography>{card.description}</Typography>
                     </CardContent>
@@ -283,47 +309,7 @@ export default function Album() {
                   </Card>
                 </Grid>
               ))
-              : _DATA.currentData().map((card) => (
-                <Grid item key={card.id} xs={12} sm={6} md={4}>
-                  <Card
-                    sx={{
-                      height: "100%",
-                      display: "flex",
-                      flexDirection: "column",
-                    }}
-                  >
-                    <CardMedia
-                      component="img"
-                      image={card.img}
-                      alt="random"
-                      sx={{ height: "300px", objectFit: "cover" }}
-                    />
-                    <CardContent sx={{ flexGrow: 1 }}>
-                      <Typography
-                        gutterBottom
-                        variant="h5"
-                        component="h2"
-                        className="font-bold"
-                      >
-                        {card.name}
-                      </Typography>
-                      <Typography>{card.description}</Typography>
-                    </CardContent>
-                    <CardActions className="flex justify-center">
-                      <Link href="/course/1/1">
-                        <a>
-                          <Button
-                            size="small"
-                            variant="contained"
-                            className="w-64 rounded-full bg-blackbutton text-white">
-                            Edit
-                          </Button>
-                        </a>
-                      </Link>
-                    </CardActions>
-                  </Card>
-                </Grid>
-              ))}
+            }
             {/*a plus button to add new course*/}
 
             <Grid item>
@@ -340,6 +326,7 @@ export default function Album() {
           open={isModalOpen}
           onClose={handleModalClose}
           onSubmit={handleModalSubmit}
+          categories = {categories}
         />
       </main>
       {/* Footer */}
