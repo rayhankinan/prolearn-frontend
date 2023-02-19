@@ -8,24 +8,21 @@
     TextField,
     } from "@mui/material";
 
+    import { Course } from "@/services/course-service";
+
     type ModalProps = {
     open: boolean;
     onClose: () => void;
-    onSubmit: (course: {
-        id: number;
-        name: string;
-        description: string;
-        img: string;
-    }) => void;
+    onSubmit: (course: Course) => void;
     };
 
     export const AddCourseModal = ({ open, onClose, onSubmit }: ModalProps) => {
-    const [name, setName] = useState("");
+    const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [img, setImage] = useState("");
 
-    const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setName(event.target.value);
+    const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setTitle(event.target.value);
     };
 
     const handleDescriptionChange = (
@@ -40,9 +37,17 @@
     };
 
     const handleFormSubmit = () => {
-        const id = Math.random();
-        onSubmit({ id, name, description, img });
-        setName("");
+        const newCourse: Course = {
+        id: Math.random(),
+        title: title,
+        description: description,
+        img: img,
+        difficulty: "",
+        categoryIDs: [],
+        status: "",
+        };
+        onSubmit(newCourse);
+        setTitle("");
         setDescription("");
         setImage("");
         onClose();
@@ -55,12 +60,12 @@
             <TextField
             autoFocus
             margin="dense"
-            id="name"
-            label="Name"
+            id="Title"
+            label="Title"
             type="text"
             fullWidth
-            value={name}
-            onChange={handleNameChange}
+            value={title}
+            onChange={handleTitleChange}
             />
             <TextField
             margin="dense"

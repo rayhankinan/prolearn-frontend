@@ -14,9 +14,12 @@ import Link from "@mui/material/Link";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import SearchBar from "@/components/search";
 import usePagination from "@/components/pagination";
-import { Course } from "@/components/pagination";
 import{Plus} from "@/components/plus";
 import { AddCourseModal } from "@/components/addCourseModal";
+import Autocomplete from "@mui/material/Autocomplete";
+import TextField from "@mui/material/TextField";
+import CourseService from "@/services/course-service";
+import { Course } from "@/services/course-service";
 
 function Copyright() {
   return (
@@ -31,63 +34,28 @@ function Copyright() {
   );
 }
 
-const courses: Course[] = [
-  {
-    id: 1,
-    name: "Introduction to Web Development",
-    description:
-      "Learn the basics of web development and build your own website from scratch.",
-    img: "https://picsum.photos/300/300?random=1",
-  },
-  {
-    id: 2,
-    name: "JavaScript Fundamentals",
-    description:
-      "Understand the core concepts of JavaScript and how to use it to build dynamic web applications.",
-    img: "https://picsum.photos/300/300?random=2",
-  },
-  {
-    id: 3,
-    name: "ReactJS: Building User Interfaces",
-    description:
-      "Learn how to build user interfaces with the popular JavaScript library ReactJS.",
-    img: "https://picsum.photos/300/300?random=3",
-  },
-  {
-    id: 4,
-    name: "NodeJS: Building Backends",
-    description:
-      "Build scalable and efficient backends with NodeJS and understand how to connect to databases.",
-    img: "https://picsum.photos/300/300?random=4",
-  },
-  {
-    id: 5,
-    name: "Advanced CSS and SASS",
-    description:
-      "Take your CSS skills to the next level with SASS and learn how to write efficient and maintainable stylesheets.",
-    img: "https://picsum.photos/300/300?random=5",
-  },
-  {
-    id: 6,
-    name: "Full Stack Development with MERN",
-    description:
-      "Build full-stack web applications using the MERN stack (MongoDB, ExpressJS, ReactJS, NodeJS).",
-    img: "https://picsum.photos/300/300?random=6",
-  },
-  {
-    id: 7,
-    name: "Data Structures and Algorithms",
-    description:
-      "Understand the basics of data structures and algorithms and learn how to implement them in code.",
-    img: "https://picsum.photos/300/300?random=7",
-  },
-  {
-    id: 8,
-    name: "Introduction to Python",
-    description:
-      "Learn the basics of Python and how to use it to build powerful applications.",
-    img: "https://picsum.photos/300/300?random=8",
-  },
+
+
+const [courses, setCourses] = useState<Course[]>([]);
+
+useEffect(() => {
+  CourseService.getAll({page: 1 })
+    .then((response) => setCourses(response.data))
+    .catch((error) => console.log(error));
+}, []);
+
+type categories = string;
+
+const categories: categories[] = [
+  "All",
+  "Web Development",
+  "JavaScript",
+  "ReactJS",
+  "NodeJS",
+  "CSS",
+  "Full Stack",
+  "Data Structures",
+  "Python",
 ];
 
 
@@ -97,7 +65,7 @@ export default function Album() {
   const [showAll, setShowAll] = useState(false);
   let PERPAGE = 6;
   const count = Math.ceil(courses.length / PERPAGE);
-  const _DATA = usePagination(courses, PERPAGE);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handlePlusClick = () => {
@@ -110,7 +78,7 @@ export default function Album() {
 
   const handleModalSubmit = (course: Course) => {
     console.log(course)
-    courses.push(course);
+    //courses.push(course);
     setIsModalOpen(false);
   };
   
@@ -119,7 +87,7 @@ export default function Album() {
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     
     setPage(value);
-    _DATA.jump(value);
+    
   };
 
 
@@ -128,7 +96,6 @@ export default function Album() {
   const handleShowAll = () => {
     setShowAll(!showAll);
   };
-
 
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -144,6 +111,7 @@ export default function Album() {
         component={Link}
         href="#"
         underline="none"
+        onClick={handlePlusClick}
       >
         <Typography className="text-s font-bold text-black">
           Add Course
@@ -161,7 +129,8 @@ export default function Album() {
         <Typography className="text-s font-bold text-black">
           View Less Courses
         </Typography>
-      </Button>);
+      </Button>
+      );
   } else {
     pagination = (
       <Pagination
@@ -187,7 +156,20 @@ export default function Album() {
                 </Button>
     );
 
-    leftButton = null;
+    
+    leftButton = (
+      <Autocomplete
+        disablePortal
+        id="combo-box-demo"
+        options={categories}
+        sx={{ width: 300, height: 10 }}
+        renderInput={(params) => <TextField {...params} label="Categories" />}
+      />
+    );
+
+
+
+    
   } 
 
 
@@ -197,7 +179,7 @@ export default function Album() {
       <main>
         {/* Header, contains logo and page name */}
         <Grid sx={{ width: "70%", margin: "0 auto", marginTop: "30px" }}>
-          <Grid container direction="row" justifyContent="space-between">
+          <Grid container justifyContent="space-between">
             <Typography variant="h4" className="text-4xl font-bold mt-10">
               All Courses
             </Typography>
@@ -206,12 +188,17 @@ export default function Album() {
           {/* horizontal line that have space on the left and right */}
           <hr className="border-t-3 border-black " />
         </Grid>
-        <Container sx={{ py: 2 }} maxWidth="lg">
+        <Container sx={{ py: 3 }} maxWidth="lg">
           {/* End hero unit */}
-          <Grid container direction="row" justify-content="space-between">
+          <Grid
+            container
+            direction="row"
+            justify-content="space-between"
+            className="mb-2"
+          >
             <Grid container>
-              <Grid item xs={0} sm={0} md={4}>
-                {leftButton}
+              <Grid item xs={0} sm={0} md={4} direction="row">
+                  {leftButton}
               </Grid>
 
               <Grid
@@ -236,19 +223,28 @@ export default function Album() {
                 sm={6}
                 md={4}
                 display="flex"
-                justifyContent="right"
+                justifyContent="space-between"
                 alignItems="center"
                 paddingBottom={4}
               >
-                {rightButton}
+                <Grid
+                  item
+                  xs={6}
+                  sm={6}
+                  md={12}
+                  display="flex"
+                  justifyContent="flex-end"
+                  alignItems="center"
+                >
+                  {rightButton}
+                </Grid>
               </Grid>
             </Grid>
           </Grid>
 
           <Grid container spacing={10}>
             {/* INI PAKE TERNARY SEMENTARA BUAT NENTUIN DIA ALL COURSE ATO BEBERAPA DOANG */}
-            {showAll
-              ? courses.map((card) => (
+            {courses.map((card) => (
                   <Grid item key={card.id} xs={12} sm={6} md={4}>
                     <Card
                       sx={{
@@ -270,7 +266,7 @@ export default function Album() {
                           component="h2"
                           className="font-bold"
                         >
-                          {card.name}
+                          {card.title}
                         </Typography>
                         <Typography>{card.description}</Typography>
                       </CardContent>
@@ -286,48 +282,11 @@ export default function Album() {
                     </Card>
                   </Grid>
                 ))
-              : _DATA.currentData().map((card) => (
-                  <Grid item key={card.id} xs={12} sm={6} md={4}>
-                    <Card
-                      sx={{
-                        height: "100%",
-                        display: "flex",
-                        flexDirection: "column",
-                      }}
-                    >
-                      <CardMedia
-                        component="img"
-                        image={card.img}
-                        alt="random"
-                        sx={{ height: "300px", objectFit: "cover" }}
-                      />
-                      <CardContent sx={{ flexGrow: 1 }}>
-                        <Typography
-                          gutterBottom
-                          variant="h5"
-                          component="h2"
-                          className="font-bold"
-                        >
-                          {card.name}
-                        </Typography>
-                        <Typography>{card.description}</Typography>
-                      </CardContent>
-                      <CardActions className="flex justify-center">
-                        <Button
-                          size="small"
-                          variant="contained"
-                          className="w-64 rounded-full bg-blackbutton text-white"
-                        >
-                          Edit
-                        </Button>
-                      </CardActions>
-                    </Card>
-                  </Grid>
-                ))}
+              }
             {/*a plus button to add new course*/}
 
             <Grid item>
-              <Plus handlePlusClick= {handlePlusClick}/>
+              <Plus handlePlusClick={handlePlusClick} />
             </Grid>
           </Grid>
           {/* INI PAKE TERNARY SEMENTARA BUAT NENTUIN DIA ALL COURSE ATO BEBERAPA DOANG */}
