@@ -10,6 +10,7 @@ import { Material } from "@/components/material";
 import Modal from "@/components/modal";
 import GridComponent from '@/components/GridComponent';
 import { Button, Grid, Typography } from "@mui/material";
+import { useRouter } from 'next/router'
 
 
 function Copyright() {
@@ -95,11 +96,15 @@ const materials: Material[] = [
 
 const theme = createTheme();
 
-
 export default function CourseDetail() {
     const [showModal, setShowModal] = useState(false);
     const [selectedMaterial, setSelectedMaterial] = useState(null);
     const [showEditButton, setShowEditButton] = useState(false);
+    const router = useRouter()
+    // const { course, course_detail } = router.query
+    // console.log("router: " + router.query)
+    // console.log("course: " + course)
+    const { course_id } = router.query
 
     const handleEditMaterial = (material) => {
         setSelectedMaterial(material);
