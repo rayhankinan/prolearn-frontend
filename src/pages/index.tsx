@@ -67,7 +67,27 @@ export default function Album() {
     }, []);
 
 
-  //get all category
+  const search = (searchTerm: string) => {
+    CourseService.getAll({
+      page: 1,
+      limit: 6,
+      title: searchTerm
+    })
+      .then((response) => {
+        console.log(response.data.data);
+        setCourses(response.data.data);
+      })
+      .catch((error) => console.log(error));
+  };
+
+  const [searchTerm, setSearchTerm] = useState("");
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      search(searchTerm);
+    }, 500);
+
+    return () => clearTimeout(delayDebounceFn); 
+  }, [searchTerm]);
 
   
 
@@ -124,7 +144,8 @@ const handleModalSubmit = (course: Course) => {
     setShowAll(!showAll);
   };
 
-  const [searchTerm, setSearchTerm] = useState("");
+  
+
 
   let pagination;
   let rightButton;
