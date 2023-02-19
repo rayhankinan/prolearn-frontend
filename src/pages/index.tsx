@@ -14,7 +14,7 @@ import Link from "@mui/material/Link";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import SearchBar from "@/components/search";
 import usePagination from "@/components/pagination";
-import{Plus} from "@/components/plus";
+import { Plus } from "@/components/plus";
 import { AddCourseModal } from "@/components/addCourseModal";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
@@ -114,7 +114,7 @@ const handleModalSubmit = (course: Course) => {
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
 
     setPage(value);
-    
+
   };
 
 
@@ -157,7 +157,7 @@ const handleModalSubmit = (course: Course) => {
           View Less Courses
         </Typography>
       </Button>
-      );
+    );
   } else {
     pagination = (
       <Pagination
@@ -183,7 +183,7 @@ const handleModalSubmit = (course: Course) => {
       </Button>
     );
 
-    
+
     leftButton = (
       <Autocomplete
         disablePortal
@@ -196,8 +196,8 @@ const handleModalSubmit = (course: Course) => {
 
 
 
-    
-  } 
+
+  }
 
 
   return (
@@ -225,7 +225,7 @@ const handleModalSubmit = (course: Course) => {
           >
             <Grid container>
               <Grid item xs={0} sm={0} md={4} direction="row">
-                  {leftButton}
+                {leftButton}
               </Grid>
 
               <Grid
