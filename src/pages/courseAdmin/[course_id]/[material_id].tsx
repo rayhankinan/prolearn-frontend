@@ -96,14 +96,11 @@ const materials: Material[] = [
 
 const theme = createTheme();
 
-export default function CourseDetail() {
+export default function CourseDetailAdmin() {
     const [showModal, setShowModal] = useState(false);
     const [selectedMaterial, setSelectedMaterial] = useState(null);
     const [showEditButton, setShowEditButton] = useState(false);
     const router = useRouter()
-    // const { course, course_detail } = router.query
-    // console.log("router: " + router.query)
-    // console.log("course: " + course)
     const { course_id, material_id } = router.query
     const course_idInt = parseInt(course_id)
     const material_idInt = parseInt(material_id)
@@ -168,22 +165,22 @@ export default function CourseDetail() {
                 {/* End hero unit */}
                 <Grid sx={{ width: "70%", margin: "0 auto", marginTop: "30px" }}>
                     <Grid container spacing={2}>
-                        <Grid xs={3} sx={{ borderRight: '1px solid #ccc' }}>
+                        <Grid item xs={3} sx={{ borderRight: '1px solid #ccc' }}>
                             <Grid item container direction="column">
                                 {materials.map((material) => (
                                     <Grid sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "10px" }} key={material.id}>
                                         {(material.id == material_idInt) &&
-                                            <Link href={`/course/1/${material.id}`}>
-                                                <a style={{ color: "black" }}>
+                                            <Link href={`/courseAdmin/1/${material.id}`} style={{  color: "black" }}>
+                                                {/* <a style={{ color: "black" }}> */}
                                                     <div>{material.name}</div>
-                                                </a>
+                                                {/* </a> */}
                                             </Link>
                                         }
                                         {(material.id != material_idInt) &&
-                                            <Link href={`/course/1/${material.id}`} style={{ textDecoration: "none" }}>
-                                                <a style={{ color: "black" }}>
+                                            <Link href={`/courseAdmin/1/${material.id}`} style={{ textDecoration: "none",  color: "black" }}>
+                                                {/* <a style={{ color: "black" }}> */}
                                                     <div>{material.name}</div>
-                                                </a>
+                                                {/* </a> */}
                                             </Link>
                                         }
                                         {showEditButton && (<Button
@@ -200,7 +197,7 @@ export default function CourseDetail() {
                                 ))}
                             </Grid>
                         </Grid>
-                        <Grid xs={9} sx={{ paddingLeft: '20px' }}>
+                        <Grid item xs={9} sx={{ paddingLeft: '20px' }}>
                             <Grid item><ReactMarkdown>Bla b;a bla</ReactMarkdown></Grid>
                         </Grid>
                     </Grid>
