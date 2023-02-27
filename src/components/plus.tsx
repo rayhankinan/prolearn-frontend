@@ -17,7 +17,7 @@
 
     export const Plus = ({handlePlusClick} : plusProps) => (
     <Button onClick = {handlePlusClick}>
-        <Card sx={{ height: 400, width: 300, p: 2 }}>
+        <Card sx={{ p: 2 }}>
         <CardMedia
             component="img"
             image="Plus.png"

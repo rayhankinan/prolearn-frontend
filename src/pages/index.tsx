@@ -21,6 +21,9 @@ import CourseService from "@/services/course-service";
 import { Course } from "@/services/course-service";
 import CategoryService from "@/services/category-service";
 import { Category } from "@/services/course-service";
+import { createGlobalStyle } from "styled-components";
+import FilterBar from "@/components/filterBar";
+
 
 function Copyright() {
   return (
@@ -41,7 +44,7 @@ const theme = createTheme();
 export default function Album() {
   const [length, setLength] = useState(0);
   const [count , setCount] = useState(0);
-  let PERPAGE = 6;
+  const [perPage, setperPage] = useState(6);
   let [page, setPage] = React.useState(1);
   const [courses, setCourses] = useState<Course[]>([]);
   const APINEMBAK = "/api/file"
@@ -52,18 +55,17 @@ export default function Album() {
   useEffect(() => {
     CourseService.getAll({
       page: page,
-      limit: PERPAGE,
+      limit: perPage,
       title: searchTerm,
       
     })
       .then((response) => {
-        console.log(response.data.data);
         setCourses(response.data.data);
-        setLength(response.data.meta.totalPage * PERPAGE);
+        setLength(response.data.meta.totalPage * perPage);
         setCount(response.data.meta.totalPage);
       })
       .catch((error) => console.log(error));
-  }, [page]);
+  }, [page, perPage]);
 
   const [categories, setCategories] = useState<Category[]>([]);
     useEffect(() => {
@@ -76,20 +78,18 @@ export default function Album() {
     }, []);
 
 
-  const search = (searchTerm: string) => {
+  const search = (searchTerm: string, selectedDifficulty:string|null) => {
     CourseService.getAll({
-      page: 1,
-      limit: 6,
-      title: searchTerm
+      page: page,
+      limit: perPage,
+      title: searchTerm,
+      difficulty: selectedDifficulty
     })
       .then((response) => {
-        console.log(response.data.data);
         setCourses(response.data.data);
         setPage(1)
-        setLength(response.data.meta.totalPage * PERPAGE);
+        setLength(response.data.meta.totalPage * perPage);
         setCount(response.data.meta.totalPage);
-        
-        
       })
       .catch((error) => console.log(error));
   };
@@ -98,7 +98,7 @@ export default function Album() {
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
-      search(searchTerm);
+      search(searchTerm, selectedDifficulty);
     }, 500);
 
     return () => clearTimeout(delayDebounceFn); 
@@ -114,7 +114,12 @@ export default function Album() {
    const handleDifficultyChange = (
      value: string| null
    ) => {
-     setSelectedDifficulty(value);
+     //change value to all lowercase
+     if(value != null)
+     {
+        value = value.toLowerCase();
+        setSelectedDifficulty(value?.toLowerCase());
+     }
    };
 
   const [showAll, setShowAll] = useState(false);
@@ -162,20 +167,18 @@ const handleModalSubmit = (course: Course) => {
       console.error(error);
     });
 };
-
-  
-
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
-
+  
     setPage(value);
-
-
   };
-
-
   //view all course button is clicked, show all courses remove pagination
-
   const handleShowAll = () => {
+    if(showAll){
+      setperPage(6);
+    }
+    else{
+      setperPage(length * count);
+    }
     setShowAll(!showAll);
   };
 
@@ -240,30 +243,7 @@ const handleModalSubmit = (course: Course) => {
       </Button>
     );
 
-
-    leftButton = (
-      <Autocomplete
-        disablePortal
-        id="combo-box-demo"
-        options={categories.map((category) => category.title)}
-        sx={{ width: 150, height: 10, marginRight: 2 }}
-        renderInput={(params) => <TextField {...params} label="Categories" />}
-      />
-    );
-    leftButton2 = (
-      <Autocomplete
-        disablePortal
-        id="combo-box-demo2"
-        options = {["Beginner", "Intermediate", "Advanced"]}
-        sx={{ width: 150, height: 10 }}
-        renderInput={(params) => <TextField {...params} label="Difficulty" />}
-        onChange= {(event, inputValue) => handleDifficultyChange(inputValue)}
-      />
-    );
-
-
-
-
+    leftButton = null;
   }
 
 
@@ -282,115 +262,149 @@ const handleModalSubmit = (course: Course) => {
           {/* horizontal line that have space on the left and right */}
           <hr className="border-t-3 border-black " />
         </Grid>
+
         <Container sx={{ py: 3 }} maxWidth="lg">
           {/* End hero unit */}
-          <Grid
-            container
-            direction="row"
-            justify-content="space-between"
-            className="mb-2"
-          >
-            <Grid container>
-              <Grid
-                container
-                xs={0}
-                sm={0}
-                md={4}
-                direction="row"
-                justifyContent="space-between"
-              >
-                {leftButton}
-                {leftButton2}
-              </Grid>
+          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
 
-              <Grid
-                item
-                xs={6}
-                sm={6}
-                md={4}
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                marginBottom={1}
-              >
-                <SearchBar
-                  searchTerm={searchTerm}
-                  setSearchTerm={setSearchTerm}
-                />
-              </Grid>
+          
+            <Grid
+              container
+              direction="row"
+              justify-content="space-between"
+              className="mb-2"
+            >
+              <Grid container>
+                <Grid
+                  container
+                  xs={0}
+                  sm={0}
+                  md={4}
+                  direction="row"
+                  justifyContent="space-between"
+                >
+                  {leftButton}
+                </Grid>
 
-              <Grid
-                item
-                xs={6}
-                sm={6}
-                md={4}
-                display="flex"
-                justifyContent="space-between"
-                alignItems="center"
-                paddingBottom={4}
-              >
                 <Grid
                   item
                   xs={6}
                   sm={6}
-                  md={12}
+                  md={4}
                   display="flex"
-                  justifyContent="flex-end"
+                  justifyContent="center"
                   alignItems="center"
+                  marginBottom={1}
                 >
-                  {rightButton}
+                  <SearchBar
+                    searchTerm={searchTerm}
+                    setSearchTerm={setSearchTerm}
+                  />
+                </Grid>
+
+                <Grid
+                  item
+                  xs={6}
+                  sm={6}
+                  md={4}
+                  display="flex"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  paddingBottom={4}
+                >
+                  <Grid
+                    item
+                    xs={6}
+                    sm={6}
+                    md={12}
+                    display="flex"
+                    justifyContent="flex-end"
+                    alignItems="center"
+                  >
+                    {rightButton}
+                  </Grid>
                 </Grid>
               </Grid>
             </Grid>
-          </Grid>
 
-          <Grid container spacing={10}>
-            {courses.map((card) => (
-              <Grid item key={card.id} xs={12} sm={6} md={4}>
-                <Card
-                  sx={{
-                    height: "100%",
-                    display: "flex",
-                    flexDirection: "column",
-                  }}
-                >
-                  <CardMedia
-                    component="img"
-                    image={ card.__thumbnail__? `${APINEMBAK}/${card.__thumbnail__.id}` : "https://source.unsplash.com/random"}
-                    alt="random"
-                    sx={{ height: "300px", objectFit: "cover" }}
-                  />
-                  <CardContent sx={{ flexGrow: 1 }}>
-                    <Typography
-                      gutterBottom
-                      variant="h5"
-                      component="h2"
-                      className="font-bold"
+            <Box sx={{ my: 2, mx: "auto", marginTop: 4 }}>
+              <FilterBar
+                categories={categories}
+                handleDifficultyChange={handleDifficultyChange}
+              />
+            </Box>
+
+            <Grid
+              container
+              spacing={10}
+              sx={{alignItems: "center", marginTop: 0}}
+            >
+              {courses.map((card) => (
+                <Grid item key={card.id} xs={12} sm={6} md={4}>
+                  <Card
+                    sx={{
+                      height: "100%",
+                      display: "flex",
+                      flexDirection: "column",
+                    }}
+                  >
+                    <CardMedia
+                      component="img"
+                      image={
+                        card.__thumbnail__
+                          ? `${APINEMBAK}/${card.__thumbnail__.id}`
+                          : "https://source.unsplash.com/random"
+                      }
+                      alt="random"
+                      sx={{ height: "300px", objectFit: "cover" }}
+                    />
+                    <CardContent sx={{ flexGrow: 1 }}>
+                      <Typography
+                        gutterBottom
+                        variant="h5"
+                        component="h2"
+                        className="font-bold custom-Source-Code-Pro"
+                      >
+                        {card.title}
+                      </Typography>
+                      <Typography className="custom-Source-Code-Pro text-greytext">
+                        {card.description}
+                      </Typography>
+                    </CardContent>
+                    <Box
+                      sx={{
+                        mt: "auto",
+                        p: 2,
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
                     >
-                      {card.title}
-                    </Typography>
-                    <Typography>{card.description}</Typography>
-                  </CardContent>
-                  <CardActions className="flex justify-center">
-                    <Button
-                      size="small"
-                      variant="contained"
-                      className="w-64 rounded-full bg-blackbutton text-white"
-                    >
-                      Edit
-                    </Button>
-                  </CardActions>
-                </Card>
+                      <Typography variant="caption" component="p"></Typography>
+                      <Typography variant="caption" component="p">
+                        {card.difficulty.toUpperCase()}
+                      </Typography>
+                    </Box>
+                    <CardActions className="flex justify-center">
+                      <Button
+                        size="small"
+                        variant="contained"
+                        className="w-64 rounded-full bg-blackbutton text-white"
+                      >
+                        Edit
+                      </Button>
+                    </CardActions>
+                  </Card>
+                </Grid>
+              ))}
+              {/*a plus button to add new course*/}
+
+              <Grid item>
+                <Plus handlePlusClick={handlePlusClick} />
               </Grid>
-            ))}
-            {/*a plus button to add new course*/}
-
-            <Grid item>
-              <Plus handlePlusClick={handlePlusClick} />
             </Grid>
-          </Grid>
-          {/* INI PAKE TERNARY SEMENTARA BUAT NENTUIN DIA ALL COURSE ATO BEBERAPA DOANG */}
-        </Container>
+          </Box>
+          </Container>
+        
         <Grid container direction="row" justifyContent="center" marginTop={2}>
           {pagination}
         </Grid>

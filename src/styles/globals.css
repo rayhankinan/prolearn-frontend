@@ -2,3 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 @import '~@fortawesome/fontawesome-free/css/all.css';
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap');
+
+.custom-Source-Code-Pro {
+  font-family: 'Source Code Pro', monospace;
+}
