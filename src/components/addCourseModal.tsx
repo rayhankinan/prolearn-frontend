@@ -12,12 +12,9 @@
         TextField,
         SelectChangeEvent,
         } from "@mui/material";
-
     import { Course } from "@/services/course-service";
     import { Category } from "@/services/course-service";
-    import CategoryService from "@/services/category-service";
-    import {thumbnail} from "@/services/course-service"
-import { isNull } from "util";
+    
 
 
         type ModalProps = {
@@ -69,21 +66,23 @@ import { isNull } from "util";
         };
 
         const handleCategoryChange = (
-            event: SelectChangeEvent<string>
+            event: SelectChangeEvent<string[]>
         ) => {
+            const selected = event.target.value
+            const selectedCategories = categories.filter((category) =>
+            selected.includes(category.title)
+            );
             setSelectedCategories(selectedCategories);
         };
 
         const handleFormSubmit = () => {
-            console.log("submitting form");
-            console.log(imgFile);
-            
+  
             const newCourse: Course = {
             title: title,
             description: description,
             imgFile : imgFile,
             difficulty: difficulty,
-            __categories__: [1],
+            __categories__: selectedCategories.map((category) => category.id),
             status: "active",
             };
             onSubmit(newCourse);
@@ -136,22 +135,6 @@ import { isNull } from "util";
                 </Select>
               </FormControl>
               <FormControl fullWidth>
-                {/*
-                <InputLabel id="category-select-label">Category</InputLabel>
-                 <Select
-                    labelId="category-select-label"
-                    id="category-select"
-                    multiple
-                    value= {selectedCategories}
-                    label="Category"
-                    onChange={handleCategoryChange}
-                >
-                    {categories.map((category) => (
-                    <MenuItem key={category.id} value={category.id}>
-                        {category.title}
-                    </MenuItem>
-                    ))}
-                </Select> */}
                 <input
                   accept="image/*"
                   id="image"
@@ -159,6 +142,38 @@ import { isNull } from "util";
                   onChange={handleImageChange}
                   className="mt-2"
                 />
+              </FormControl>
+              <FormControl sx={{ minWidth: 200, my: 2 }}>
+                <InputLabel id="category-label">Categories</InputLabel>
+                <Select
+                  labelId="category-label"
+                  id="category-select"
+                  multiple
+                  value={selectedCategories.map((category) => category.title)}
+                  onChange={handleCategoryChange}
+                  MenuProps={{
+                    PaperProps: {
+                      style: { maxHeight: "200px", overflowY: "auto" },
+                    },
+                  }}
+                  renderValue={(selected: string[]) => (
+                    <div
+                      style={{
+                        maxWidth: 200,
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                      }}
+                    >
+                      {selected.join(", ")}
+                    </div>
+                  )}
+                >
+                  {categories.map((category) => (
+                    <MenuItem key={category.title} value={category.title}>
+                      {category.title}
+                    </MenuItem>
+                  ))}
+                </Select>
               </FormControl>
             </DialogContent>
             <DialogActions>

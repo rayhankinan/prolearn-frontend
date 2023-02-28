@@ -49,8 +49,8 @@ export default function Album() {
   const [courses, setCourses] = useState<Course[]>([]);
   const APINEMBAK = "/api/file"
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedDifficulty, setSelectedDifficulty] = useState<string | null>(
-    ""
+  const [selectedDifficulty, setSelectedDifficulty] = useState<string | undefined>(
+    undefined
   );
   useEffect(() => {
     CourseService.getAll({
@@ -78,7 +78,7 @@ export default function Album() {
     }, []);
 
 
-  const search = (searchTerm: string, selectedDifficulty:string|null) => {
+  const search = (searchTerm: string, selectedDifficulty:string|undefined) => {
     CourseService.getAll({
       page: page,
       limit: perPage,
@@ -142,7 +142,6 @@ const handleModalSubmit = (course: Course) => {
     return;
   }
   const formData = new FormData();
-  console.log("disini kontol")
   console.log(course.imgFile)
   formData.append("title", course.title);
   formData.append("description", course.description);
@@ -155,13 +154,8 @@ const handleModalSubmit = (course: Course) => {
 
   CourseService.create(formData)
     .then((newCourse) => {
-      console.log(newCourse);
-
-      //sementara reload dulu karena aing stres
-      
+      console.log(newCourse);      
       window.location.reload();
-      
-    
     })
     .catch((error) => {
       console.error(error);
@@ -173,17 +167,15 @@ const handleModalSubmit = (course: Course) => {
   };
   //view all course button is clicked, show all courses remove pagination
   const handleShowAll = () => {
-    if(showAll){
+    
+    setShowAll(!showAll);
+    if(!showAll){
       setperPage(6);
     }
     else{
       setperPage(length * count);
     }
-    setShowAll(!showAll);
   };
-
-  
-
 
   let pagination;
   let rightButton;
@@ -265,9 +257,13 @@ const handleModalSubmit = (course: Course) => {
 
         <Container sx={{ py: 3 }} maxWidth="lg">
           {/* End hero unit */}
-          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-
-          
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
             <Grid
               container
               direction="row"
@@ -337,13 +333,12 @@ const handleModalSubmit = (course: Course) => {
             <Grid
               container
               spacing={10}
-              sx={{alignItems: "center", marginTop: 0}}
+              sx={{ alignItems: "center", marginTop: 0 }}
             >
               {courses.map((card) => (
                 <Grid item key={card.id} xs={12} sm={6} md={4}>
                   <Card
                     sx={{
-                      height: "100%",
                       display: "flex",
                       flexDirection: "column",
                     }}
@@ -367,10 +362,14 @@ const handleModalSubmit = (course: Course) => {
                       >
                         {card.title}
                       </Typography>
-                      <Typography className="custom-Source-Code-Pro text-greytext">
+                      <Typography
+                        className="custom-Source-Code-Pro text-greytext"
+                        sx={{ minHeight : "50px",maxHeight: "50px", overflow: "auto" }}
+                      >
                         {card.description}
                       </Typography>
                     </CardContent>
+
                     <Box
                       sx={{
                         mt: "auto",
@@ -403,8 +402,8 @@ const handleModalSubmit = (course: Course) => {
               </Grid>
             </Grid>
           </Box>
-          </Container>
-        
+        </Container>
+
         <Grid container direction="row" justifyContent="center" marginTop={2}>
           {pagination}
         </Grid>
