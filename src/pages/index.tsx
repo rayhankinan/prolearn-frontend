@@ -52,6 +52,7 @@ export default function Album() {
   const [selectedDifficulty, setSelectedDifficulty] = useState<string | undefined>(
     undefined
   );
+  const [selectedCategories, setSelectedCategories] = useState<number[] | undefined>(undefined);
   useEffect(() => {
     CourseService.getAll({
       page: page,
@@ -78,12 +79,13 @@ export default function Album() {
     }, []);
 
 
-  const search = (searchTerm: string, selectedDifficulty:string|undefined) => {
+  const search = (searchTerm: string, selectedDifficulty:string|undefined, selectedCategories:number[]|undefined) => {
     CourseService.getAll({
       page: page,
       limit: perPage,
       title: searchTerm,
-      difficulty: selectedDifficulty
+      difficulty: selectedDifficulty,
+      categoryId: selectedCategories
     })
       .then((response) => {
         setCourses(response.data.data);
@@ -98,17 +100,33 @@ export default function Album() {
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
-      search(searchTerm, selectedDifficulty);
+      search(searchTerm, selectedDifficulty, selectedCategories);
     }, 500);
 
     return () => clearTimeout(delayDebounceFn); 
-  }, [searchTerm, selectedDifficulty]);
+  }, [searchTerm, selectedDifficulty, selectedCategories]);
   
-   const handleCategoryChange = (
-     event: React.SyntheticEvent<Element, Event>,
-     value: string
+  const handleCategoryChange = (
+     value: string[]
    ) => {
      // handle category change here
+      console.log(value); 
+    //search the corresponding category id
+    let categoryIDs: number[] = [];
+    value.map((categoryTitle) => {
+      let category = categories.find((category) => category.title === categoryTitle);
+      if(category != null){
+        categoryIDs.push(category.id);
+      }
+    });
+
+    if(categoryIDs.length == 0)
+    {
+      setSelectedCategories(undefined);
+    }
+    else{
+      setSelectedCategories(categoryIDs);
+    }
    };
 
    const handleDifficultyChange = (
@@ -120,6 +138,9 @@ export default function Album() {
         value = value.toLowerCase();
         setSelectedDifficulty(value?.toLowerCase());
      }
+      else{
+        setSelectedDifficulty(undefined);
+      }
    };
 
   const [showAll, setShowAll] = useState(false);
@@ -327,6 +348,7 @@ const handleModalSubmit = (course: Course) => {
               <FilterBar
                 categories={categories}
                 handleDifficultyChange={handleDifficultyChange}
+                handleCategoryChange={handleCategoryChange}
               />
             </Box>
 
