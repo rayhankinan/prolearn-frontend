@@ -198,6 +198,17 @@ const handleModalSubmit = (course: Course) => {
     }
   };
 
+  const handleDelete = async (id: number) => {
+    try {
+      const response = await CourseService.delete(id);
+      console.log(response);
+      window.location.reload();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+
   let pagination;
   let rightButton;
   let leftButton;
@@ -386,7 +397,11 @@ const handleModalSubmit = (course: Course) => {
                       </Typography>
                       <Typography
                         className="custom-Source-Code-Pro text-greytext"
-                        sx={{ minHeight : "50px",maxHeight: "50px", overflow: "auto" }}
+                        sx={{
+                          minHeight: "50px",
+                          maxHeight: "50px",
+                          overflow: "auto",
+                        }}
                       >
                         {card.description}
                       </Typography>
@@ -405,13 +420,22 @@ const handleModalSubmit = (course: Course) => {
                         {card.difficulty.toUpperCase()}
                       </Typography>
                     </Box>
-                    <CardActions className="flex justify-center">
+                    <CardActions className="flex justify-between">
                       <Button
                         size="small"
                         variant="contained"
                         className="w-64 rounded-full bg-blackbutton text-white"
                       >
                         Edit
+                      </Button>
+
+                      <Button
+                        size="small"
+                        variant="contained"
+                        className="w-64 rounded-full bg-redButton text-white"
+                        onClick={() => handleDelete(card.id)}
+                      >
+                        Delete
                       </Button>
                     </CardActions>
                   </Card>
