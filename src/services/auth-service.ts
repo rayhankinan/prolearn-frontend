@@ -11,6 +11,17 @@ class AuthService {
             return response.data;
         })
     }
+
+    register(data: any) {
+        return http.post<any>('/user/register', data)
+        .then(response => {
+            if (response.data.username) {
+                console.log(response.data.username)
+            }
+
+            return response.data;
+        })
+    }
 }
 
 export default new AuthService();

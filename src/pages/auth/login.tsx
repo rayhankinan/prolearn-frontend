@@ -1,5 +1,4 @@
 import React, { useState , useEffect} from "react";
-// import { useHistory } from "react-router-dom";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import Grid from "@mui/material/Grid";
@@ -58,7 +57,7 @@ export default function Login() {
                                 
                             }}
                         >
-                            <img src="logo.png" alt="Logo" className="h-12 mt-5 mb-10" />
+                            <img src="/logo.png" alt="Logo" className="h-12 mt-5 mb-10" />
                             <Typography component="h1" variant="h4" className="mt-10" sx={{fontFamily: "Poppins", fontStyle: "bold", fontSize: "5vh"}}>
                                 Sign in
                             </Typography>
@@ -140,7 +139,7 @@ export default function Login() {
                                 borderRadius: "10px",
                                 marginBottom: 5,
                             }}>
-                                <img src="Saly-10 (1).png" alt="Logo" />
+                                <img src="/Saly-10 (1).png" alt="Logo" />
                             </Container>
                             <Typography component="h1" variant="h5"  color="white" className="ml-10 mb-5" sx={{fontFamily: "Poppins", fontStyle: "bold", fontSize: "5vh"}}>
                                 Sign In to ProLearn
