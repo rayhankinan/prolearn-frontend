@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import { Grid, Paper, TextField } from '@material-ui/core';
 import ReactQuill from 'react-quill';
-import { Material } from "@/components/material";
+// import { Material } from "@/components/material";
 import dynamic from 'next/dynamic';
 import 'react-quill/dist/quill.snow.css';
 
@@ -9,6 +9,17 @@ const DynamicReactQuill = dynamic(() => import('react-quill'), {
     ssr: false,
 });
 
+interface Material {
+    id: number;
+    name: string;
+    text: string;
+    video_url: string;
+    course_id: number;
+}
+
+interface GridComponentProps {
+    material: Material;
+}
 
 const materials: Material[] = [
     {
@@ -28,22 +39,28 @@ const materials: Material[] = [
         course_id: 1,
     },]
 
-const GridComponent = ({ material }) => {
+const GridComponent = ({ material }: GridComponentProps) => {
     const [name, setName] = useState(material.name || "");
     const [videoUrl, setVideoUrl] = useState(material.video_url || "");
     const [body, setBody] = useState(material.text || "");
 
-    const handleNameChange = (event) => {
+    const handleNameChange = (event : ChangeEvent<HTMLInputElement>) => {
         setName(event.target.value);
     };
 
-    const handleVideoUrlChange = (event) => {
+    const handleVideoUrlChange = (event : ChangeEvent<HTMLInputElement>) => {
         setVideoUrl(event.target.value);
     };
 
-    const handleBodyChange = (value) => {
-        setBody(value);
-    };
+    const handleBodyChange = (
+        value: string| null
+      ) => {
+        //change value to all lowercase
+        if(value != null)
+        {
+           setBody(value);
+        }
+      };
 
 
 
