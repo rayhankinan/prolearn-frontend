@@ -15,10 +15,6 @@ export interface Course {
     __thumbnail__?: thumbnail;
 }
 
-export interface Category {
-    title: string;
-    id: number;
-}
 class CourseService {
     getAll(params?: any) {
         return http.get("/course", { params });

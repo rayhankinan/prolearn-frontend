@@ -20,7 +20,7 @@ import TextField from "@mui/material/TextField";
 import CourseService from "@/services/course-service";
 import { Course } from "@/services/course-service";
 import CategoryService from "@/services/category-service";
-import { Category } from "@/services/course-service";
+import { Category } from "@/services/category-service";
 import { createGlobalStyle } from "styled-components";
 import FilterBar from "@/components/adminCourse/filterBar";
 
