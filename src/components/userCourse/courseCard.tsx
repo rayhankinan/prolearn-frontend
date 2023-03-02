@@ -8,16 +8,28 @@ interface CourseCardProps {
 }
 
 const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
+  console.log(course);
+  const APINEMBAK = "/api/file";
+  const imageLoader = ({ src }: { src: string }): string => {
+    return `${src}`;
+  };
+  
   return (
-    <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-      <div className="relative h-0 aspect-w-16 aspect-h-9">
+    <div className="bg-white rounded-lg shadow-lg overflow-hidden aspect-w-16 aspect-h-9">
+      <div className="relative h-64">
         <Image
+          fill
           src={
             course.__thumbnail__
-              ? "/api/file" + course.__thumbnail__.id
-              : "/images/placeholder.png"
+              ? `${APINEMBAK}/${course.__thumbnail__.id}`
+              : "https://source.unsplash.com/random"
           }
-          alt={course.title}
+          alt="course thumbnail"
+          loader={imageLoader}
+          sizes="(max-width: 768px) 100vw,
+      (max-width: 1200px) 50vw,
+      33vw"
+          className="absolute top-0 left-0 w-full h-full object-cover object-center"
         />
       </div>
       <div className="px-6 py-4">

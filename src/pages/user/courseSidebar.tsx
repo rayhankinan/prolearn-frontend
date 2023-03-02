@@ -1,31 +1,57 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Grid, Typography } from "@material-ui/core";
 import { Course } from "@/services/course-service";
-import CourseCard from "@/pages/user/courseCard";
+import CourseCard from "@/components/userCourse/courseCard";
 import { Chip } from "@mui/material";
+import DifficultySelection from "@/components/userCourse/difficultySelection";
+import CategoryList from "@/components/userCourse/categoryList";
+import { Category } from "@/services/category-service";
+import CategoryService from "@/services/category-service";
 
 const Sidebar = () => {
+  //get all categories
+
+  const [categories, setCategories] = useState<Category[]>([]);
+  // useEffect(() => {
+  //   CategoryService.getAll()
+  //     .then((response) => {
+  //       console.log(response.data.data);
+  //       setCategories(response.data.data);
+  //     })
+  //     .catch((error) => console.log(error));
+  // }, []);
+
+  const examples = [
+    {
+      id: 1,
+      title: "React",
+    },
+    {
+      id: 2,
+      title: "Angular",
+    },
+    {
+      id: 3,
+      title: "Vue",
+    },
+  ];
+
+  useEffect(() => {
+    setCategories(examples);
+  }, [examples]);
+  
+  
   return (
-    <div className="w-1/4">
-      <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-        <div className="px-6 py-4">
-          <div className="font-bold text-xl mb-2">Course Categories</div>
-          <div className="mt-4 flex flex-wrap">
-            <Chip label="All" className="mr-2 mb-2" />
-            <Chip label="Web Development" className="mr-2 mb-2" />
-            <Chip label="Mobile Development" className="mr-2 mb-2" />
-            <Chip label="Data Science" className="mr-2 mb-2" />
-            <Chip label="Design" className="mr-2 mb-2" />
-            <Chip label="Business" className="mr-2 mb-2" />
-            <Chip label="IT & Software" className="mr-2 mb-2" />
-            <Chip label="Marketing" className="mr-2 mb-2" />
-            <Chip label="Personal Development" className="mr-2 mb-2" />
-            </div>
-          </div>
-        </div>
+    <div className="flex flex-col w-full px-4 py-6">
+
+      <h3 className="text-blue-800 font-bold text-lg mb-4">Difficulty</h3>
+      <DifficultySelection />
+      <div className="mt-6">
+        <h3 className="text-gray-800 font-bold text-lg mb-2">Categories</h3>
+        <CategoryList categories={categories} />
       </div>
+    </div>
   );
 };
 
-
-export default Sidebar
+export default Sidebar;

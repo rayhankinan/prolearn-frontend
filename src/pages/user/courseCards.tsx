@@ -1,7 +1,7 @@
 import React from "react";
 import { Grid, Typography } from "@material-ui/core";
 import { Course } from "@/services/course-service";
-import CourseCard from "@/pages/user/courseCard";
+import CourseCard from "@/components/userCourse/courseCard";
 
 interface CourseCardsProps {
   courses: Course[];
@@ -12,7 +12,9 @@ const CourseCards: React.FC<CourseCardsProps> = ({ courses }) => {
     <Grid container spacing={3}>
       {courses.map((course) => (
         <Grid item xs={12} sm={6} md={4} lg={3} key={course.id}>
-          <CourseCard course={course} />
+          <div style={{ maxWidth: "350px" }}>
+            <CourseCard course={course} />
+          </div>
         </Grid>
       ))}
       {courses.length === 0 && (
