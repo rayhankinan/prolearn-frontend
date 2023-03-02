@@ -6,12 +6,25 @@ import Link from "@mui/material/Link";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { styled } from '@mui/material/styles';
 import ReactMarkdown from 'react-markdown'
-import { Material } from "@/components/material";
+// import { Material } from "@/components/material";
 import Modal from "@/components/modal";
 import GridComponent from '@/components/GridComponent';
 import { Button, Grid, Typography } from "@mui/material";
 import { useRouter } from 'next/router'
+import CategoryService from "@/services/category-service";
+import { Category } from "@/services/category-service";
 
+interface Material {
+    id: number;
+    name: string;
+    text: string;
+    video_url: string;
+    course_id: number;
+}
+
+interface GridComponentProps {
+    material: Material;
+}
 
 function Copyright() {
 
@@ -98,15 +111,17 @@ const theme = createTheme();
 
 export default function CourseDetailAdmin() {
     const [showModal, setShowModal] = useState(false);
-    const [selectedMaterial, setSelectedMaterial] = useState(null);
+    const [selectedMaterial, setSelectedMaterial] = useState<Material | null>(null);
     const [showEditButton, setShowEditButton] = useState(false);
     const router = useRouter()
-    const { course_id, material_id } = router.query
+    // const { course_id, material_id } = router.query
+    const course_id: string = router.query.course_id!.toString();
+    const material_id: string = router.query.material_id!.toString();
     const course_idInt = parseInt(course_id)
     const material_idInt = parseInt(material_id)
     console.log("id: " + material_idInt)
 
-    const handleEditMaterial = (material) => {
+    const handleEditMaterial = (material: Material) => {
         setSelectedMaterial(material);
         setShowModal(true);
     };
@@ -121,14 +136,15 @@ export default function CourseDetailAdmin() {
         setShowModal(false);
     }
 
-    // const currentMaterial = materials.find(m => m.id === material_idInt);
-    // console.log("material id: " + currentMaterial.id);
-    // if (currentMaterial) {
-    //     const currentText = currentMaterial.text;
-    //     console.log("text: " + currentText);
-    // } else {
-    //     console.log(`Material with id ${material_idInt} not found.`);
-    // }
+    const [categories, setCategories] = useState<Category[]>([]);
+    useEffect(() => {
+      CategoryService.getAll()
+        .then((response) => {
+          console.log(response.data.data);
+          setCategories(response.data.data);
+        })
+        .catch((error) => console.log(error));
+    }, []);
 
     return (
         <ThemeProvider theme={theme}>

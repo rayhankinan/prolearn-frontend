@@ -51,7 +51,10 @@ export default function userCourseDetail() {
     const [selectedMaterial, setSelectedMaterial] = useState(null);
 
     const router = useRouter();
-    const {course_id, material_id} = router.query;
+    // let {course_id, material_id} = router.query;
+    const course_id: string = router.query.course_id!.toString();
+    const material_id: string = router.query.material_id!.toString();
+
     const course_idInt = parseInt(course_id);
     const material_idInt = parseInt(material_id);
 

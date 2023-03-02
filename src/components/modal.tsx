@@ -4,16 +4,23 @@ import styles from "@/styles/Modal.module.css"
 import { DirtyLensSharp } from "@mui/icons-material";
 import { Grid, Paper } from '@material-ui/core';
 
+type ModalProps = {
+    show: boolean;
+    onClose: () => void;
+    children: any;
+    };
 
-
-export default function Modal({ show, onClose, children }) {
+export default function Modal({ 
+    show, 
+    onClose, 
+    children }: ModalProps) {
     const [isBrowser, setIsBrowser] = useState(false)
 
     useEffect(() => {
         setIsBrowser(true);
     }, []);
 
-    const handleClose = (e) => {
+    const handleClose = (e: Event) => {
         e.preventDefault();
         onClose();
     }
@@ -33,7 +40,7 @@ export default function Modal({ show, onClose, children }) {
     if (isBrowser) {
         return ReactDOM.createPortal(
             modalContent,
-            document.getElementById("modal-root")
+            document.getElementById("modal-root")!
         )
     } else {
         return null;
