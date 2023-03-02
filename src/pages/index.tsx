@@ -12,17 +12,17 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Link from "@mui/material/Link";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import SearchBar from "@/components/search";
-import { Plus } from "@/components/plus";
-import { AddCourseModal } from "@/components/addCourseModal";
+import SearchBar from "@/components/adminCourse/search";
+import { Plus } from "@/components/adminCourse/plus";
+import { AddCourseModal } from "@/components/adminCourse/addCourseModal";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import CourseService from "@/services/course-service";
 import { Course } from "@/services/course-service";
 import CategoryService from "@/services/category-service";
-import { Category } from "@/services/course-service";
+import { Category } from "@/services/category-service";
 import { createGlobalStyle } from "styled-components";
-import FilterBar from "@/components/filterBar";
+import FilterBar from "@/components/adminCourse/filterBar";
 
 
 function Copyright() {
@@ -198,11 +198,14 @@ const handleModalSubmit = (course: Course) => {
     }
   };
 
-  const handleDelete = async (id: number) => {
+  const handleDelete = async (id?: number) => {
+    //check if id not null
+    if (id == null) {
+      return;
+    }
     try {
-      const response = await CourseService.delete(id);
-      console.log(response);
-      window.location.reload();
+      await CourseService.delete(id);
+      setCourses(courses.filter((course) => course.id !== id));
     } catch (error) {
       console.error(error);
     }

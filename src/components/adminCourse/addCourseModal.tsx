@@ -1,3 +1,4 @@
+    
     import { useState } from "react";
         import {
         Button,
@@ -13,7 +14,7 @@
         SelectChangeEvent,
         } from "@mui/material";
     import { Course } from "@/services/course-service";
-    import { Category } from "@/services/course-service";
+    import { Category } from "@/services/category-service";
     
 
 

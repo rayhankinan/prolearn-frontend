@@ -1,4 +1,8 @@
 import http from "../http-common";
+export interface Category {
+    title: string;
+    id: number;
+}
 
 class CategoryService {
     getAll() {

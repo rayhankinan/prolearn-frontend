@@ -20,7 +20,7 @@
         <Card sx={{ p: 2 }}>
         <CardMedia
             component="img"
-            image="Plus.png"
+            image="/Plus.png"
             alt="Add Course"
             sx={{ margin: "auto"}}
         />
