@@ -8,8 +8,12 @@ const Footer: React.FC = () => {
             </div>
             <div className="flex flex-row w-full items-center p-12">
                 <div className="flex flex-col w-full items-center">
-                    <h2 className="font-sans p-3 text-6xl font-bold text-white"> ProLearn </h2>
+                    <img src="../logo.png" alt="Logo" className="bg-cover" />
                     <p className="font-sans p-3 text-xl font-bold text-white"> Become a Professional Starts Here </p>
+                    <div className="flex flex-row w-full justify-center">
+                        <input type="text" className="w-1/2 h-12 rounded-l-lg border-2 border-gray-400 placeholder: pl-[14px]" placeholder="Enter your email address" />
+                        <button className="w-1/6 h-12 rounded-r-lg bg-gray-400 text-white"> Contact Us </button>
+                    </div>
                 </div>
                 <div className="flex flex-col w-full justify-items-end">
                     <div className="flex flex-row w-full justify-middle">
