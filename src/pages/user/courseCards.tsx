@@ -11,8 +11,8 @@ const CourseCards: React.FC<CourseCardsProps> = ({ courses }) => {
   return (
     <Grid container spacing={3}>
       {courses.map((course) => (
-        <Grid item xs={12} sm={6} md={4} lg={3} key={course.id}>
-          <div style={{ maxWidth: "350px" }}>
+        <Grid item xs={12} sm={6} md={4} lg={4} key={course.id}>
+          <div style={{ maxWidth: "300px" }}>
             <CourseCard course={course} />
           </div>
         </Grid>

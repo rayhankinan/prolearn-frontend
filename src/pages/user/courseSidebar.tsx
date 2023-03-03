@@ -12,33 +12,19 @@ const Sidebar = () => {
   //get all categories
 
   const [categories, setCategories] = useState<Category[]>([]);
-  // useEffect(() => {
-  //   CategoryService.getAll()
-  //     .then((response) => {
-  //       console.log(response.data.data);
-  //       setCategories(response.data.data);
-  //     })
-  //     .catch((error) => console.log(error));
-  // }, []);
+  useEffect(() => {
+    CategoryService.getAll()
+      .then((response) => {
+        console.log(response.data.data);
+        setCategories(response.data.data);
+      })
+      .catch((error) => console.log(error));
+  }, []);
 
-  const examples = [
-    {
-      id: 1,
-      title: "React",
-    },
-    {
-      id: 2,
-      title: "Angular",
-    },
-    {
-      id: 3,
-      title: "Vue",
-    },
-  ];
 
   useEffect(() => {
-    setCategories(examples);
-  }, [examples]);
+    setCategories(categories);
+  }, [categories]);
   
   
   return (

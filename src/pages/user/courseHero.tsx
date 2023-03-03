@@ -28,11 +28,10 @@ const Hero: React.FC<Props> = ({ title, breadcrumbs }) => {
           style={{ minHeight: "6rem" }}
         >
           <div
-            className="absolute inset-0 bg-center bg-cover"
+            className="absolute inset-0 bg-center bg-cover rounded-3xl"
             style={{
               backgroundImage: "url(https://picsum.photos/1920/1080)",
               opacity: 0.8,
-              filter: "blur(2px)",
             }}
           />
           <div className="flex items-center">
@@ -44,7 +43,7 @@ const Hero: React.FC<Props> = ({ title, breadcrumbs }) => {
             </span>
           </div>
           <div
-            className="absolute inset-0 bg-blue-600 opacity-60"
+            className="absolute inset-0 bg-slate-800 rounded-3xl"
             style={{ mixBlendMode: "color" }}
           />
         </Typography>

@@ -25,6 +25,9 @@ export default function Courses() {
       .catch((error) => console.log(error));
   }, [page, perPage]);
 
+  
+  
+
   return (
     <>
     <div className="container mx-auto justify-center">
