@@ -15,12 +15,13 @@ const CourseDifficultySelect = () => {
 
   return (
     <Fragment>
-      <FormControl sx={{ minWidth: "250px" }}>
+      <FormControl sx={{ minWidth: "100%" }}>
         <Select
           labelId="course-difficulty-select-label"
           id="course-difficulty-select"
           value={difficulty}
           onChange={handleDifficultyChange}
+          className= "rounded-xl"
         >
           {difficulties.map((option) => (
             <MenuItem key={option} value={option}>

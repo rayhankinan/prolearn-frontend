@@ -30,10 +30,9 @@ const Sidebar = () => {
   return (
     <div className="flex flex-col w-full px-4 py-6">
 
-      <h3 className="text-blue-800 font-bold text-lg mb-4">Difficulty</h3>
+      <h3 className="text-blue-900 font-bold text-lg mb-4">DIFFICULTY</h3>
       <DifficultySelection />
-      <div className="mt-6">
-        <h3 className="text-gray-800 font-bold text-lg mb-2">Categories</h3>
+      <div className="mt-7">
         <CategoryList categories={categories} />
       </div>
     </div>

@@ -26,8 +26,8 @@ const CategoryList: React.FC<CategoryListProps> = ({
           key={category.id}
           className={`flex items-center justify-between px-4 py-2 rounded-md cursor-pointer ${
             selected.includes(category.id)
-              ? "bg-blue-500 text-white"
-              : "hover:bg-gray-200"
+              ? "bg-blue-500 text-white font-semibold"
+              : "hover:bg-gray-200 text-slate-500 font-semibold"
           }`}
           onClick={() => handleCategorySelect(category)}
         >
