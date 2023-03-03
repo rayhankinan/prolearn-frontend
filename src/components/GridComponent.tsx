@@ -18,7 +18,7 @@ interface Material {
 }
 
 interface GridComponentProps {
-    material: Material;
+    material?: Material;
 }
 
 const materials: Material[] = [
@@ -39,10 +39,10 @@ const materials: Material[] = [
         course_id: 1,
     },]
 
-const GridComponent = ({ material }: GridComponentProps) => {
-    const [name, setName] = useState(material.name || "");
-    const [videoUrl, setVideoUrl] = useState(material.video_url || "");
-    const [body, setBody] = useState(material.text || "");
+const GridComponent = ({ material }: GridComponentProps = {}) => {
+    const [name, setName] = useState(material?.name || "");
+    const [videoUrl, setVideoUrl] = useState(material?.video_url || "");
+    const [body, setBody] = useState(material?.text || "");
 
     const handleNameChange = (event : ChangeEvent<HTMLInputElement>) => {
         setName(event.target.value);
