@@ -13,7 +13,6 @@ import { Button, Grid, Typography } from "@mui/material";
 import { useRouter } from 'next/router'
 import CategoryService from "@/services/category-service";
 import { Category } from "@/services/category-service";
-
 interface Material {
     id: number;
     name: string;
@@ -111,20 +110,30 @@ const theme = createTheme();
 
 export default function CourseDetailAdmin() {
     const [showModal, setShowModal] = useState(false);
+    const[showAddModal, setShowAddModal] = useState(false);
     const [selectedMaterial, setSelectedMaterial] = useState<Material | null>(null);
     const [showEditButton, setShowEditButton] = useState(false);
     const router = useRouter()
-    // const { course_id, material_id } = router.query
-    const course_id: string = router.query.course_id!.toString();
-    const material_id: string = router.query.material_id!.toString();
-    const course_idInt = parseInt(course_id)
-    const material_idInt = parseInt(material_id)
-    console.log("id: " + material_idInt)
+    const { course_id, material_id } = router.query
+    // const course_id: string = router.query.course_id!.toString() ; 
+    // const material_id: string = router.query.material_id!.toString();
+    if (typeof course_id === 'string') {
+        const course_idInt = parseInt(course_id);
+        console.log(course_idInt);
+      };
+
+    const material_idInt = parseInt(material_id );
+    console.log("id: " + material_idInt);
+
+    const handleAddMaterial = () => {
+        setShowAddModal(true);
+    };
 
     const handleEditMaterial = (material: Material) => {
         setSelectedMaterial(material);
         setShowModal(true);
     };
+    
     const handleShowEditButton = () => {
         setShowEditButton(true);
     };
@@ -134,6 +143,7 @@ export default function CourseDetailAdmin() {
 
     const handleClose = () => {
         setShowModal(false);
+        setShowAddModal(false);
     }
 
     const [categories, setCategories] = useState<Category[]>([]);
@@ -173,6 +183,13 @@ export default function CourseDetailAdmin() {
                                 Done
                             </Button>
                             )}
+
+                                <button
+                                    onClick={() => handleAddMaterial()}
+                                    className=" bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mt-10 mx-4 mb-5"
+                                >
+                                    Add Material
+                                </button>
                         </Box>
                     </Grid>
                     {/* horizontal line that have space on the left and right */}
@@ -247,6 +264,19 @@ export default function CourseDetailAdmin() {
                     </Modal>
                 )
             }
+
+            {
+                showAddModal && (
+                    <Modal show={showAddModal} onClose={() => setShowModal(false)}>
+                        <GridComponent />
+                        <div className="flex justify-center mt-5">
+                            <button onClick={handleClose} className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mr-4">Cancel</button>
+                        </div>
+                    </Modal>
+                )
+            }
+
+
         </ThemeProvider >
     )
 };
