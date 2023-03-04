@@ -9,7 +9,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import TextField from "@material-ui/core/TextField";
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { InputAdornment } from "@material-ui/core";
-import authService from "@/services/auth-service";
+import userService from "@/services/user-service";
 import { PersonOutlined } from "@mui/icons-material";
 import { useRouter } from "next/router";
 
@@ -29,7 +29,7 @@ export default function Login() {
             password
         }
 
-        authService.logIn(dataUser).then((response) => {
+        userService.logIn(dataUser).then((response) => {
             localStorage.setItem('token', response.data)
             router.push('/')
         }).catch((error) => {
