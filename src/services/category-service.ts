@@ -16,10 +16,6 @@ class CategoryService {
     create(data: any) {
         return http.post("/category", data)
         .then(response => {
-            if (response.data.title) {
-                console.log(response.data.title)
-            }
-
             return response.data;
         })
     }

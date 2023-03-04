@@ -10,7 +10,6 @@ interface CourseCardProps {
 }
 
 const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
-  console.log(course);
   const APINEMBAK = "/api/file";
   const imageLoader = ({ src }: { src: string }): string => {
     return `${src}`;

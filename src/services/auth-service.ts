@@ -4,10 +4,6 @@ class AuthService {
     logIn(data: any) {
         return http.post<any>('/user/login', data)
         .then(response => {
-            if (response.data.username) {
-                console.log(response.data.username)
-            }
-
             return response.data;
         })
     }
@@ -15,10 +11,6 @@ class AuthService {
     register(data: any) {
         return http.post<any>('/student/register', data)
         .then(response => {
-            if (response.data.username) {
-                console.log(response.data.username)
-            }
-
             return response.data;
         })
     }

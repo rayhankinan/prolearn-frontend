@@ -28,7 +28,6 @@ export default function register() {
     };
 
     authService.register(dataUser).then((response) => {
-      console.log(response.data);
       router.push('/auth/login');
     }).catch((error) => {
       console.log(error);

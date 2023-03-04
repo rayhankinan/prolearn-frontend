@@ -15,7 +15,6 @@ const Sidebar = () => {
   useEffect(() => {
     CategoryService.getAll()
       .then((response) => {
-        console.log(response.data.data);
         setCategories(response.data.data);
       })
       .catch((error) => console.log(error));

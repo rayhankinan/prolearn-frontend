@@ -72,7 +72,6 @@ export default function Album() {
     useEffect(() => {
       CategoryService.getAll()
         .then((response) => {
-          console.log(response.data.data);
           setCategories(response.data.data);
         })
         .catch((error) => console.log(error));
@@ -110,7 +109,6 @@ export default function Album() {
      value: string[]
    ) => {
      // handle category change here
-      console.log(value); 
     //search the corresponding category id
     let categoryIDs: number[] = [];
     value.map((categoryTitle) => {
@@ -163,7 +161,6 @@ const handleModalSubmit = (course: Course) => {
     return;
   }
   const formData = new FormData();
-  console.log(course.imgFile)
   formData.append("title", course.title);
   formData.append("description", course.description);
   formData.append("difficulty", course.difficulty);
@@ -174,8 +171,7 @@ const handleModalSubmit = (course: Course) => {
   formData.append("file", course.imgFile, course.imgFile.name);
 
   CourseService.create(formData)
-    .then((newCourse) => {
-      console.log(newCourse);      
+    .then((newCourse) => {     
       window.location.reload();
     })
     .catch((error) => {

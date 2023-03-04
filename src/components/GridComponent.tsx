@@ -72,7 +72,6 @@ const GridComponent = ({ material }: GridComponentProps = {}) => {
             video_url: videoUrl,
             text: body,
         };
-        console.log(updatedMaterial);
     };
 
     return (

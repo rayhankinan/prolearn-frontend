@@ -119,11 +119,9 @@ export default function CourseDetailAdmin() {
     // const material_id: string = router.query.material_id!.toString();
     if (typeof course_id === 'string') {
         const course_idInt = parseInt(course_id);
-        console.log(course_idInt);
       };
 
     const material_idInt = parseInt(material_id );
-    console.log("id: " + material_idInt);
 
     const handleAddMaterial = () => {
         setShowAddModal(true);
@@ -150,7 +148,6 @@ export default function CourseDetailAdmin() {
     useEffect(() => {
       CategoryService.getAll()
         .then((response) => {
-          console.log(response.data.data);
           setCategories(response.data.data);
         })
         .catch((error) => console.log(error));

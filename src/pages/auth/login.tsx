@@ -30,7 +30,6 @@ export default function Login() {
         }
 
         authService.logIn(dataUser).then((response) => {
-            console.log(response.data)
             localStorage.setItem('token', response.data)
             router.push('/')
         }).catch((error) => {

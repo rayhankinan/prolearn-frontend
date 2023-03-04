@@ -54,7 +54,6 @@
         const handleImageChange = (
             event: React.ChangeEvent<HTMLInputElement>
         ) => {
-            console.log(event.target.files);
             const file = event.target.files?.[0];
             setImage(file)
             event.target.value = "";
