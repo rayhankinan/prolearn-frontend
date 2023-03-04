@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import Hero from "@/pages/user/courseHero";
-import Sidebar from "@/pages/user/courseSidebar";
-import CourseCards from "@/pages/user/courseCards";
+import Hero from "@/pages/course/courseHero";
+import Sidebar from "@/pages/course/courseSidebar";
+import CourseCards from "@/pages/course/courseCards";
 import { Course } from "@/services/course-service";
 import CourseService from "@/services/course-service";
 

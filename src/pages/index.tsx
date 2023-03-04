@@ -23,6 +23,7 @@ import CategoryService from "@/services/category-service";
 import { Category } from "@/services/category-service";
 import { createGlobalStyle } from "styled-components";
 import FilterBar from "@/components/adminCourse/filterBar";
+import { useRouter } from "next/router";
 
 
 function Copyright() {
@@ -42,6 +43,7 @@ function Copyright() {
 const theme = createTheme();
 
 export default function Album() {
+  const router = useRouter();
   const [length, setLength] = useState(0);
   const [count , setCount] = useState(0);
   const [perPage, setperPage] = useState(6);
@@ -152,6 +154,11 @@ export default function Album() {
 
   const handleModalClose = () => {
     setIsModalOpen(false);
+  };
+
+  const handleEdit = (courseId: number) => {
+    // set data
+    router.push(`/course/admin/${courseId}/description`);
   };
 
 const handleModalSubmit = (course: Course) => {
@@ -424,6 +431,7 @@ const handleModalSubmit = (course: Course) => {
                         size="small"
                         variant="contained"
                         className="w-64 rounded-full bg-blackbutton text-white"
+                        onClick={() => handleEdit(card.id)}
                       >
                         Edit
                       </Button>

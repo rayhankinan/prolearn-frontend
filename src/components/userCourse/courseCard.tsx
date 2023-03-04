@@ -35,9 +35,9 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
           <div className="font-bold text-sky-900 text-xl mb-2 overflow-hidden max-h-16 line-clamp-2 hover:max-h-full">
             {course.title}
           </div>
-          {/* <p className="text-gray-700 text-base overflow-hidden max-h-16 line-clamp-2 hover:max-h-full">
+          <p className="text-gray-700 text-base overflow-hidden max-h-16 line-clamp-2 hover:max-h-full">
             {course.description}
-          </p> */}
+          </p>
         </div>
         <div className="px-6 py-4 flex items-center justify-between">
           <span className="inline-block bg-gray-200 rounded-lg px-2 py-1 text-sm font-semibold text-gray-700 mr-2">

@@ -10,7 +10,7 @@ import ReactMarkdown from 'react-markdown'
 import { Material } from "@/components/material";
 import GridComponent from '@/components/GridComponent';
 import { Button, Grid, Typography } from "@mui/material";
-import { useRouter, Router } from 'next/router'
+import { useRouter, Router } from 'next/router';
 
 function Copyright() {
 
@@ -52,6 +52,7 @@ export default function userCourseDetail() {
 
     const router = useRouter();
     // let {course_id, material_id} = router.query;
+    // TO DO - fix error
     const course_id: string = router.query.course_id!.toString();
     const material_id: string = router.query.material_id!.toString();
 
@@ -80,13 +81,13 @@ export default function userCourseDetail() {
                                 {materials.map((material) => (
                                     <Grid sx= {{display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "10px"}} key= {material.id}>
                                         {(material.id == material_idInt) &&
-                                            <Link href={`/courseUser/1/${material.id}`} style={{   color: "black" }}>
+                                            <Link href={`/course/1/${material.id}`} style={{   color: "black" }}>
                                                 {/* <a style={{ color: "black" }}> */}
                                                     <div>{material.name}</div>
                                                 {/* </a> */}
                                             </Link>                                        }
                                         {(material.id != material_idInt) &&
-                                            <Link href={`/courseUser/1/${material.id}`} style={{ textDecoration: "none", color: "black" }}>
+                                            <Link href={`/course/1/${material.id}`} style={{ textDecoration: "none", color: "black" }}>
                                             {/* <a style={{ color: "black" }}> */}
                                                 <div>{material.name}</div>
                                             {/* </a> */}

@@ -13,6 +13,7 @@ import { Button, Grid, Typography } from "@mui/material";
 import { useRouter } from 'next/router'
 import CategoryService from "@/services/category-service";
 import { Category } from "@/services/category-service";
+import { Course } from "@/services/course-service";
 interface Material {
     id: number;
     name: string;
@@ -121,7 +122,7 @@ export default function CourseDetailAdmin() {
         const course_idInt = parseInt(course_id);
       };
 
-    const material_idInt = parseInt(material_id );
+    const material_idInt = -1;
 
     const handleAddMaterial = () => {
         setShowAddModal(true);
@@ -197,17 +198,17 @@ export default function CourseDetailAdmin() {
                     <Grid container spacing={2}>
                         <Grid item xs={3} sx={{ borderRight: '1px solid #ccc' }}>
                             <Grid item container direction="column">
+                                <Grid sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "10px" }} key={"desc"}>
+                                    <Link href={`/course/admin/1/description`} style={{  color: "black" }}>
+                                        {/* <a style={{ color: "black" }}> */}
+                                            <div>Description</div>
+                                        {/* </a> */}
+                                    </Link>
+                                </Grid>
                                 {materials.map((material) => (
                                     <Grid sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "10px" }} key={material.id}>
-                                        {(material.id == material_idInt) &&
-                                            <Link href={`/courseAdmin/1/${material.id}`} style={{  color: "black" }}>
-                                                {/* <a style={{ color: "black" }}> */}
-                                                    <div>{material.name}</div>
-                                                {/* </a> */}
-                                            </Link>
-                                        }
                                         {(material.id != material_idInt) &&
-                                            <Link href={`/courseAdmin/1/${material.id}`} style={{ textDecoration: "none",  color: "black" }}>
+                                            <Link href={`/course/admin/1/${material.id}`} style={{ textDecoration: "none",  color: "black" }}>
                                                 {/* <a style={{ color: "black" }}> */}
                                                     <div>{material.name}</div>
                                                 {/* </a> */}
@@ -228,7 +229,7 @@ export default function CourseDetailAdmin() {
                             </Grid>
                         </Grid>
                         <Grid item xs={9} sx={{ paddingLeft: '20px' }}>
-                            <Grid item><ReactMarkdown>Bla b;a bla</ReactMarkdown></Grid>
+                            <Grid item><ReactMarkdown></ReactMarkdown></Grid>
                         </Grid>
                     </Grid>
                 </Grid>
