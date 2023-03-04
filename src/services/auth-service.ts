@@ -13,7 +13,7 @@ class AuthService {
     }
 
     register(data: any) {
-        return http.post<any>('/user/register', data)
+        return http.post<any>('/student/register', data)
         .then(response => {
             if (response.data.username) {
                 console.log(response.data.username)
