@@ -1,31 +1,20 @@
 import Image from "next/image";
 import { Course } from "@/services/course-service";
 import { Chip } from "@mui/material";
-import { Category } from "@/services/category-service";
-import Link from "next/link";
 import { Card, CardContent, CardActions, Typography } from "@mui/material";
 import {Button} from "@mui/material";
-import { useRouter } from "next/router";
 import userService from "@/services/user-service";
 
 
 
-interface CourseCardProps {
+interface SubcribedCardProps {
   course: Course;
 }
 
-const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
+const SubcribedCard: React.FC<SubcribedCardProps> = ({ course }) => {
   const APINEMBAK = "/api/file";
   const imageLoader = ({ src }: { src: string }): string => {
     return `${src}`;
-  };
-
-  const handleSubscribe = (id: number) => {
-    try {
-      userService.subscribe(id);
-    } catch (error) {
-      console.log(error);
-    }
   };
 
   return (
@@ -122,9 +111,9 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
               size="small"
               variant="contained"
               className="w-64 bg-blackbutton text-white"
-              onClick={() => handleSubscribe(course.id)}
+              href="/course/[id]/description"
             >
-              Subscribe
+              Learn Now!
             </Button>
           </CardActions>
         </CardContent>
@@ -133,5 +122,5 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
   );
 };
 
-export default CourseCard;
+export default SubcribedCard;
 
