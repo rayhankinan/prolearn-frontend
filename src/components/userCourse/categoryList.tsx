@@ -3,16 +3,16 @@ import { Category } from "@/services/category-service";
 
 type CategoryListProps = {
   categories: Category[];
+  selected: number[] | undefined;
+  setSelected: (selected: number[] | undefined) => void;
 };
 
-const CategoryList: React.FC<CategoryListProps> = ({ categories }) => {
-  const [selected, setSelected] = useState<number[]>([]);
-
+const CategoryList: React.FC<CategoryListProps> = ({ categories, selected, setSelected}) => {
   const handleCategorySelect = (category: Category) => {
-    if (selected.includes(category.id)) {
-      setSelected(selected.filter((id) => id !== category.id));
+    if (selected?.includes(category.id)) {
+      setSelected(selected?.filter((id) => id !== category.id));
     } else {
-      setSelected([...selected, category.id]);
+      setSelected([...selected ?? [], category.id]);
     }
   };
 
@@ -22,7 +22,7 @@ const CategoryList: React.FC<CategoryListProps> = ({ categories }) => {
         <li
           key={category.id}
           className={`flex items-center justify-between px-4 py-2 rounded-md cursor-pointer ${
-            selected.includes(category.id)
+            selected?.includes(category.id)
               ? "bg-blue-500 text-white font-semibold"
               : "hover:bg-gray-200 text-slate-500 font-semibold"
           }`}
