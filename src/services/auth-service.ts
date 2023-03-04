@@ -9,7 +9,7 @@ class AuthService {
     }
 
     register(data: any) {
-        return http.post<any>('/student/register', data)
+        return http.post<any>('/user/register', data)
         .then(response => {
             return response.data;
         })
