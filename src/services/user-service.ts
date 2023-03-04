@@ -1,6 +1,6 @@
 import http from "../http-common";
 
-class AuthService {
+class UserService {
     logIn(data: any) {
         return http.post<any>('/user/login', data)
         .then(response => {
@@ -14,6 +14,13 @@ class AuthService {
             return response.data;
         })
     }
+
+    subscribe(id: number) {
+        return http.post<any>(`/user/subscribe/${id}`)
+        .then(response => {
+            return response.data;
+        })
+    }
 }
 
-export default new AuthService();
+export default new UserService();
