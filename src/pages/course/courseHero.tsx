@@ -43,8 +43,8 @@ const Hero: React.FC<Props> = ({ title, breadcrumbs }) => {
             </span>
           </div>
           <div
-            className="absolute inset-0 bg-blue-900 rounded-2xl"
-            style={{ mixBlendMode: "color" }}
+            className="absolute inset-0 rounded-2xl"
+            style={{ mixBlendMode: "overlay", backgroundColor: "#1a202c" }}
           />
         </Typography>
       </div>

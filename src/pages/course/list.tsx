@@ -4,6 +4,8 @@ import Sidebar from "@/pages/course/courseSidebar";
 import CourseCards from "@/pages/course/courseCards";
 import { Course } from "@/services/course-service";
 import CourseService from "@/services/course-service";
+import Navbar from "../../components/navbar";
+import SearchBar from "@/components/adminCourse/search";
 
 
 export default function Courses() {
@@ -12,6 +14,7 @@ export default function Courses() {
   const [perPage, setPerPage] = useState(9);
   const [count, setCount] = useState(1);
   const [length, setLength] = useState(0);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     CourseService.getAll({
@@ -31,6 +34,7 @@ export default function Courses() {
 
   return (
     <>
+      <Navbar />
       <div className="container mx-auto justify-center custom-Montserrat ">
         <Hero
           title="Courses"
@@ -51,6 +55,9 @@ export default function Courses() {
           <Sidebar />
         </div>
         <div className="w-full md:w-4/5 px-4">
+          <div className="flex justify-center">
+            <SearchBar searchTerm={search} setSearchTerm={setSearch} />
+          </div>
           <CourseCards courses={courses} />
         </div>
       </div>

@@ -1,15 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from "@mui/material";
+import {
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  Icon,
+} from "@mui/material";
 import { Fragment } from "react";
 
 const difficulties = ["Beginner", "Intermediate", "Advanced"];
 
 const CourseDifficultySelect = () => {
-  const [difficulty, setDifficulty] = useState(" ");
+  const [difficulty, setDifficulty] = useState("All Difficulty");
 
-  const handleDifficultyChange = (
-    event: SelectChangeEvent<string>
-  ) => {
+  const handleDifficultyChange = (event: SelectChangeEvent<string>) => {
     setDifficulty(event.target.value as string);
   };
 
@@ -21,8 +26,18 @@ const CourseDifficultySelect = () => {
           id="course-difficulty-select"
           value={difficulty}
           onChange={handleDifficultyChange}
-          className= "rounded-xl"
+          className="rounded-xl"
+          IconComponent={() => <Icon className="fas fa-chevron-down" />}
+          sx={{
+            paddingRight: "1rem",
+            "&:after": {
+              fontSize: "1rem",
+            },
+          }}
         >
+          <MenuItem key="All Difficulty" value="All Difficulty">
+            All Difficulty
+          </MenuItem>
           {difficulties.map((option) => (
             <MenuItem key={option} value={option}>
               {option}

@@ -1,8 +1,11 @@
 import Image from "next/image";
 import { Course } from "@/services/course-service";
-import { Chip } from "@material-ui/core";
+import { Chip } from "@mui/material";
 import { Category } from "@/services/category-service";
 import Link from "next/link";
+import { Card, CardContent, CardActions, Typography } from "@mui/material";
+import {Button} from "@mui/material";
+
 
 
 interface CourseCardProps {
@@ -14,11 +17,33 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
   const imageLoader = ({ src }: { src: string }): string => {
     return `${src}`;
   };
-  
+
   return (
     <Link href="/">
-      <div className="bg-white rounded-lg border-slate-800 border-solid overflow-hidden aspect-w-16 aspect-h-9 transition duration-300 transform hover:-translate-y-1 hover:shadow-xl active:translate-y-0 active:shadow-lg">
-        <div className="relative h-64 bg-slate-50">
+      <Card
+        sx={{
+          maxWidth: 360,
+          borderRadius: "0.5rem",
+          boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+          border: "1px solid #D1D5DB",
+          borderColor: "gray.400",
+          transition: "transform 0.3s ease-in-out",
+          "&:hover": {
+            transform: "translateY(-4px)",
+            boxShadow: "0px 4px 8px rgba(38, 38, 38, 0.2)",
+          },
+          "&:active": {
+            transform: "translateY(0)",
+            boxShadow: "0px 2px 4px rgba(38, 38, 38, 0.2)",
+          },
+        }}
+      >
+        <div
+          style={{
+            position: "relative",
+            paddingTop: "56.25%",
+          }}
+        >
           <Image
             fill
             src={
@@ -28,25 +53,75 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
             }
             alt="course thumbnail"
             loader={imageLoader}
-            className="absolute top-0 left-0 w-full h-full object-contain rounded object-center py-3 px-3"
+            className="absolute top-0 left-0 w-full h-full object-contain rounded object-center py-3 px-3 bg-zinc-100"
           />
         </div>
-        <div className="px-6 py-4">
-          <div className="font-bold text-sky-900 text-xl mb-2 overflow-hidden max-h-16 line-clamp-2 hover:max-h-full">
+        <CardContent>
+          <Typography
+            variant="h6"
+            component="div"
+            sx={{
+              fontWeight: "bold",
+              fontSize: "1.5rem",
+              mb: "1rem",
+              maxHeight: 64,
+              overflow: "hidden",
+              display: "-webkit-box",
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: "vertical",
+            }}
+          >
             {course.title}
-          </div>
-          <p className="text-gray-700 text-base overflow-hidden max-h-16 line-clamp-2 hover:max-h-full">
+          </Typography>
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            sx={{
+              maxHeight: 48,
+              overflow: "hidden",
+              display: "-webkit-box",
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: "vertical",
+            }}
+          >
             {course.description}
-          </p>
-        </div>
-        <div className="px-6 py-4 flex items-center justify-between">
-          <span className="inline-block bg-gray-200 rounded-lg px-2 py-1 text-sm font-semibold text-gray-700 mr-2">
-            {course.difficulty}
-          </span>
-        </div>
-      </div>
+          </Typography>
+          <div style={{ display: "flex", flexWrap: "wrap", marginTop: "1rem" }}>
+            <Chip
+              label={course.difficulty}
+              sx={{
+                backgroundColor:
+                  course.difficulty === "beginner"
+                    ? "#E8F5E9"
+                    : course.difficulty === "intermediate"
+                    ? "#FFFDE7"
+                    : "#FFEBEE",
+                color:
+                  course.difficulty === "beginner"
+                    ? "#2E7D32"
+                    : course.difficulty === "intermediate"
+                    ? "#FFB900"
+                    : "#C62828",
+                marginRight: "0.5rem",
+                marginBottom: "1rem",
+              }}
+            />
+          </div>
+          <CardActions className="flex items-center justify-center">
+            <Button
+              size="small"
+              variant="contained"
+              className="w-64 bg-blackbutton text-white"
+              onClick={(event) => {event.preventDefault()}}
+            >
+              Subscribe
+            </Button>
+          </CardActions>
+        </CardContent>
+      </Card>
     </Link>
   );
 };
 
 export default CourseCard;
+
