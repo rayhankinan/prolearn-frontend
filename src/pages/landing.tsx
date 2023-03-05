@@ -104,7 +104,8 @@ export default function CourseLanding() {
                         {categories.map((category) => (
                             <li key={category.title} className="flex-1 mr-2">
                                 <a className="text-center block py-2 px-4 hover:bg-gray-400 
-                                rounded-xl text-gray-800" onClick={() => handleCategoryClicked(category.id)}>
+                                rounded-xl text-gray-800 transition ease-in-out 
+                                delay-150 hover:-translate-y-1 hover:scale-110 duration-300" onClick={() => handleCategoryClicked(category.id)}>
                                     {category.title}
                                 </a>
                             </li>
