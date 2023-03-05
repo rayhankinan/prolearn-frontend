@@ -100,17 +100,17 @@
             status: "active",
             };
             onSubmit(newCourse);
-            setTitle("");
-            setDescription("");
-            setImage(null) ;
+            // setTitle("");
+            // setDescription("");
+            // setImage(null) ;
             setSelectedCategories([]);
-            setDifficulty("beginner");
-            if(title === "" || description === "" || imgFile === null){
+            // setDifficulty("beginner");
+            if(title === "" || description === "" || imgFile === null || selectedCategories.length === 0 || difficulty === ""){
               setModalOpen(true);
               setErrorMessage("Please fill in all the required fields");
-              setTitleNameError(title === "");
-              setDescriptionNameError(description === "");
-              setImgNameError(imgFile === null);
+              setTitleNameError(true);
+              setDescriptionNameError(true);
+              setImgNameError(true);
               return;
           }
           if(titleNameError || descriptionNameError || imgNameError){
