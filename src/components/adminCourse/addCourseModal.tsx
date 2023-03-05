@@ -12,9 +12,11 @@
         Select,
         TextField,
         SelectChangeEvent,
+        Modal
         } from "@mui/material";
     import { Course } from "@/services/course-service";
     import { Category } from "@/services/category-service";
+    import ModalFailed from "@/pages/user/modalFailed";
     
 
 
@@ -38,17 +40,28 @@
         const [selectedCategories, setSelectedCategories] = useState<Category[]>(
             []
         );
+        const [titleNameError, setTitleNameError] = useState(false);
+        const [descriptionNameError, setDescriptionNameError] = useState(false);
+        const [imgNameError, setImgNameError] = useState(false);
+        
+        const [modalOpen, setModalOpen] = useState(false);
+        const [errorMessage, setErrorMessage] = useState<String>("");
+        const handleCloseModal = () => {
+            setModalOpen(false);
+        };
 
         const handleTitleChange = (
             event: React.ChangeEvent<HTMLInputElement>
         ) => {
             setTitle(event.target.value);
+            setTitleNameError(event.target.value === "");
         };
 
         const handleDescriptionChange = (
             event: React.ChangeEvent<HTMLInputElement>
         ) => {
             setDescription(event.target.value);
+            setDescriptionNameError(event.target.value === "");
         };
 
         const handleImageChange = (
@@ -57,6 +70,7 @@
             const file = event.target.files?.[0];
             setImage(file)
             event.target.value = "";
+            setImgNameError(file === null);
         };
 
         const handleDifficultyChange = (
@@ -91,6 +105,19 @@
             setImage(null) ;
             setSelectedCategories([]);
             setDifficulty("beginner");
+            if(title === "" || description === "" || imgFile === null){
+              setModalOpen(true);
+              setErrorMessage("Please fill in all the required fields");
+              setTitleNameError(title === "");
+              setDescriptionNameError(description === "");
+              setImgNameError(imgFile === null);
+              return;
+          }
+          if(titleNameError || descriptionNameError || imgNameError){
+              setModalOpen(true);
+              setErrorMessage("Please fill in all the required fields");
+              return;
+          }
             onClose();
         };
 
@@ -107,6 +134,8 @@
                 fullWidth
                 value={title}
                 onChange={handleTitleChange}
+                error={titleNameError}
+                helperText={titleNameError ? "Title is required" : ""}
               />
               <TextField
                 margin="dense"
@@ -118,6 +147,8 @@
                 rows={4}
                 value={description}
                 onChange={handleDescriptionChange}
+                error={descriptionNameError}
+                helperText={descriptionNameError ? "Description is required" : ""}
               />
               <FormControl fullWidth>
                 <InputLabel id="difficulty-select-label">Difficulty</InputLabel>
@@ -140,6 +171,7 @@
                   id="image"
                   type="file"
                   onChange={handleImageChange}
+                  
                   className="mt-2"
                 />
               </FormControl>
@@ -175,6 +207,9 @@
                   ))}
                 </Select>
               </FormControl>
+              <Modal open={modalOpen} onClose={handleCloseModal}>
+                <ModalFailed open={modalOpen} onClose={handleCloseModal} error={errorMessage}/>
+              </Modal>
             </DialogContent>
             <DialogActions>
               <Button onClick={onClose}>Cancel</Button>

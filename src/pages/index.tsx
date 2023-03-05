@@ -166,7 +166,7 @@ export default function Album() {
 const handleModalSubmit = (course: Course) => {
   //add course to setCourses
   if(course.imgFile == null){
-    alert("Please upload an image");
+    // alert("Please upload an image");
     return;
   }
   const formData = new FormData();
