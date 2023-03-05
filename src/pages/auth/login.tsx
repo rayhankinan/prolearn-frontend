@@ -5,6 +5,7 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import Modal from '@mui/material/Modal';
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import TextField from "@material-ui/core/TextField";
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -12,6 +13,8 @@ import { InputAdornment } from "@material-ui/core";
 import userService from "@/services/user-service";
 import { PersonOutlined } from "@mui/icons-material";
 import { useRouter } from "next/router";
+import ModalFailed from '../user/modalFailed';
+import ModalSuccess from '../user/modalSucess';
 
 // create login page
 const theme = createTheme();
@@ -20,10 +23,49 @@ export default function Login() {
     const router = useRouter();
 
     const [username, setUsername] = useState('');
+    const [usernameError, setUsernameError] = useState(false);
     const [password, setPassword] = useState('');
+    const [passwordError, setPasswordError] = useState(false);
+    const [modalOpen, setModalOpen] = useState(false);
+    const [modalSuccessOpen, setModalSuccessOpen] = useState(false);
+    const [errorMessage, setErrorMessage] = useState<String>('');
+    const handleCloseModal = () => {
+      setModalOpen(false);};
+
+    const handleCloseModalSuccess = () => {
+    setModalSuccessOpen(false);};
+
+    const handleUsernameChange = (event: any) => {
+        setUsername(event.target.value);
+        setUsernameError(event.target.value === '');
+    }
+
+    const handlePasswordChange = (event: any) => {
+        setPassword(event.target.value);
+        setPasswordError(event.target.value === '');
+    }
 
     const handleLogin = (event: any) => {
         event.preventDefault();
+        if(username === '' && password === '') {
+            setModalOpen(true);
+            setErrorMessage('Username and password are required');
+            setUsernameError(true);
+            setPasswordError(true);
+            return;
+        }
+        if (username === '') {
+            setModalOpen(true);
+            setErrorMessage('Username is required');
+            setUsernameError(true);
+            return;
+          }
+        if(password === '') {
+            setModalOpen(true);
+            setErrorMessage('Password is required');
+            setPasswordError(true);
+            return;
+        }
         const dataUser = {
             username,
             password
@@ -31,10 +73,14 @@ export default function Login() {
 
         userService.logIn(dataUser).then((response) => {
             localStorage.setItem('token', response.data)
+            setModalSuccessOpen(true);
             router.push('/')
+            setModalSuccessOpen(false);
         }).catch((error) => {
             console.log(error)
-            alert("Username or password is incorrect")
+            // alert("Username or password is incorrect")
+            setErrorMessage('Username or password is incorrect');
+            setModalOpen(true);
         })
     }
 
@@ -78,7 +124,9 @@ export default function Login() {
                                     )
                                 }}
                                 value={username}
-                                onChange={(e) => setUsername(e.target.value)}
+                                onChange={handleUsernameChange}
+                                error={usernameError}
+                                helperText={usernameError ? 'Username is required' : ''}
                                 />
                                 <TextField
                                 margin="normal"
@@ -97,7 +145,9 @@ export default function Login() {
                                     ),
                                 }}
                                 value={password}
-                                onChange={(e) => setPassword(e.target.value)}
+                                onChange={handlePasswordChange}
+                                error={passwordError}
+                                helperText={passwordError ? 'Password is required' : ''}
                                 />
                                 <Button
                                     type="submit"
@@ -149,6 +199,12 @@ export default function Login() {
                         </Box>
                     </Container>
                 </Grid>
+                <Modal open={modalOpen} onClose={handleCloseModal}>
+                    <ModalFailed open={modalOpen} onClose={handleCloseModal} error={errorMessage} />
+                </Modal>
+                    <Modal open={modalSuccessOpen}>
+                <ModalSuccess />
+                </Modal>
             </Grid>
                                 
         </ThemeProvider>

@@ -23,8 +23,8 @@ const Navbar: React.FC = () => {
                     </a>
                 </div>
                 <div className="mr-10">
-                    <a href="#" className="inline-block w-32 h-auto text-xl px-4 py-2 leading-none border rounded-xl text-black bg-white mt-4 lg:mt-0 mr-12 ml-10 text-center align-middle hover:transition ease-in-out hover:scale-110 duration-300">Login</a>
-                    <a href="#" className="inline-block w-32 h-auto text-xl px-4 py-2 leading-none border rounded-xl text-black bg-gray-400 mt-4 lg:mt-0 mr-5 text-center align-middle hover:transition ease-in-out hover:scale-110 duration-300">Register</a>
+                    <a href="/auth/login" className="inline-block w-32 h-auto text-xl px-4 py-2 leading-none border rounded-xl text-black bg-white mt-4 lg:mt-0 mr-12 ml-10 text-center align-middle hover:transition ease-in-out hover:scale-110 duration-300">Login</a>
+                    <a href="/auth/register" className="inline-block w-32 h-auto text-xl px-4 py-2 leading-none border rounded-xl text-black bg-gray-400 mt-4 lg:mt-0 mr-5 text-center align-middle hover:transition ease-in-out hover:scale-110 duration-300">Register</a>
 
                 </div>
             </div>
