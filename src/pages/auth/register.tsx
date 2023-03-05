@@ -14,16 +14,43 @@ export default function Register() {
   const router = useRouter();
 
   const [username, setUsername] = useState<String>('');
+  const [usernameError, setUsernameError] = useState(false);
   const [password, setPassword] = useState<String>('');
+  const [passwordError, setPasswordError] = useState(false);
   const [passwordConfirm, setPasswordConfirm] = useState<String>('');
+  const [passwordConfirmError, setPasswordConfirmError] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [modalSuccessOpen, setModalSuccessOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState<String>('');
   const handleCloseModal = () => {
     setModalOpen(false);};
 
+  const handleCloseModalSuccess = () => {
+  setModalSuccessOpen(false);};
+
+  const handleUsernameChange = (event: any) => {
+    setUsername(event.target.value);
+    setUsernameError(event.target.value === '');
+  }
+
+  const handlePasswordChange = (event: any) => {
+    setPassword(event.target.value);
+    setPasswordError(event.target.value === '');
+  }
+
+  const handlePasswordConfirmChange = (event: any) => {
+    setPasswordConfirm(event.target.value);
+    setPasswordConfirmError(event.target.value === '');
+  }
+
+
   const handleRegister = (event: any) => {
     event.preventDefault();
+    if(username === '' && password === '' && passwordConfirm === '') {
+      setModalOpen(true);
+      setErrorMessage('Username, password and password confirmation are required');
+      return;
+    }
     if (username === '') {
       setModalOpen(true);
       setErrorMessage('Username is required');
@@ -93,7 +120,10 @@ export default function Register() {
                     ) 
                   }}
                   value={username}
-                  onChange={(e) => setUsername(e.target.value)} />
+                  onChange={handleUsernameChange} 
+                  error={usernameError}
+                  helperText={usernameError ? 'Username is required' : ''}
+                  />
                 <TextField 
                   margin="normal" 
                   required 
@@ -112,7 +142,10 @@ export default function Register() {
                     ) 
                   }}
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)} />
+                  onChange={handlePasswordChange} 
+                  error={passwordError}
+                  helperText={passwordError ? 'Password is required' : ''}
+                  />
                 <TextField 
                   margin="normal" 
                   required 
@@ -131,7 +164,10 @@ export default function Register() {
                     ) 
                   }}
                   value={passwordConfirm}
-                  onChange={(e) => setPasswordConfirm(e.target.value)} />
+                  onChange={handlePasswordConfirmChange} 
+                  error={passwordConfirmError}
+                  helperText={passwordConfirmError ? 'Password confirmation is required' : ''}
+                  />
                 <Button
                   type='submit'
                   fullWidth
