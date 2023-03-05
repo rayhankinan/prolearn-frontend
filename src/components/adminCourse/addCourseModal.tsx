@@ -105,13 +105,15 @@
             // setImage(null) ;
             setSelectedCategories([]);
             // setDifficulty("beginner");
-            if(title === "" || description === "" || imgFile === null || selectedCategories.length === 0 || difficulty === ""){
-              setModalOpen(true);
-              setErrorMessage("Please fill in all the required fields");
-              setTitleNameError(true);
-              setDescriptionNameError(true);
-              setImgNameError(true);
-              return;
+            if(title === "" || description === "" || imgFile === null){
+              if(selectedCategories.length === 0 || difficulty === ""){
+                setModalOpen(true);
+                setErrorMessage("Please fill in all the required fields");
+                setTitleNameError(true);
+                setDescriptionNameError(true);
+                setImgNameError(true);
+                return;
+              }
           }
           if(titleNameError || descriptionNameError || imgNameError){
               setModalOpen(true);
