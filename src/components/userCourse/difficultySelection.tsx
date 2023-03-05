@@ -11,11 +11,14 @@ import { Fragment } from "react";
 
 const difficulties = ["Beginner", "Intermediate", "Advanced"];
 
-const CourseDifficultySelect = () => {
-  const [difficulty, setDifficulty] = useState("All Difficulty");
+type Props = {
+  difficulty: string;
+  setDifficulty: (value: string) => void;
+};
 
+const CourseDifficultySelect = ({ difficulty, setDifficulty }: Props) => {
   const handleDifficultyChange = (event: SelectChangeEvent<string>) => {
-    setDifficulty(event.target.value as string);
+    setDifficulty((event.target.value as string).toLowerCase());
   };
 
   return (

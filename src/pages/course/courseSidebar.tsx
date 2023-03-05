@@ -4,7 +4,14 @@ import CategoryList from "@/components/userCourse/categoryList";
 import { Category } from "@/services/category-service";
 import CategoryService from "@/services/category-service";
 
-const Sidebar = () => {
+
+type SidebarProps = {
+  difficulty: string;
+  setDifficulty: (difficulty: string) => void;
+  selected: number[] | undefined;
+  setSelected: (selected: number[] | undefined) => void;
+};
+const Sidebar = ({ difficulty, setDifficulty, selected, setSelected } : SidebarProps) => {
   //get all categories
 
   const [categories, setCategories] = useState<Category[]>([]);
@@ -23,10 +30,10 @@ const Sidebar = () => {
   return (
     <div className="flex flex-col w-full px-4 py-6">
       <h4 className="text-blue-900 font-bold text-md mb-2">Difficulty</h4>
-      <DifficultySelection />
+      <DifficultySelection difficulty={difficulty} setDifficulty={setDifficulty} />
       <h4 className="text-blue-900 font-bold text-md mt-4 mb-2">Categories</h4>
       <div className="mt-3">
-        <CategoryList categories={categories} />
+        <CategoryList categories={categories} selected={selected} setSelected={setSelected} />
       </div>
     </div>
   );

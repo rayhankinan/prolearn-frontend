@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Hero from "@/pages/course/courseHero";
 import Sidebar from "@/pages/course/courseSidebar";
-import CourseCards from "@/pages/course/courseCards";
+import SubscribedCards from "@/pages/course/subscribedCards";
 import { Course } from "@/services/course-service";
 import CourseService from "@/services/course-service";
 import Navbar from "../../components/navbar";
@@ -23,6 +23,7 @@ export default function Courses() {
       page: page,
       limit: perPage,
       title: search,
+      subscribed: true,
     })
       .then((response) => {
         setCourses(response.data.data);
@@ -42,6 +43,7 @@ export default function Courses() {
       title: search,
       difficulty: difficulty != "All Difficulty" ? difficulty : undefined,
       categoryId: selected,
+      subscribed: true,
     })
       .then((response) => {
         setCourses(response.data.data);
@@ -67,7 +69,7 @@ export default function Courses() {
   return (
     <>
       <Navbar />
-      <div className="container mx-auto justify-center custom-Poppins ">
+      <div className="container mx-auto justify-center custom-Montserrat ">
         <Hero
           title="Courses"
           breadcrumbs={[
@@ -82,7 +84,7 @@ export default function Courses() {
           ]}
         />
       </div>
-      <div className="container mx-auto flex flex-wrap justify-center custom-Poppins ">
+      <div className="container mx-auto flex flex-wrap justify-center custom-Montserrat ">
         <div className="w-full md:w-1/5 px-4">
           <Sidebar difficulty={difficulty} setDifficulty={setDifficulty} selected={selected} setSelected={setSelected} />
         </div>
@@ -90,7 +92,7 @@ export default function Courses() {
           <div className="flex justify-center">
             <SearchBar searchTerm={search} setSearchTerm={setSearch} />
           </div>
-          <CourseCards courses={courses} />
+          <SubscribedCards courses={courses} />
           <Grid container direction="row" justifyContent="center" marginTop={2}>
             <Pagination
               count={count}

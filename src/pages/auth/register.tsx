@@ -1,4 +1,4 @@
-import authService from '@/services/auth-service';
+import userService from '@/services/user-service';
 import { createTheme, CssBaseline, InputAdornment, ThemeProvider } from '@material-ui/core';
 import { PersonOutlined } from '@mui/icons-material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -8,7 +8,7 @@ import React, { useState } from 'react';
 
 const theme = createTheme();
 
-export default function register() {
+export default function Register() {
   const router = useRouter();
 
   const [username, setUsername] = useState<String>('');
@@ -27,7 +27,7 @@ export default function register() {
       password
     };
 
-    authService.register(dataUser).then((response) => {
+    userService.register(dataUser).then((response) => {
       router.push('/auth/login');
     }).catch((error) => {
       console.log(error);
