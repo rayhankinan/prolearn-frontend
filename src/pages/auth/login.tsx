@@ -77,7 +77,7 @@ export default function Login() {
             if (response.role === 'admin') {
                 router.push('/');
             } else {
-                router.push('/user/courses');
+                router.push('/course/list');
             }
             setModalSuccessOpen(false);
         }).catch((error) => {
