@@ -49,21 +49,27 @@ export default function Register() {
     if(username === '' && password === '' && passwordConfirm === '') {
       setModalOpen(true);
       setErrorMessage('Username, password and password confirmation are required');
+      setUsernameError(true);
+      setPasswordError(true);
+      setPasswordConfirmError(true);
       return;
     }
     if (username === '') {
       setModalOpen(true);
       setErrorMessage('Username is required');
+      setUsernameError(true);
       return;
     }
     if(password === '') {
       setModalOpen(true);
       setErrorMessage('Password is required');
+      setPasswordError(true);
       return;
     }
     if(passwordConfirm === '') {
       setModalOpen(true);
       setErrorMessage('Password confirmation is required');
+      setPasswordConfirmError(true);
       return;
     }
     if (passwordConfirm !== password) {

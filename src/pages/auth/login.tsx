@@ -47,14 +47,23 @@ export default function Login() {
 
     const handleLogin = (event: any) => {
         event.preventDefault();
+        if(username === '' && password === '') {
+            setModalOpen(true);
+            setErrorMessage('Username and password are required');
+            setUsernameError(true);
+            setPasswordError(true);
+            return;
+        }
         if (username === '') {
             setModalOpen(true);
             setErrorMessage('Username is required');
+            setUsernameError(true);
             return;
           }
         if(password === '') {
             setModalOpen(true);
             setErrorMessage('Password is required');
+            setPasswordError(true);
             return;
         }
         const dataUser = {
