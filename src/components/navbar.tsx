@@ -9,11 +9,11 @@ const Navbar: React.FC = () => {
             </div>
             <div className="w-full block flex-grow lg:flex lg:items-center lg:w-auto justify-end">
                 <div className="text-xl lg:flex-end space-x-16 mr-16">
-                    <a href="#responsive-header" className="block mt-4 lg:inline-block lg:mt-0 text-black-200 hover:transition ease-in-out hover:scale-110 duration-300">
-                        Home
-                    </a>
-                    <a href="#responsive-header" className="block mt-4 lg:inline-block lg:mt-0 text-black-200 hover:transition ease-in-out hover:scale-110 duration-300">
+                    <a href="/course/list" className="block mt-4 lg:inline-block lg:mt-0 text-black-200 hover:transition ease-in-out hover:scale-110 duration-300">
                         Course
+                    </a>
+                    <a href="/course/subscribed" className="block mt-4 lg:inline-block lg:mt-0 text-black-200 hover:transition ease-in-out hover:scale-110 duration-300">
+                        My Course
                     </a>
                     <a href="#responsive-header" className="block mt-4 lg:inline-block lg:mt-0 text-black-200 hover:transition ease-in-out hover:scale-110 duration-300">
                         Discussion
