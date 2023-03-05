@@ -74,7 +74,11 @@ export default function Login() {
         userService.logIn(dataUser).then((response) => {
             localStorage.setItem('token', response.data)
             setModalSuccessOpen(true);
-            router.push('/course/list')
+            if (response.role === 'admin') {
+                router.push('/');
+            } else {
+                router.push('/user/courses');
+            }
             setModalSuccessOpen(false);
         }).catch((error) => {
             console.log(error)
