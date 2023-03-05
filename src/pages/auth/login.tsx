@@ -5,6 +5,7 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import Modal from '@mui/material/Modal';
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import TextField from "@material-ui/core/TextField";
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -12,6 +13,8 @@ import { InputAdornment } from "@material-ui/core";
 import userService from "@/services/user-service";
 import { PersonOutlined } from "@mui/icons-material";
 import { useRouter } from "next/router";
+import ModalFailed from '../user/modalFailed';
+import ModalSuccess from '../user/modalSucess';
 
 // create login page
 const theme = createTheme();
@@ -21,9 +24,24 @@ export default function Login() {
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [modalOpen, setModalOpen] = useState(false);
+    const [modalSuccessOpen, setModalSuccessOpen] = useState(false);
+    const [errorMessage, setErrorMessage] = useState<String>('');
+    const handleCloseModal = () => {
+      setModalOpen(false);};
 
     const handleLogin = (event: any) => {
         event.preventDefault();
+        if (username === '') {
+            setModalOpen(true);
+            setErrorMessage('Username is required');
+            return;
+          }
+        if(password === '') {
+            setModalOpen(true);
+            setErrorMessage('Password is required');
+            return;
+        }
         const dataUser = {
             username,
             password
@@ -31,10 +49,14 @@ export default function Login() {
 
         userService.logIn(dataUser).then((response) => {
             localStorage.setItem('token', response.data)
+            setModalSuccessOpen(true);
             router.push('/')
+            setModalSuccessOpen(false);
         }).catch((error) => {
             console.log(error)
-            alert("Username or password is incorrect")
+            // alert("Username or password is incorrect")
+            setErrorMessage('Username or password is incorrect');
+            setModalOpen(true);
         })
     }
 
@@ -149,6 +171,12 @@ export default function Login() {
                         </Box>
                     </Container>
                 </Grid>
+                <Modal open={modalOpen} onClose={handleCloseModal}>
+                    <ModalFailed open={modalOpen} onClose={handleCloseModal} error={errorMessage} />
+                </Modal>
+                    <Modal open={modalSuccessOpen}>
+                <ModalSuccess />
+                </Modal>
             </Grid>
                                 
         </ThemeProvider>
