@@ -67,7 +67,7 @@ export default function Courses() {
   return (
     <>
       <Navbar />
-      <div className="container mx-auto justify-center custom-Montserrat ">
+      <div className="container mx-auto justify-center custom-Poppins ">
         <Hero
           title="Courses"
           breadcrumbs={[
@@ -82,7 +82,7 @@ export default function Courses() {
           ]}
         />
       </div>
-      <div className="container mx-auto flex flex-wrap justify-center custom-Montserrat ">
+      <div className="container mx-auto flex flex-wrap justify-center custom-Poppins ">
         <div className="w-full md:w-1/5 px-4">
           <Sidebar difficulty={difficulty} setDifficulty={setDifficulty} selected={selected} setSelected={setSelected} />
         </div>
