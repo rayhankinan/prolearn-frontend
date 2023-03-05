@@ -156,9 +156,11 @@ export default function Album() {
     setIsModalOpen(false);
   };
 
-  const handleEdit = (courseId: number) => {
+  const handleEdit = (courseId?: number) => {
     // set data
-    router.push(`/course/admin/${courseId}/description`);
+    if (courseId) {
+      router.push(`/course/admin/${courseId}/description`);
+    }
   };
 
 const handleModalSubmit = (course: Course) => {

@@ -22,9 +22,11 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
     return `${src}`;
   };
 
-  const handleSubscribe = (id: number) => {
+  const handleSubscribe = (id?: number) => {
     try {
-      userService.subscribe(id);
+      if (id) {
+        userService.subscribe(id);
+      }
     } catch (error) {
       console.log(error);
     }

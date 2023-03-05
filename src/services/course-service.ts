@@ -5,7 +5,7 @@ export interface thumbnail{
     name: string;
 }
 export interface Course {
-    id: number;
+    id?: number;
     title: string;
     description: string;
     difficulty: string;
