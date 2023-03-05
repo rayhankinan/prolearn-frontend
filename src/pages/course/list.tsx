@@ -34,13 +34,13 @@ export default function Courses() {
 
   const [difficulty, setDifficulty] = useState("All Difficulty");
   const [selected, setSelected] = useState<number[] | undefined>(undefined);
-
+  const difficultyList = ["beginner", "intermediate", "advanced"]
   const searchQuery = (search: string) => {
     CourseService.getAll({
       page: page,
       limit: perPage,
       title: search,
-      difficulty: difficulty != "All Difficulty" ? difficulty : undefined,
+      difficulty: difficultyList.includes(difficulty.toLowerCase()) ? difficulty.toLowerCase() : undefined,
       categoryId: selected,
     })
       .then((response) => {
