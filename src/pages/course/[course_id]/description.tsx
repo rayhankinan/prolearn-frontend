@@ -53,8 +53,8 @@ export default function UserCourseDetail() {
     const router = useRouter();
     // let {course_id, material_id} = router.query;
     // TO DO - fix error
-    const course_id: string = router.query.course_id!.toString();
-    const material_id: string = router.query.material_id!.toString();
+    const course_id: string = router.query.course_id ? router.query.course_id.toString() : '';
+    const material_id: string = router.query.material_id ? router.query.material_id.toString() : '';
 
     const course_idInt = parseInt(course_id);
     const material_idInt = parseInt(material_id);
