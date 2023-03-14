@@ -1,23 +1,25 @@
 import axios from "axios";
+import getConfig from "next/config";
 
-const API_URL = "http://localhost:80/api";
+const { publicRuntimeConfig } = getConfig();
 
 const http = axios.create({
-  baseURL: API_URL,
-  headers: {
-  }
+  baseURL: publicRuntimeConfig.apiURL,
+  headers: {},
 });
+
+console.log(publicRuntimeConfig.apiURL);
 
 // Add a request interceptor
 http.interceptors.request.use(
-  config => {
+  (config) => {
     const token = localStorage.getItem("token");
     if (token) {
       config.headers["Authorization"] = `Bearer ${token}`;
     }
     return config;
   },
-  error => {
+  (error) => {
     return Promise.reject(error);
   }
 );
