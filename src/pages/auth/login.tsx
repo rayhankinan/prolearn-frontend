@@ -77,13 +77,11 @@ export default function Login() {
       .logIn(dataUser)
       .then((response) => {
         localStorage.setItem("token", response.data);
-        setModalSuccessOpen(true);
         if (response.role === "admin") {
           router.push("/admin/course");
         } else {
           router.push("/course");
         }
-        setModalSuccessOpen(false);
       })
       .catch((error) => {
         console.log(error);
@@ -260,7 +258,10 @@ export default function Login() {
           />
         </Modal>
         <Modal open={modalSuccessOpen}>
-          <ModalSuccess />
+          <ModalSuccess
+            open={modalSuccessOpen}
+            onClose={handleCloseModalSuccess}
+          />
         </Modal>
       </Grid>
     </ThemeProvider>

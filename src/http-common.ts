@@ -8,8 +8,6 @@ const http = axios.create({
   headers: {},
 });
 
-console.log(publicRuntimeConfig.apiURL);
-
 // Add a request interceptor
 http.interceptors.request.use(
   (config) => {

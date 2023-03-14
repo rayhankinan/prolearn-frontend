@@ -277,7 +277,7 @@ export default function Album() {
             <Typography variant="h4" className="text-4xl font-bold mt-10">
               All Courses
             </Typography>
-            <img src="logo.png" alt="Logo" className="h-12 mr-4" />
+            <img src="/logo.png" alt="Logo" className="h-12 mr-4" />
           </Grid>
           {/* horizontal line that have space on the left and right */}
           <hr className="border-t-3 border-black " />
