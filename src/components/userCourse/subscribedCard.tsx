@@ -2,10 +2,9 @@ import Image from "next/image";
 import { Course } from "@/services/course-service";
 import { Chip } from "@mui/material";
 import { Card, CardContent, CardActions, Typography } from "@mui/material";
-import {Button} from "@mui/material";
+import { Button } from "@mui/material";
 import userService from "@/services/user-service";
-
-
+import Link from "next/link";
 
 interface SubcribedCardProps {
   course: Course;
@@ -18,7 +17,10 @@ const SubcribedCard: React.FC<SubcribedCardProps> = ({ course }) => {
   };
 
   return (
-    // <Link href="/course/[id]/description" as={`/course/${course.id}/description`}>
+    <Link
+      href="/course/[id]/description"
+      as={`/course/${course.id}/description`}
+    >
       <Card
         sx={{
           maxWidth: 360,
@@ -118,9 +120,8 @@ const SubcribedCard: React.FC<SubcribedCardProps> = ({ course }) => {
           </CardActions>
         </CardContent>
       </Card>
-    // </Link>
+    </Link>
   );
 };
 
 export default SubcribedCard;
-

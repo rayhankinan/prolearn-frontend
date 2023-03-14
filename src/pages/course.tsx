@@ -4,11 +4,10 @@ import Sidebar from "@/pages/course/courseSidebar";
 import CourseCards from "@/pages/course/courseCards";
 import { Course } from "@/services/course-service";
 import CourseService from "@/services/course-service";
-import Navbar from "../../components/navbar";
+import Navbar from "../components/navbar";
 import SearchBar from "@/components/adminCourse/search";
 import { Grid } from "@mui/material";
 import { Pagination } from "@mui/material";
-
 
 export default function Courses() {
   const [courses, setCourses] = useState<Course[]>([]);
@@ -34,18 +33,20 @@ export default function Courses() {
 
   const [difficulty, setDifficulty] = useState("All Difficulty");
   const [selected, setSelected] = useState<number[] | undefined>(undefined);
-  const difficultyList = ["beginner", "intermediate", "advanced"]
+  const difficultyList = ["beginner", "intermediate", "advanced"];
   const searchQuery = (search: string) => {
     CourseService.getAll({
       page: page,
       limit: perPage,
       title: search,
-      difficulty: difficultyList.includes(difficulty.toLowerCase()) ? difficulty.toLowerCase() : undefined,
+      difficulty: difficultyList.includes(difficulty.toLowerCase())
+        ? difficulty.toLowerCase()
+        : undefined,
       categoryId: selected,
     })
       .then((response) => {
         setCourses(response.data.data);
-        setPage(1)
+        setPage(1);
         setLength(response.data.meta.totalPage * perPage);
         setCount(response.data.meta.totalPage);
       })
@@ -57,7 +58,7 @@ export default function Courses() {
       searchQuery(search);
     }, 500);
 
-    return () => clearTimeout(delayDebounceFn); 
+    return () => clearTimeout(delayDebounceFn);
   }, [search, difficulty, selected]);
 
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
@@ -77,14 +78,19 @@ export default function Courses() {
             },
             {
               label: "Courses",
-              href: "/course/list",
+              href: "/course",
             },
           ]}
         />
       </div>
       <div className="container mx-auto flex flex-wrap justify-center custom-Poppins ">
         <div className="w-full md:w-1/5 px-4">
-          <Sidebar difficulty={difficulty} setDifficulty={setDifficulty} selected={selected} setSelected={setSelected} />
+          <Sidebar
+            difficulty={difficulty}
+            setDifficulty={setDifficulty}
+            selected={selected}
+            setSelected={setSelected}
+          />
         </div>
         <div className="w-full md:w-4/5 px-4">
           <div className="flex justify-center">
