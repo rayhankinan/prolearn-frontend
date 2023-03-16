@@ -12,20 +12,6 @@ import GridComponent from '@/components/GridComponent';
 import { Button, Grid, Typography } from "@mui/material";
 import { useRouter, Router } from 'next/router';
 
-function Copyright() {
-
-    return (
-        <Typography variant="body2" color="text.secondary" align="center">
-            {"Copyright © "}
-            <Link color="inherit" href="https://mui.com/">
-                Your Website
-            </Link>{" "}
-            {new Date().getFullYear()}
-            {"."}
-        </Typography>
-    );
-}
-
 const materials: Material[] = [
     {
         id: 1,
@@ -98,7 +84,7 @@ export default function UserCourseDetail() {
                             </Grid>
                         </Grid>
                         <Grid item xs={9} sx={{ paddingLeft: '20px' }}>
-                            <Grid item><ReactMarkdown>Bla b;a bla</ReactMarkdown></Grid>
+                            <Grid item><ReactMarkdown>Bla bla bla</ReactMarkdown></Grid>
                         </Grid>
                     </Grid>
                 </Grid>

@@ -15,13 +15,10 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import SearchBar from "@/components/adminCourse/search";
 import { Plus } from "@/components/adminCourse/plus";
 import { AddCourseModal } from "@/components/adminCourse/addCourseModal";
-import Autocomplete from "@mui/material/Autocomplete";
-import TextField from "@mui/material/TextField";
 import CourseService from "@/services/course-service";
 import CategoryService from "@/services/category-service";
 import Course from "@/interfaces/course-interface";
 import Category from "@/interfaces/category-interface";
-import { createGlobalStyle } from "styled-components";
 import FilterBar from "@/components/adminCourse/filterBar";
 import { useRouter } from "next/router";
 
@@ -209,7 +206,6 @@ export default function Album() {
   let pagination;
   let rightButton;
   let leftButton;
-  let leftButton2;
 
   if (showAll) {
     pagination = null;
@@ -438,11 +434,13 @@ export default function Album() {
                   </Card>
                 </Grid>
               ))}
+            
               {/*a plus button to add new course*/}
 
               <Grid item>
                 <Plus handlePlusClick={handlePlusClick} />
               </Grid>
+
             </Grid>
           </Box>
         </Container>
@@ -458,22 +456,6 @@ export default function Album() {
           categories={categories}
         />
       </main>
-      {/* Footer */}
-      <Box sx={{ bgcolor: "background.paper", p: 6 }} component="footer">
-        <Typography variant="h6" align="center" gutterBottom>
-          Footer
-        </Typography>
-        <Typography
-          variant="subtitle1"
-          align="center"
-          color="text.secondary"
-          component="p"
-        >
-          Something here to give the footer a purpose!
-        </Typography>
-        <Copyright />
-      </Box>
-      {/* End footer */}
     </ThemeProvider>
   );
 }

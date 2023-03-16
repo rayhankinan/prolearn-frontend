@@ -1,30 +1,17 @@
 import React, {useState}  from "react";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
 import Link from "@mui/material/Link";
-import {LinkProps} from 'react-router-dom';
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { styled } from '@mui/material/styles';
 import ReactMarkdown from 'react-markdown'
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Material } from "@/components/material";
-import GridComponent from '@/components/GridComponent';
 import { Button, Grid, Typography } from "@mui/material";
 import { useRouter, Router } from 'next/router';
+import Container from "@mui/material/Container";
+import {LinkProps} from 'react-router-dom';
+import { styled } from '@mui/material/styles';
+import GridComponent from '@/components/GridComponent';
 
-function Copyright() {
-
-    return (
-        <Typography variant="body2" color="text.secondary" align="center">
-            {"Copyright © "}
-            <Link color="inherit" href="https://mui.com/">
-                Your Website
-            </Link>{" "}
-            {new Date().getFullYear()}
-            {"."}
-        </Typography>
-    );
-}
 
 const materials: Material[] = [
     {
