@@ -145,7 +145,7 @@ export default function CourseLanding() {
                 component="img"
                 image={
                   course.__thumbnail__
-                    ? `${fileService.getFile(course.__thumbnail__.id)}`
+                    ? `/api/file/${course.__thumbnail__.id}`
                     : "https://source.unsplash.com/random"
                 }
                 alt="random"

@@ -48,7 +48,7 @@ const SubcribedCard: React.FC<SubcribedCardProps> = ({ course }) => {
             fill
             src={
               course.__thumbnail__
-                ? `${fileService.getFile(course.__thumbnail__.id)}`
+                ? `/api/file/${course.__thumbnail__.id}`
                 : "https://source.unsplash.com/random"
             }
             alt="course thumbnail"

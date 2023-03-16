@@ -359,7 +359,7 @@ export default function Album() {
                       component="img"
                       image={
                         card.__thumbnail__
-                          ? `${fileService.getFile(card.__thumbnail__.id)}`
+                          ? `/api/file/${card.__thumbnail__.id}`
                           : "https://source.unsplash.com/random"
                       }
                       alt="random"
