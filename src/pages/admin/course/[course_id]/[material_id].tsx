@@ -12,8 +12,7 @@ import GridComponent from "@/components/GridComponent";
 import { Button, Grid, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import CategoryService from "@/services/category-service";
-import { Category } from "@/services/category-service";
-interface Material {
+import Category from "@/interfaces/category-interface";interface Material {
   id: number;
   name: string;
   text: string;

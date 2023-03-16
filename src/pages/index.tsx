@@ -3,9 +3,9 @@ import CardMedia from "@mui/material/CardMedia";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import CourseService from "@/services/course-service";
-import { Course } from "@/services/course-service";
 import CategoryService from "@/services/category-service";
-import { Category } from "@/services/category-service";
+import Course from "@/interfaces/course-interface";
+import Category from "@/interfaces/category-interface";
 
 export default function CourseLanding() {
   const [courses, setCourses] = useState<Course[]>([]);

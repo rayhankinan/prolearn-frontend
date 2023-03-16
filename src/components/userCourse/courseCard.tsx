@@ -1,7 +1,7 @@
 import Image from "next/image";
-import { Course } from "@/services/course-service";
+import Course from "@/interfaces/course-interface";
+import Category from "@/interfaces/category-interface";
 import { Chip, CssBaseline } from "@mui/material";
-import { Category } from "@/services/category-service";
 import Link from "next/link";
 import { Card, CardContent, CardActions, Typography } from "@mui/material";
 import { Button } from "@mui/material";

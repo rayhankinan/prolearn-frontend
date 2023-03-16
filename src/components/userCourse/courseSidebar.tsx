@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import DifficultySelection from "@/components/userCourse/difficultySelection";
 import CategoryList from "@/components/userCourse/categoryList";
-import { Category } from "@/services/category-service";
+import Category from "@/interfaces/category-interface";
 import CategoryService from "@/services/category-service";
 
 

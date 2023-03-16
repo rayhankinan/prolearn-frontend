@@ -1,8 +1,8 @@
 import React from "react";
 import { Grid, Typography } from "@material-ui/core";
-import { Course } from "@/services/course-service";
-import CourseCard from "@/components/userCourse/courseCard";
+import Course from "@/interfaces/course-interface";
 import { flexbox } from "@mui/system";
+import CourseCard from "@/components/userCourse/courseCard";
 
 
 interface CourseCardsProps {

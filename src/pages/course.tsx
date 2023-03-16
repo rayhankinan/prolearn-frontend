@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import Hero from "@/pages/course/courseHero";
-import Sidebar from "@/pages/course/courseSidebar";
-import CourseCards from "@/pages/course/courseCards";
-import { Course } from "@/services/course-service";
+import Hero from "@/components/userCourse/courseHero";
+import Sidebar from "@/components/userCourse/courseSidebar";
+import CourseCards from "@/components/userCourse/courseCards";
+import Course from "@/interfaces/course-interface";
 import CourseService from "@/services/course-service";
 import Navbar from "../components/navbar";
 import SearchBar from "@/components/adminCourse/search";

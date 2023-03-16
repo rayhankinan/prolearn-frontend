@@ -1,20 +1,5 @@
 import http from "../http-common";
 
-export interface thumbnail{
-    id?: number;
-    name: string;
-}
-export interface Course {
-    id?: number;
-    title: string;
-    description: string;
-    difficulty: string;
-    __categories__ : number[];
-    status: string;
-    imgFile?: File|null;
-    __thumbnail__?: thumbnail;
-}
-
 class CourseService {
     getAll(params?: any) {
         return http.get("/course", { params });
