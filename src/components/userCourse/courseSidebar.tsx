@@ -12,8 +12,6 @@ type SidebarProps = {
   setSelected: (selected: number[] | undefined) => void;
 };
 const Sidebar = ({ difficulty, setDifficulty, selected, setSelected } : SidebarProps) => {
-  //get all categories
-
   const [categories, setCategories] = useState<Category[]>([]);
   useEffect(() => {
     CategoryService.getAll()

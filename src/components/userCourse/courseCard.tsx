@@ -1,21 +1,17 @@
 import Image from "next/image";
 import Course from "@/interfaces/course-interface";
-import Category from "@/interfaces/category-interface";
-import { Chip, CssBaseline } from "@mui/material";
+import { Chip } from "@mui/material";
 import Link from "next/link";
 import { Card, CardContent, CardActions, Typography } from "@mui/material";
 import { Button } from "@mui/material";
-import { createTheme } from "@material-ui/core";
-import { ThemeProvider } from "styled-components";
-import { useRouter } from "next/router";
 import userService from "@/services/user-service";
+import fileService from "@/services/file-service";
 
 interface CourseCardProps {
   course: Course;
 }
 
 const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
-  const APINEMBAK = "/api/file";
   const imageLoader = ({ src }: { src: string }): string => {
     return `${src}`;
   };
@@ -63,15 +59,15 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
             fill
             src={
               course.__thumbnail__
-                ? `${APINEMBAK}/${course.__thumbnail__.id}`
+                ? `${fileService.getFile(course.__thumbnail__.id)}`
                 : "https://source.unsplash.com/random"
             }
             alt="course thumbnail"
             loader={imageLoader}
-            className="absolute top-0 left-0 w-full h-full object-contain rounded object-center py-3 px-3 bg-zinc-100"
+            className="absolute top-0 left-0 w-full h-full 
+            object-contain rounded object-center py-3 px-3 bg-zinc-100"
           />
         </div>
-
         <CardContent>
           <Typography
             variant="h6"

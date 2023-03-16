@@ -4,12 +4,13 @@ import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import CourseService from "@/services/course-service";
 import CategoryService from "@/services/category-service";
+import fileService from "@/services/file-service";
 import Course from "@/interfaces/course-interface";
 import Category from "@/interfaces/category-interface";
+import Image from "next/image";
 
 export default function CourseLanding() {
   const [courses, setCourses] = useState<Course[]>([]);
-  const APINEMBAK = "/api/file";
   useEffect(() => {
     CourseService.getAllForVisitor({
       page: 1,
@@ -67,26 +68,22 @@ export default function CourseLanding() {
             resources.
           </p>
           <div className="flex flex-row justify-start ml-14 mt-10">
-            <a
-              href="/auth/register"
-              className="inline-block w-auto h-16 text-xl px-4 py-5 
-                        leading-none border border-gray-300 shadow-xl text-black bg-white 
-                        mt-4 lg:mt-0 mr-12 ml-10 hover:transition ease-in-out hover:scale-110 duration-300 "
+            <a href="/auth/register" className="inline-block w-auto h-16 text-xl px-4 py-5 
+              leading-none border border-gray-300 shadow-xl text-black bg-white mt-4 lg:mt-0
+              mr-12 ml-10 hover:transition ease-in-out hover:scale-110 duration-300"
             >
               Get Started
             </a>
-            <a
-              href="#"
-              className="inline-block w-auto h-16 text-xl px-4 py-5 
-                        leading-none border border-gray-300 shadow-xl text-black bg-gray-400 
-                        mt-4 lg:mt-0 mr-5 hover:transition ease-in-out hover:scale-110 duration-300"
+            <a href="#" className="inline-block w-auto h-16 text-xl px-4 py-5 leading-none 
+              border border-gray-300 shadow-xl text-black bg-gray-400 mt-4 lg:mt-0 mr-5
+              hover:transition ease-in-out hover:scale-110 duration-300"
             >
               Learn More
             </a>
           </div>
         </div>
         <div className="flex justify-end ">
-          <img className="mt-10 mr-20" src="../stock_1.png" alt="Logo" />
+          <Image className="mt-10 mr-20" src="../stock_1.png" alt="Logo" />
         </div>
       </div>
       <div className="flex flex-row justify-between pb-20 pt-20 pr-20 bg-gray-400">
@@ -101,7 +98,7 @@ export default function CourseLanding() {
           </p>
         </div>
         <div className="flex flex-col ml-14 mt-4">
-          <img className="w-12 h-12 mb-8" src="../Frame 35.png" alt="Logo" />
+          <Image className="w-12 h-12 mb-8" src="../Frame 35.png" alt="Logo" />
           <h1 className="font-sans text-xl font-bold mb-4">Expert Teacher</h1>
           <p>
             Our teachers are experts in their field and have years of experience
@@ -109,14 +106,14 @@ export default function CourseLanding() {
           </p>
         </div>
         <div className="flex flex-col ml-14 mt-4">
-          <img className="w-12 h-12 mb-8" src="../Frame 36.png" alt="Logo" />
+          <Image className="w-12 h-12 mb-8" src="../Frame 36.png" alt="Logo" />
           <h1 className="font-sans text-xl font-bold mb-4">Online Courses</h1>
           <p>
             Our courses are available online and can be accessed from anywhere.
           </p>
         </div>
         <div className="flex flex-col ml-14 mt-4">
-          <img className="w-12 h-12 mb-8" src="../Frame 37.png" alt="Logo" />
+          <Image className="w-12 h-12 mb-8" src="../Frame 37.png" alt="Logo" />
           <h1 className="font-sans text-xl font-bold mb-4">24/7 Support</h1>
           <p>
             Our support team is available 24/7 to help you with any issues you
@@ -129,10 +126,8 @@ export default function CourseLanding() {
           <ul className="flex w-full justify-center ">
             {categories.map((category) => (
               <li key={category.title} className="flex-1 mr-2">
-                <a
-                  className="text-center block py-2 px-4 hover:bg-gray-400 
-                                rounded-xl text-gray-800 transition ease-in-out 
-                                delay-150 hover:-translate-y-1 hover:scale-110 duration-300"
+                <a className="text-center block py-2 px-4 hover:bg-gray-400 rounded-xl text-gray-800
+                  transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300"
                   onClick={() => handleCategoryClicked(category.id)}
                 >
                   {category.title}
@@ -143,17 +138,15 @@ export default function CourseLanding() {
         </div>
         <div className="grid grid-cols-4 ml-10 mr-10">
           {courses.map((course) => (
-            <div
-              key={course.id}
-              className="flex flex-wrap mx-1 lg:mx-10 rounded-xl border 
-                        hover:border-gray-400 overflow-hidden shadow-xl ml-20 mt-20 mr-20 transition ease-in-out 
-                        delay-150 hover:-translate-y-1 hover:scale-110 duration-300"
+            <div key={course.id} className="flex flex-wrap mx-1 lg:mx-10 rounded-xl border 
+              hover:border-gray-400 overflow-hidden shadow-xl ml-20 mt-20 mr-20 transition ease-in-out 
+              delay-150 hover:-translate-y-1 hover:scale-110 duration-300"
             >
               <CardMedia
                 component="img"
                 image={
                   course.__thumbnail__
-                    ? `${APINEMBAK}/${course.__thumbnail__.id}`
+                    ? `${fileService.getFile(course.__thumbnail__.id)}`
                     : "https://source.unsplash.com/random"
                 }
                 alt="random"
@@ -168,9 +161,8 @@ export default function CourseLanding() {
               </div>
             </div>
           ))}
-          <div
-            className="flex flex-wrap mx-1 lg:mx-10 rounded-xl overflow-hidden shadow-lg ml-20 
-                    mt-20 mr-20 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300"
+          <div className="flex flex-wrap mx-1 lg:mx-10 rounded-xl overflow-hidden shadow-lg ml-20 
+            mt-20 mr-20 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300"
           >
             <div className="w-full h-full flex flex-col bg-gray-600 justify-center text-center">
               <h1 className="font-sans text-8xl font-bold text-white">. . .</h1>
@@ -193,10 +185,9 @@ export default function CourseLanding() {
           </p>
         </div>
         <div className="flex flex-col ml-14">
-          <img src="../Logos.png" alt="Logo" />
+          <Image src="../Logos.png" alt="Logo" />
         </div>
       </div>
-
       <Footer />
     </div>
   );

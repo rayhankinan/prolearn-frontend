@@ -9,7 +9,8 @@ const ModalSuccess = ({ open, onClose }: ModalSuccessProps) => {
   return (
     <div>
       <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto">
-        <div className="relative top-80 mx-auto my-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+        <div className="relative top-80 mx-auto my-auto p-5 border w-96 shadow-lg
+        rounded-md bg-white">
           <div className="mt-3 text-center">
             <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
               <svg
@@ -36,7 +37,8 @@ const ModalSuccess = ({ open, onClose }: ModalSuccessProps) => {
               </p>
               <div className="mt-5">
                 <button
-                  className="bg-red-500 text-white rounded-xl px-8 py-2 text-base font-medium hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300"
+                  className="bg-red-500 text-white rounded-xl px-8 py-2 text-base font-medium hover:bg-red-600
+                  focus:outline-none focus:ring-2 focus:ring-red-300"
                   onClick={onClose}
                 >
                   Close

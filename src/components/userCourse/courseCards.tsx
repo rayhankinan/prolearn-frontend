@@ -2,7 +2,6 @@ import React from "react";
 import { Grid, Typography } from "@material-ui/core";
 import Course from "@/interfaces/course-interface";
 import CourseCard from "@/components/userCourse/courseCard";
-import { flexbox } from "@mui/system";
 
 
 interface CourseCardsProps {

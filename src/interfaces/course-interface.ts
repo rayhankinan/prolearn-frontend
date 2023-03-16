@@ -1,5 +1,5 @@
 interface thumbnail{
-    id?: number;
+    id: number;
     name: string;
 }
 interface Course {

@@ -14,7 +14,6 @@ export default function Courses() {
   const [page, setPage] = useState(1);
   const [perPage, setPerPage] = useState(9);
   const [count, setCount] = useState(1);
-  const [length, setLength] = useState(0);
   const [search, setSearch] = useState("");
 
   useEffect(() => {
@@ -26,7 +25,6 @@ export default function Courses() {
     })
       .then((response) => {
         setCourses(response.data.data);
-        setLength(response.data.meta.totalPage * perPage);
         setCount(response.data.meta.totalPage);
       })
       .catch((error) => console.log(error));
@@ -47,7 +45,6 @@ export default function Courses() {
       .then((response) => {
         setCourses(response.data.data);
         setPage(1);
-        setLength(response.data.meta.totalPage * perPage);
         setCount(response.data.meta.totalPage);
       })
       .catch((error) => console.log(error));

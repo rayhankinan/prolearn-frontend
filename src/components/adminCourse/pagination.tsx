@@ -1,38 +1,30 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import CourseCard from "@/interfaces/course-card-interface";
 
-export interface Course {
-    id : number;
-    name: string;
-    description: string;
-    img: string;
-}
+function usePagination(data : CourseCard[] , itemsPerPage : number ) {
+  const [currentPage, setCurrentPage] = useState(1);
+  const maxPage = Math.ceil(data.length / itemsPerPage);
 
+  function currentData() {
+    const begin = (currentPage - 1) * itemsPerPage;
+    const end = begin + itemsPerPage;
+    return data.slice(begin, end);
+  }
 
-function usePagination(data : Course[] , itemsPerPage : number ) {
-    const [currentPage, setCurrentPage] = useState(1);
-    const maxPage = Math.ceil(data.length / itemsPerPage);
+  function next() {
+    setCurrentPage((currentPage) => Math.min(currentPage + 1, maxPage));
+  }
 
-    function currentData() {
-        const begin = (currentPage - 1) * itemsPerPage;
-        const end = begin + itemsPerPage;
-        return data.slice(begin, end);
-    }
+  function prev() {
+    setCurrentPage((currentPage) => Math.max(currentPage - 1, 1));
+  }
 
-    function next() {
-        setCurrentPage((currentPage) => Math.min(currentPage + 1, maxPage));
-    }
+  function jump(page : number) {
+    const pageNumber = Math.max(1, page);
+    setCurrentPage((currentPage) => Math.min(pageNumber, maxPage));
+  }
 
-    function prev() {
-        setCurrentPage((currentPage) => Math.max(currentPage - 1, 1));
-    }
-
-    function jump(page : number) {
-        const pageNumber = Math.max(1, page);
-        setCurrentPage((currentPage) => Math.min(pageNumber, maxPage));
-    }
-    
-
-    return { next, prev, jump, currentData, currentPage, maxPage };
+  return { next, prev, jump, currentData, currentPage, maxPage };
 }
 
 export default usePagination;

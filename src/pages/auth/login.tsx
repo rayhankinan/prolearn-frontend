@@ -15,6 +15,7 @@ import { PersonOutlined } from "@mui/icons-material";
 import { useRouter } from "next/router";
 import ModalFailed from "../user/modalFailed";
 import ModalSuccess from "../user/modalSucess";
+import Image from "next/image";
 
 // create login page
 const theme = createTheme();
@@ -85,7 +86,6 @@ export default function Login() {
       })
       .catch((error) => {
         console.log(error);
-        // alert("Username or password is incorrect")
         setErrorMessage("Username or password is incorrect");
         setModalOpen(true);
       });
@@ -94,8 +94,6 @@ export default function Login() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      {/* Logo Name */}
-
       <Grid container spacing={1}>
         <Grid item xs={12} sm={6}>
           <Container component="main" maxWidth="xl">
@@ -107,7 +105,7 @@ export default function Login() {
                 alignItems: "center",
               }}
             >
-              <img src="/logo.png" alt="Logo" className="h-12 mt-5 mb-10" />
+              <Image src="/logo.png" alt="Logo" className="h-12 mt-5 mb-10" />
               <Typography
                 component="h1"
                 variant="h4"
@@ -218,7 +216,7 @@ export default function Login() {
                   marginBottom: 5,
                 }}
               >
-                <img src="/Saly-10 (1).png" alt="Logo" />
+                <Image src="/Saly-10 (1).png" alt="Logo" />
               </Container>
               <Typography
                 component="h1"

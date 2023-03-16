@@ -1,17 +1,16 @@
 import Image from "next/image";
-import { Course } from "@/services/course-service";
+import Course from "@/interfaces/course-interface";
 import { Chip } from "@mui/material";
 import { Card, CardContent, CardActions, Typography } from "@mui/material";
 import { Button } from "@mui/material";
-import userService from "@/services/user-service";
 import Link from "next/link";
+import fileService from "@/services/file-service";
 
 interface SubcribedCardProps {
   course: Course;
 }
 
 const SubcribedCard: React.FC<SubcribedCardProps> = ({ course }) => {
-  const APINEMBAK = "/api/file";
   const imageLoader = ({ src }: { src: string }): string => {
     return `${src}`;
   };
@@ -49,7 +48,7 @@ const SubcribedCard: React.FC<SubcribedCardProps> = ({ course }) => {
             fill
             src={
               course.__thumbnail__
-                ? `${APINEMBAK}/${course.__thumbnail__.id}`
+                ? `${fileService.getFile(course.__thumbnail__.id)}`
                 : "https://source.unsplash.com/random"
             }
             alt="course thumbnail"

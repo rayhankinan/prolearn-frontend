@@ -20,7 +20,7 @@ const FilterBar: React.FC<FilterBarProps> = ({
         options={categories.map((category) => category.title)}
         sx={{ width: 350, marginRight: 2 }}
         renderInput={(params) => <TextField {...params} label="Categories" />}
-        onChange={(event, inputValue) =>
+        onChange={(_, inputValue) =>
           handleCategoryChange(inputValue || [])
         }
       />
@@ -30,7 +30,7 @@ const FilterBar: React.FC<FilterBarProps> = ({
         options={["Beginner", "Intermediate", "Advanced"]}
         sx={{ width: 350, height: 10 }}
         renderInput={(params) => <TextField {...params} label="Difficulty" />}
-        onChange={(event, inputValue) =>
+        onChange={(_, inputValue) =>
           handleDifficultyChange(inputValue || null)
         }
       />

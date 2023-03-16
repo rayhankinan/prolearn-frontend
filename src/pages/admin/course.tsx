@@ -17,10 +17,12 @@ import { Plus } from "@/components/adminCourse/plus";
 import { AddCourseModal } from "@/components/adminCourse/addCourseModal";
 import CourseService from "@/services/course-service";
 import CategoryService from "@/services/category-service";
+import fileService from "@/services/file-service";
 import Course from "@/interfaces/course-interface";
 import Category from "@/interfaces/category-interface";
 import FilterBar from "@/components/adminCourse/filterBar";
 import { useRouter } from "next/router";
+import Image from "next/image";
 
 function Copyright() {
   return (
@@ -44,7 +46,6 @@ export default function Album() {
   const [perPage, setperPage] = useState(6);
   let [page, setPage] = React.useState(1);
   const [courses, setCourses] = useState<Course[]>([]);
-  const APINEMBAK = "/api/file";
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedDifficulty, setSelectedDifficulty] = useState<
     string | undefined
@@ -52,6 +53,10 @@ export default function Album() {
   const [selectedCategories, setSelectedCategories] = useState<
     number[] | undefined
   >(undefined);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [showAll, setShowAll] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  
   useEffect(() => {
     CourseService.getAll({
       page: page,
@@ -66,7 +71,6 @@ export default function Album() {
       .catch((error) => console.log(error));
   }, [page, perPage]);
 
-  const [categories, setCategories] = useState<Category[]>([]);
   useEffect(() => {
     CategoryService.getAll()
       .then((response) => {
@@ -105,8 +109,6 @@ export default function Album() {
   }, [searchTerm, selectedDifficulty, selectedCategories]);
 
   const handleCategoryChange = (value: string[]) => {
-    // handle category change here
-    //search the corresponding category id
     let categoryIDs: number[] = [];
     value.map((categoryTitle) => {
       let category = categories.find(
@@ -125,7 +127,6 @@ export default function Album() {
   };
 
   const handleDifficultyChange = (value: string | null) => {
-    //change value to all lowercase
     if (value != null) {
       value = value.toLowerCase();
       setSelectedDifficulty(value?.toLowerCase());
@@ -133,10 +134,6 @@ export default function Album() {
       setSelectedDifficulty(undefined);
     }
   };
-
-  const [showAll, setShowAll] = useState(false);
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handlePlusClick = () => {
     setIsModalOpen(true);
@@ -147,16 +144,13 @@ export default function Album() {
   };
 
   const handleEdit = (courseId?: number) => {
-    // set data
     if (courseId) {
       router.push(`/admin/course/${courseId}/description`);
     }
   };
 
   const handleModalSubmit = (course: Course) => {
-    //add course to setCourses
     if (course.imgFile == null) {
-      // alert("Please upload an image");
       return;
     }
     const formData = new FormData();
@@ -168,7 +162,6 @@ export default function Album() {
       formData.append("categoryIDs[]", course.__categories__[i].toString());
     }
     formData.append("file", course.imgFile, course.imgFile.name);
-
     CourseService.create(formData)
       .then((newCourse) => {
         window.location.reload();
@@ -177,10 +170,11 @@ export default function Album() {
         console.error(error);
       });
   };
+
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
   };
-  //view all course button is clicked, show all courses remove pagination
+
   const handleShowAll = () => {
     setShowAll(!showAll);
     if (!showAll) {
@@ -191,7 +185,6 @@ export default function Album() {
   };
 
   const handleDelete = async (id?: number) => {
-    //check if id not null
     if (id == null) {
       return;
     }
@@ -209,7 +202,6 @@ export default function Album() {
 
   if (showAll) {
     pagination = null;
-
     rightButton = (
       <Button
         component={Link}
@@ -222,7 +214,6 @@ export default function Album() {
         </Typography>
       </Button>
     );
-
     leftButton = (
       <Button
         component={Link}
@@ -246,7 +237,6 @@ export default function Album() {
         onChange={handleChange}
       />
     );
-
     rightButton = (
       <Button
         component={Link}
@@ -259,7 +249,6 @@ export default function Album() {
         </Typography>
       </Button>
     );
-
     leftButton = null;
   }
 
@@ -267,20 +256,22 @@ export default function Album() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <main>
-        {/* Header, contains logo and page name */}
-        <Grid sx={{ width: "70%", margin: "0 auto", marginTop: "30px" }}>
+        <Grid 
+          sx={{ 
+            width: "70%",
+            margin: "0 auto",
+            marginTop: "30px",
+          }}
+        >
           <Grid container justifyContent="space-between">
             <Typography variant="h4" className="text-4xl font-bold mt-10">
               All Courses
             </Typography>
-            <img src="/logo.png" alt="Logo" className="h-12 mr-4" />
+            <Image src="/logo.png" alt="Logo" className="h-12 mr-4" />
           </Grid>
-          {/* horizontal line that have space on the left and right */}
           <hr className="border-t-3 border-black " />
         </Grid>
-
         <Container sx={{ py: 3 }} maxWidth="lg">
-          {/* End hero unit */}
           <Box
             sx={{
               display: "flex",
@@ -305,7 +296,6 @@ export default function Album() {
                 >
                   {leftButton}
                 </Grid>
-
                 <Grid
                   item
                   xs={6}
@@ -321,7 +311,6 @@ export default function Album() {
                     setSearchTerm={setSearchTerm}
                   />
                 </Grid>
-
                 <Grid
                   item
                   xs={6}
@@ -346,7 +335,6 @@ export default function Album() {
                 </Grid>
               </Grid>
             </Grid>
-
             <Box sx={{ my: 2, mx: "auto", marginTop: 4 }}>
               <FilterBar
                 categories={categories}
@@ -354,7 +342,6 @@ export default function Album() {
                 handleCategoryChange={handleCategoryChange}
               />
             </Box>
-
             <Grid
               container
               spacing={10}
@@ -372,7 +359,7 @@ export default function Album() {
                       component="img"
                       image={
                         card.__thumbnail__
-                          ? `${APINEMBAK}/${card.__thumbnail__.id}`
+                          ? `${fileService.getFile(card.__thumbnail__.id)}`
                           : "https://source.unsplash.com/random"
                       }
                       alt="random"
@@ -434,9 +421,6 @@ export default function Album() {
                   </Card>
                 </Grid>
               ))}
-            
-              {/*a plus button to add new course*/}
-
               <Grid item>
                 <Plus handlePlusClick={handlePlusClick} />
               </Grid>
