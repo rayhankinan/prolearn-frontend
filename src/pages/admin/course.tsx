@@ -267,7 +267,7 @@ export default function Album() {
             <Typography variant="h4" className="text-4xl font-bold mt-10">
               All Courses
             </Typography>
-            <Image src="/logo.png" alt="Logo" className="h-12 mr-4" />
+            <img src="/logo.png" alt="Logo" className="h-12 mr-4" />
           </Grid>
           <hr className="border-t-3 border-black " />
         </Grid>

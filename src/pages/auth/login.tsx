@@ -15,7 +15,6 @@ import { PersonOutlined } from "@mui/icons-material";
 import { useRouter } from "next/router";
 import ModalFailed from "../user/modalFailed";
 import ModalSuccess from "../user/modalSucess";
-import Image from "next/image";
 
 // create login page
 const theme = createTheme();
@@ -105,7 +104,7 @@ export default function Login() {
                 alignItems: "center",
               }}
             >
-              <Image src="/logo.png" alt="Logo" className="h-12 mt-5 mb-10" />
+              <img src="/logo.png" alt="Logo" className="h-12 mt-5 mb-10" />
               <Typography
                 component="h1"
                 variant="h4"
@@ -216,7 +215,7 @@ export default function Login() {
                   marginBottom: 5,
                 }}
               >
-                <Image src="/Saly-10 (1).png" alt="Logo" />
+                <img src="/Saly-10 (1).png" alt="Logo" />
               </Container>
               <Typography
                 component="h1"

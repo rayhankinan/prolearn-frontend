@@ -7,7 +7,6 @@ import CategoryService from "@/services/category-service";
 import fileService from "@/services/file-service";
 import Course from "@/interfaces/course-interface";
 import Category from "@/interfaces/category-interface";
-import Image from "next/image";
 
 export default function CourseLanding() {
   const [courses, setCourses] = useState<Course[]>([]);
@@ -83,7 +82,7 @@ export default function CourseLanding() {
           </div>
         </div>
         <div className="flex justify-end ">
-          <Image className="mt-10 mr-20" src="../stock_1.png" alt="Logo" />
+          <img className="mt-10 mr-20" src="../stock_1.png" alt="Logo" />
         </div>
       </div>
       <div className="flex flex-row justify-between pb-20 pt-20 pr-20 bg-gray-400">
@@ -98,7 +97,7 @@ export default function CourseLanding() {
           </p>
         </div>
         <div className="flex flex-col ml-14 mt-4">
-          <Image className="w-12 h-12 mb-8" src="../Frame 35.png" alt="Logo" />
+          <img className="w-12 h-12 mb-8" src="../Frame 35.png" alt="Logo" />
           <h1 className="font-sans text-xl font-bold mb-4">Expert Teacher</h1>
           <p>
             Our teachers are experts in their field and have years of experience
@@ -106,14 +105,14 @@ export default function CourseLanding() {
           </p>
         </div>
         <div className="flex flex-col ml-14 mt-4">
-          <Image className="w-12 h-12 mb-8" src="../Frame 36.png" alt="Logo" />
+          <img className="w-12 h-12 mb-8" src="../Frame 36.png" alt="Logo" />
           <h1 className="font-sans text-xl font-bold mb-4">Online Courses</h1>
           <p>
             Our courses are available online and can be accessed from anywhere.
           </p>
         </div>
         <div className="flex flex-col ml-14 mt-4">
-          <Image className="w-12 h-12 mb-8" src="../Frame 37.png" alt="Logo" />
+          <img className="w-12 h-12 mb-8" src="../Frame 37.png" alt="Logo" />
           <h1 className="font-sans text-xl font-bold mb-4">24/7 Support</h1>
           <p>
             Our support team is available 24/7 to help you with any issues you
@@ -185,7 +184,7 @@ export default function CourseLanding() {
           </p>
         </div>
         <div className="flex flex-col ml-14">
-          <Image src="../Logos.png" alt="Logo" />
+          <img src="../Logos.png" alt="Logo" />
         </div>
       </div>
       <Footer />

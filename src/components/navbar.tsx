@@ -1,11 +1,10 @@
 import React from "react";
-import Image from "next/image";
 
 const Navbar: React.FC = () => {
   return (
     <nav className="flex w-full items-center justify-between flex-wrap bg-gray-300 p-6">
       <div className="flex items-center flex-shrink-0 mr-6">
-        <Image src="../logo.png" alt="Logo" className="" />
+        <img src="../logo.png" alt="Logo" className=""/>
         {/* <span className="font-bold text-4xl tracking-tight">ProLearn</span> */}
       </div>
       <div className="w-full block flex-grow lg:flex lg:items-center lg:w-auto justify-end">

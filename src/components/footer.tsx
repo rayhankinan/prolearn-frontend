@@ -1,5 +1,4 @@
 import React from "react";
-import Image from "next/image";
 
 const Footer: React.FC = () => {
   return (
@@ -7,7 +6,7 @@ const Footer: React.FC = () => {
       <div className="flex flex-row w-full justify-start"></div>
       <div className="flex flex-row w-full items-center p-12">
         <div className="flex flex-col w-full items-center">
-          <Image src="../logo.png" alt="Logo" className="bg-cover" />
+          <img src="../logo.png" alt="Logo" className="bg-cover"/>
           <p className="font-sans p-3 text-xl font-bold text-white"> 
             Become a Professional Starts Here 
           </p>
