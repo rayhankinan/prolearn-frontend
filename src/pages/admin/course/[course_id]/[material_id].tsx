@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from "react";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
 import Link from "@mui/material/Link";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { styled } from "@mui/material/styles";
 import ReactMarkdown from "react-markdown";
-// import { Material } from "@/components/material";
 import Modal from "@/components/modal";
 import GridComponent from "@/components/GridComponent";
 import { Button, Grid, Typography } from "@mui/material";
@@ -14,6 +11,9 @@ import { useRouter } from "next/router";
 import CategoryService from "@/services/category-service";
 import Category from "@/interfaces/category-interface";
 import Material from "@/interfaces/material-interface";
+// import { styled } from "@mui/material/styles";
+// import Container from "@mui/material/Container";
+// import { Material } from "@/components/material";
 
 interface GridComponentProps {
   material: Material;

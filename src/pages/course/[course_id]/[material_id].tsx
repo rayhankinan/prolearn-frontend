@@ -7,7 +7,7 @@ import {LinkProps} from 'react-router-dom';
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { styled } from '@mui/material/styles';
 import ReactMarkdown from 'react-markdown'
-import { Material } from "@/components/material";
+import  Material from "@/interfaces/material-interface";
 import GridComponent from '@/components/GridComponent';
 import { Button, Grid, Typography } from "@mui/material";
 import { useRouter, Router } from 'next/router';

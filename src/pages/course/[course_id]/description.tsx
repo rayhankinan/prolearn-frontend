@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import Link from "@mui/material/Link";
 import ReactMarkdown from 'react-markdown'
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { Material } from "@/components/material";
+import Material from "@/interfaces/material-interface";
 import { Button, Grid, Typography } from "@mui/material";
 import { useRouter, Router } from 'next/router';
 import Container from "@mui/material/Container";

@@ -17,25 +17,11 @@ import { Plus } from "@/components/adminCourse/plus";
 import { AddCourseModal } from "@/components/adminCourse/addCourseModal";
 import CourseService from "@/services/course-service";
 import CategoryService from "@/services/category-service";
-import fileService from "@/services/file-service";
 import Course from "@/interfaces/course-interface";
 import Category from "@/interfaces/category-interface";
 import FilterBar from "@/components/adminCourse/filterBar";
 import { useRouter } from "next/router";
-import Image from "next/image";
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center">
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
+//import fileService from "@/services/file-service";
 
 const theme = createTheme();
 
