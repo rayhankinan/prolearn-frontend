@@ -39,7 +39,7 @@ const CategoryList: React.FC<CategoryListProps> = ({ categories, selected, setSe
               w-6 h-6 flex items-center justify-center"
             >
               <span className="text-xs px-1">
-                {Math.floor(Math.random() * 100)}
+                {category.total_course}
               </span>
             </div>
         </li>
