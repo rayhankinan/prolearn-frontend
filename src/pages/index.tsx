@@ -7,6 +7,7 @@ import CategoryService from "@/services/category-service";
 import fileService from "@/services/file-service";
 import Course from "@/interfaces/course-interface";
 import Category from "@/interfaces/category-interface";
+import Login_navbar from "@/components/login_navbar";
 
 export default function CourseLanding() {
   const [courses, setCourses] = useState<Course[]>([]);
@@ -55,6 +56,7 @@ export default function CourseLanding() {
 
   return (
     <div>
+      {/* <Login_navbar />1 */}
       <Navbar />
       <div className="flex flex-row justify-between">
         <div className="flex flex-col justify-center">
