@@ -1,6 +1,6 @@
 import React from "react";
 
-const Navbar: React.FC = () => {
+const Login_navbar: React.FC = () => {
   return (
     <nav className="flex w-full items-center justify-between flex-wrap bg-gray-300 p-6">
       <div className="flex items-center flex-shrink-0 mr-6">
@@ -41,19 +41,14 @@ const Navbar: React.FC = () => {
         <div className="mr-10">
           <a
             href="/auth/login"
-            className="inline-block w-32 h-auto text-xl px-4 py-2 leading-none border 
-            rounded-xl text-black bg-white mt-4 lg:mt-0 mr-12 ml-10 text-center align-middle 
+            className="inline-block w-32 h-auto text-xl px-4 py-2 leading-none border
+            rounded-xl text-black bg-red-400 mt-4 lg:mt-0 mr-5 text-center align-middle
             hover:transition ease-in-out hover:scale-110 duration-300"
+            onClick={() => {
+                localStorage.removeItem("token");
+                }}
           >
-            Login
-          </a>
-          <a
-            href="/auth/register"
-            className="inline-block w-32 h-auto text-xl px-4 py-2 leading-none border 
-            rounded-xl text-black bg-gray-400 mt-4 lg:mt-0 mr-5 text-center align-middle 
-            hover:transition ease-in-out hover:scale-110 duration-300"
-          >
-            Register
+            Logout
           </a>
         </div>
       </div>
@@ -61,4 +56,4 @@ const Navbar: React.FC = () => {
   );
 };
 
-export default Navbar;
+export default Login_navbar;

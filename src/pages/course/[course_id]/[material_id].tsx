@@ -1,4 +1,4 @@
-import React, {useState}  from "react";
+import React, {useState, useEffect}  from "react";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
@@ -11,6 +11,8 @@ import  Material from "@/interfaces/material-interface";
 import GridComponent from '@/components/GridComponent';
 import { Button, Grid, Typography } from "@mui/material";
 import { useRouter, Router } from 'next/router';
+import Section from "@/interfaces/section-interface";
+import SectionService from "@/services/section-service";
 
 const materials: Material[] = [
     {
@@ -34,7 +36,8 @@ const materials: Material[] = [
 const theme = createTheme();
 
 export default function UserCourseDetail() {
-    const [selectedMaterial, setSelectedMaterial] = useState(null);
+    const [allMaterial, setAllMaterial] = useState<Section[]>([]);
+    const [selectedMaterial, setSelectedMaterial] = useState<Section | undefined>(undefined);
 
     const router = useRouter();
     // let {course_id, material_id} = router.query;
@@ -44,6 +47,19 @@ export default function UserCourseDetail() {
 
     const course_idInt = parseInt(course_id);
     const material_idInt = parseInt(material_id);
+
+    useEffect(() => {
+        SectionService.getSectionByCourse(course_idInt)
+            .then((response) => {
+                setAllMaterial(response.data.data);
+            })
+            .catch((error) => console.log(error));
+    }, [course_idInt]);
+    
+    useEffect(() => {
+        const selectedSection = allMaterial.find((section) => section.id === material_idInt);
+        setSelectedMaterial(selectedSection);
+    }, [allMaterial, material_idInt]);
 
     return(
         <ThemeProvider theme={theme}>
