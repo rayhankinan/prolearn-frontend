@@ -31,7 +31,7 @@ const Navbar: React.FC = () => {
             Discussion
           </a>
           <a
-            href="#responsive-header"
+            href="/aboutUs"
             className="block mt-4 lg:inline-block lg:mt-0 text-black-200 hover:transition 
             ease-in-out hover:scale-110 duration-300"
           >

@@ -115,7 +115,7 @@ const AboutUs = () => {
                 </div>
             </div>
 
-            <div className='mt-28'>
+            <div className='mt-28 mb-14'>
                 <h1 className='text-6xl font-bold text-center mt-10 font-mono'>Get In Touch</h1>
                 <h2 className='text-xl font-bold text-center mt-2 font-mono'>We’d love to hear from you. Please fill out this form.</h2>
                 <div className='flex justify-center'>
