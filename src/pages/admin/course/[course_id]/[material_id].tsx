@@ -1,121 +1,87 @@
 import React, { useState, useEffect } from "react";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
+import Container from "@mui/material/Container";
 import Link from "@mui/material/Link";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
 import ReactMarkdown from "react-markdown";
+import Material from "@/interfaces/material-interface";
 import Modal from "@/components/modal";
 import GridComponent from "@/components/GridComponent";
+import AddSectionModal from "@/components/AddSectionModal";
 import { Button, Grid, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import CategoryService from "@/services/category-service";
 import Category from "@/interfaces/category-interface";
-import Material from "@/interfaces/material-interface";
-// import { styled } from "@mui/material/styles";
-// import Container from "@mui/material/Container";
-// import { Material } from "@/components/material";
-
-interface GridComponentProps {
-  material: Material;
-}
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center">
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
-
-const materials: Material[] = [
-  {
-    id: 1,
-    name: "Introduction to Web Development",
-    text: "Learn the basics of web development and build your own website from scratch.",
-    video_url: "https://picsum.photos/300/300?random=1",
-    course_id: 1,
-  },
-  {
-    id: 2,
-    name: "JavaScript Fundamentals",
-    text: "Understand the core concepts of JavaScript and how to use it to build dynamic web applications.",
-    video_url: "https://picsum.photos/300/300?random=2",
-    course_id: 1,
-  },
-  {
-    id: 3,
-    name: "ReactJS: Building User Interfaces",
-    text: "Learn how to build user interfaces with the popular JavaScript library ReactJS.",
-    video_url: "https://picsum.photos/300/300?random=3",
-    course_id: 1,
-  },
-  {
-    id: 4,
-    name: "NodeJS: Building Backends",
-    text: "Build scalable and efficient backends with NodeJS and understand how to connect to databases.",
-    video_url: "https://picsum.photos/300/300?random=4",
-    course_id: 1,
-  },
-  {
-    id: 5,
-    name: "Advanced CSS and SASS",
-    text: "Take your CSS skills to the next level with SASS and learn how to write efficient and maintainable stylesheets.",
-    video_url: "https://picsum.photos/300/300?random=5",
-    course_id: 1,
-  },
-  {
-    id: 6,
-    name: "Full Stack Development with MERN",
-    text: "Build full-stack web applications using the MERN stack (MongoDB, ExpressJS, ReactJS, NodeJS).",
-    video_url: "https://picsum.photos/300/300?random=6",
-    course_id: 1,
-  },
-  {
-    id: 7,
-    name: "Data Structures and Algorithms",
-    text: "Understand the basics of data structures and algorithms and learn how to implement them in code.",
-    video_url: "https://picsum.photos/300/300?random=7",
-    course_id: 1,
-  },
-  {
-    id: 8,
-    name: "Introduction to Python",
-    text: "Learn the basics of Python and how to use it to build powerful applications.",
-    video_url: "https://picsum.photos/300/300?random=8",
-    course_id: 1,
-  },
-];
+import Section from "@/interfaces/section-interface";
+import sectionService from "@/services/section-service";
+import fileService from "@/services/file-service";
+import { HtmlProps } from "next/dist/shared/lib/html-context";
 
 const theme = createTheme();
 
 export default function CourseDetailAdmin() {
+  const router = useRouter();
+  const [course_id, setCourseId] = useState("");
+  const [material_id, setMaterialId] = useState("");
+  const [file_id, setFileId] = useState(1);
+  const [material_idInt, setMaterialIdInt] = useState(-1);
+  const [file, setFile] = useState<File | null>(null);
+
+  useEffect(() => {
+    if (router.isReady) {
+      console.log(router.query);
+      setCourseId(router.query.course_id!.toString());
+      setMaterialId(router.query.material_id!.toString());
+      //set material id int with material id converted to int
+      setMaterialIdInt(parseInt(router.query.material_id!.toString()));
+      
+    }
+  }, [router.isReady]);
+
   const [showModal, setShowModal] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
-  const [selectedMaterial, setSelectedMaterial] = useState<Material | null>(
-    null
-  );
-  const [showEditButton, setShowEditButton] = useState(false);
-  const router = useRouter();
-  const { course_id, material_id } = router.query;
-  // const course_id: string = router.query.course_id!.toString() ;
-  // const material_id: string = router.query.material_id!.toString();
-  if (typeof course_id === "string") {
-    const course_idInt = parseInt(course_id);
-  }
+  const [section, setSection] = useState<Section[]>([]);
 
-  const material_idInt = parseInt(material_id);
+  useEffect(() => {
+    sectionService
+      .getSectionByCourse(course_id)
+      .then((response) => {
+        console.log(response.data.data);
+        setSection(response.data.data);
+        //find material with material id
+        const material = response.data.data.find((material : Section) => {
+          return material.id === material_idInt;
+        }
+        );
+        setFileId(material.__file__.id);
+      })
+      .catch((error) => console.log(error));
+  }, [course_id, material_idInt]);
+
+  useEffect(() => {
+    console.log(file_id);
+    fileService.getFile(file_id).then((response) => {
+      console.log("DISINI FILE")
+      console.log(response);
+      setFile(response.data);
+    })
+    .catch((error) => console.log(error));
+    
+  }, [file_id]);
+
+  console.log(file);
+
+  const [selectedSection, setSelectedSection] = useState<Section | null>(null);
+  const [showEditButton, setShowEditButton] = useState(false);
 
   const handleAddMaterial = () => {
     setShowAddModal(true);
   };
 
-  const handleEditMaterial = (material: Material) => {
-    setSelectedMaterial(material);
+  const handleEditSection = (section: Section) => {
+    setSelectedSection(section);
     setShowModal(true);
   };
 
@@ -159,7 +125,7 @@ export default function CourseDetailAdmin() {
                 className="text-4xl font-bold mt-10 mx-4 mb-5"
                 sx={{ marginRight: "10px" }}
               >
-                COURSE X
+                COURSE {course_id}
               </Typography>
               {!showEditButton && (
                 <button
@@ -195,25 +161,7 @@ export default function CourseDetailAdmin() {
           <Grid container spacing={2}>
             <Grid item xs={3} sx={{ borderRight: "1px solid #ccc" }}>
               <Grid item container direction="column">
-                <Grid
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    marginBottom: "10px",
-                  }}
-                  key={"desc"}
-                >
-                  <Link
-                    href={`/admin/course/1/description`}
-                    style={{ textDecoration: "none", color: "black" }}
-                  >
-                    {/* <a style={{ color: "black" }}> */}
-                    <div>Description</div>
-                    {/* </a> */}
-                  </Link>
-                </Grid>
-                {materials.map((material) => (
+                {section.map((material) => (
                   <Grid
                     sx={{
                       display: "flex",
@@ -223,29 +171,27 @@ export default function CourseDetailAdmin() {
                     }}
                     key={material.id}
                   >
-                    {material.id == material_idInt && (
-                      <Link
-                        href={`/course/admin/1/${material.id}`}
-                        style={{ color: "black" }}
-                      >
-                        {/* <a style={{ color: "black" }}> */}
-                        <div>{material.name}</div>
-                        {/* </a> */}
-                      </Link>
-                    )}
                     {material.id != material_idInt && (
                       <Link
-                        href={`/course/admin/1/${material.id}`}
+                        href={`/admin/course/${course_id}/${material.id}`}
                         style={{ textDecoration: "none", color: "black" }}
                       >
                         {/* <a style={{ color: "black" }}> */}
-                        <div>{material.name}</div>
+                        <div>{material.title}</div>
                         {/* </a> */}
+                      </Link>
+                    )}
+                    {material.id == material_idInt && (
+                      <Link
+                        href={`/admin/course/${course_id}/${material.id}`}
+                        style={{ textDecoration: "none", color: "black" }}
+                      >
+                        <div className="font-bold">{material.title}</div>
                       </Link>
                     )}
                     {showEditButton && (
                       <Button
-                        onClick={() => handleEditMaterial(material)}
+                        onClick={() => handleEditSection(material)}
                         size="small"
                         // variant="contained"
                         className=" bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mr-4"
@@ -260,31 +206,17 @@ export default function CourseDetailAdmin() {
             </Grid>
             <Grid item xs={9} sx={{ paddingLeft: "20px" }}>
               <Grid item>
-                <ReactMarkdown>Bla b;a bla</ReactMarkdown>
+                {file
+                  ? <div dangerouslySetInnerHTML={{__html : file!.toString()}}></div> : <div>loading</div>}
               </Grid>
             </Grid>
           </Grid>
         </Grid>
       </main>
-      {/* Footer */}
-      <Box sx={{ bgcolor: "background.paper", p: 6 }} component="footer">
-        <Typography variant="h6" align="center" gutterBottom>
-          Footer
-        </Typography>
-        <Typography
-          variant="subtitle1"
-          align="center"
-          color="text.secondary"
-          component="p"
-        >
-          Something here to give the footer a purpose!
-        </Typography>
-        <Copyright />
-      </Box>
-      {/* End footer */}
-      {selectedMaterial && (
+
+      {selectedSection && (
         <Modal show={showModal} onClose={() => setShowModal(false)}>
-          <GridComponent material={selectedMaterial} />
+          <GridComponent section={selectedSection} />
           <div className="flex justify-center mt-5">
             <button
               onClick={handleClose}
@@ -298,7 +230,7 @@ export default function CourseDetailAdmin() {
 
       {showAddModal && (
         <Modal show={showAddModal} onClose={() => setShowModal(false)}>
-          <GridComponent />
+          <AddSectionModal courseId={course_id} />
           <div className="flex justify-center mt-5">
             <button
               onClick={handleClose}

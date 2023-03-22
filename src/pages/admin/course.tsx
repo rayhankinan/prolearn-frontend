@@ -21,12 +21,14 @@ import Course from "@/interfaces/course-interface";
 import Category from "@/interfaces/category-interface";
 import FilterBar from "@/components/adminCourse/filterBar";
 import { useRouter } from "next/router";
+import CourseContext from "@/contexts/CourseContext";
 //import fileService from "@/services/file-service";
 
 const theme = createTheme();
 
 export default function Album() {
   const router = useRouter();
+  const [selectedId, setSelectedId] = useState<number>(1);
   const [length, setLength] = useState(0);
   const [count, setCount] = useState(0);
   const [perPage, setperPage] = useState(6);
@@ -131,12 +133,15 @@ export default function Album() {
 
   const handleEdit = (courseId?: number) => {
     if (courseId) {
+      setSelectedId(courseId);
+    
       router.push(`/admin/course/${courseId}/description`);
     }
   };
 
   const handleModalSubmit = (course: Course) => {
     if (course.imgFile == null) {
+      alert("Please upload an image");
       return;
     }
     const formData = new FormData();
@@ -274,6 +279,7 @@ export default function Album() {
               <Grid container>
                 <Grid
                   container
+                  item
                   xs={0}
                   sm={0}
                   md={4}
@@ -386,14 +392,14 @@ export default function Album() {
                       </Typography>
                     </Box>
                     <CardActions className="flex justify-between">
-                      <Button
-                        size="small"
-                        variant="contained"
-                        className="w-64 rounded-full bg-blackbutton text-white"
-                        onClick={() => handleEdit(card.id)}
-                      >
-                        Edit
-                      </Button>
+                        <Button
+                          size="small"
+                          variant="contained"
+                          className="w-64 rounded-full bg-blackbutton text-white"
+                          onClick={() => handleEdit(card.id)}
+                        >
+                          Edit
+                        </Button>
 
                       <Button
                         size="small"

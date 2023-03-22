@@ -1,5 +1,9 @@
 import Course  from './course-interface';
 
+interface file{
+    id: number;
+    name: string;
+}
 interface Section {
     id?: number;
     title: string;
@@ -7,6 +11,7 @@ interface Section {
     duration: number;
     type: string;
     file?: File|null;
+    __file__?: file;
     adjoinedCourse?: Course|null;
     quiz? : string;
     children?: Section[];

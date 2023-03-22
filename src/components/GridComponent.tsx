@@ -1,6 +1,7 @@
 import React, { ChangeEvent, useState } from 'react';
 import { Grid, TextField } from '@material-ui/core';
 import Material from '@/interfaces/material-interface';
+import Section from '@/interfaces/section-interface';
 import dynamic from 'next/dynamic';
 import 'react-quill/dist/quill.snow.css';
 
@@ -9,22 +10,18 @@ const DynamicReactQuill = dynamic(() => import('react-quill'), {
 });
 
 interface GridComponentProps {
-  material?: Material;
+  section?: Section;
 }
 
-const GridComponent = ({ material }: GridComponentProps = {}) => {
-  const [name, setName] = useState(material?.name || "");
-  const [videoUrl, setVideoUrl] = useState(material?.video_url || "");
-  const [body, setBody] = useState(material?.text || "");
+const GridComponent = ({ section }: GridComponentProps = {}) => {
+  const [name, setName] = useState(section?.title || "");
+  const [body, setBody] = useState(section?.file?.toString || "");
 
   const handleNameChange = (event : ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value);
   };
 
-  const handleVideoUrlChange = (event : ChangeEvent<HTMLInputElement>) => {
-    setVideoUrl(event.target.value);
-  };
-
+ 
   const handleBodyChange = (
     value: string| null
   ) => {
@@ -35,12 +32,7 @@ const GridComponent = ({ material }: GridComponentProps = {}) => {
   };
 
   const handleSave = () => {
-    const updatedMaterial = {
-      ...material,
-      name: name,
-      video_url: videoUrl,
-      text: body,
-    };
+    
   };
 
   return (
@@ -56,18 +48,7 @@ const GridComponent = ({ material }: GridComponentProps = {}) => {
           onChange={handleNameChange}
         />
       </Grid>
-      <Grid item xs={3} style={{ marginTop: "5px" }}>
-        <label>Video</label>
-      </Grid>
-      <Grid item xs={9} >
-        {/* <TextField
-          variant="outlined"
-          fullWidth
-          value={videoUrl}
-          onChange={handleVideoUrlChange}
-        /> */}
-        <input type="file" onChange={handleVideoUrlChange} />
-      </Grid>
+      
       <Grid item xs={3} style={{ marginTop: "16px" }}>
         <label>Material Text</label>
       </Grid>
