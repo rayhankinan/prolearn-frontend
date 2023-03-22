@@ -40,20 +40,22 @@ const ourTeam = [
 ]
 
 
-
-
 const AboutUs = () => {
     const [swiper, setSwiper] = useState(null);
 
     useEffect(() => {
-        const swiper = new Swiper('.swiper-container', {
-          slidesPerView: 5,
+        const newSwiper = new Swiper('.swiper-container', {
+          slidesPerView: 3,
           spaceBetween: 10,
           loop: true,
           centeredSlides: true,
           grabCursor: true,
+            autoplay: {
+                delay: 2500,
+                disableOnInteraction: false,
+            },
         });
-        setSwiper(swiper);
+        setSwiper(newSwiper);
       }, []);
 
     return (
@@ -89,6 +91,7 @@ const AboutUs = () => {
                     </div>
                     ))}
                 </div>
+                
             </div>
 
 
