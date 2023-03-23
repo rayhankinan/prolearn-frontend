@@ -63,8 +63,6 @@ export default function CourseDetailAdmin() {
   useEffect(() => {
     console.log(file_id);
     fileService.getFile(file_id).then((response) => {
-      console.log("DISINI FILE")
-      console.log(response);
       setFile(response.data);
     })
     .catch((error) => console.log(error));
@@ -207,7 +205,7 @@ export default function CourseDetailAdmin() {
             <Grid item xs={9} sx={{ paddingLeft: "20px" }}>
               <Grid item>
                 {file
-                  ? <div dangerouslySetInnerHTML={{__html : file!.toString()}}></div> : <div>loading</div>}
+                  ? <div dangerouslySetInnerHTML={{__html : file!.toString()}}></div> : <div>loading ... </div>}
               </Grid>
             </Grid>
           </Grid>

@@ -9,17 +9,17 @@ class SectionService {
         return http.get("/section", { params });
     }
 
-    create(data: any) {
-        return http.post("/section", data)
-            .then(response => response.data);
+    async create(data: any) {
+        const response = await http.post("/section", data);
+        return response.data;
     }
 
-    edit(data : any) {
-        return http.put("/section", data)
-            .then(response => response.data);
+    async update(sectionId : string, data: any) {
+        const response = await http.put(`/section/${sectionId}`, data);
+        return response.data;
     }
 
-    delete(id: number) {
+    async delete(id: number) {
         return http.delete(`/section/${id}`);
     }
 }

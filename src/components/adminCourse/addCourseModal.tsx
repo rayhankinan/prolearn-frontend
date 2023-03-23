@@ -64,8 +64,7 @@ export const AddCourseModal = ({
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const file = event.target.files?.[0];
-    setImage(file)
-    event.target.value = "";
+    setImage(file);
     setImgNameError(file === null);
   };
 
