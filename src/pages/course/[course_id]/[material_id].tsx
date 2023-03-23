@@ -12,54 +12,73 @@ import GridComponent from '@/components/GridComponent';
 import { Button, Grid, Typography } from "@mui/material";
 import { useRouter, Router } from 'next/router';
 import Section from "@/interfaces/section-interface";
+import Category from "@/interfaces/category-interface";
 import SectionService from "@/services/section-service";
+import fileService from "@/services/file-service";
+import CategoryService from "@/services/category-service";
 
-const materials: Material[] = [
-    {
-        id: 1,
-        name: "Introduction to Web Development",
-        text:
-            "Learn the basics of web development and build your own website from scratch.",
-        video_url: "https://picsum.photos/300/300?random=1",
-        course_id: 1,
-    },
-    {
-        id: 2,
-        name: "JavaScript Fundamentals",
-        text:
-            "Understand the core concepts of JavaScript and how to use it to build dynamic web applications.",
-        video_url: "https://picsum.photos/300/300?random=2",
-        course_id: 1,
-    },
-]
+
 
 const theme = createTheme();
 
 export default function UserCourseDetail() {
-    const [allMaterial, setAllMaterial] = useState<Section[]>([]);
-    const [selectedMaterial, setSelectedMaterial] = useState<Section | undefined>(undefined);
-
     const router = useRouter();
-    // let {course_id, material_id} = router.query;
-    // TO DO - fix error
-    const course_id: string = router.query.course_id ? router.query.course_id.toString() : '';
-    const material_id: string = router.query.material_id ? router.query.material_id.toString() : '';
-
-    const course_idInt = parseInt(course_id);
-    const material_idInt = parseInt(material_id);
+    const [course_id, setCourseId] = useState("");
+    const [material_id, setMaterialId] = useState("");
+    const [file_id, setFileId] = useState(1);
+    const [material_idInt, setMaterialIdInt] = useState(-1);
+    const [file, setFile] = useState<File | null>(null);
 
     useEffect(() => {
-        SectionService.getSectionByCourse(course_idInt)
-            .then((response) => {
-                setAllMaterial(response.data.data);
-            })
-            .catch((error) => console.log(error));
-    }, [course_idInt]);
+        if (router.isReady) {
+          console.log(router.query);
+          setCourseId(router.query.course_id!.toString());
+          setMaterialId(router.query.material_id!.toString());
+          //set material id int with material id converted to int
+          setMaterialIdInt(parseInt(router.query.material_id!.toString()));
+          
+        }
+    }, [router.isReady]);
+
+    const [section, setSection] = useState<Section[]>([]);
+
+    useEffect(() => {
+        SectionService
+          .getSectionByCourse(course_id)
+          .then((response) => {
+            console.log(response.data.data);
+            setSection(response.data.data);
+            //find material with material id
+            const material = response.data.data.find((material : Section) => {
+              return material.id === material_idInt;
+            }
+            );
+            setFileId(material.__file__.id);
+          })
+          .catch((error) => console.log(error));
+    }, [course_id, material_idInt]);
     
     useEffect(() => {
-        const selectedSection = allMaterial.find((section) => section.id === material_idInt);
-        setSelectedMaterial(selectedSection);
-    }, [allMaterial, material_idInt]);
+        console.log(file_id);
+        fileService.getFile(file_id).then((response) => {
+          setFile(response.data);
+        })
+        .catch((error) => console.log(error));
+        
+    }, [file_id]);
+
+    console.log(file);
+    
+    const [selectedSection, setSelectedSection] = useState<Section | null>(null);
+
+    const [categories, setCategories] = useState<Category[]>([]);
+    useEffect(() => {
+      CategoryService.getAll()
+        .then((response) => {
+          setCategories(response.data.data);
+        })
+        .catch((error) => console.log(error));
+    }, []);
 
     return(
         <ThemeProvider theme={theme}>
@@ -69,7 +88,7 @@ export default function UserCourseDetail() {
                     <Grid container direction= "row" justifyContent= "space-between" alignItems="center" sx={{justifyContent: 'center'}}>
                         <Box sx= {{display: "flex", alignItems: "center"}}>
                             <Typography variant= "h4" className= "text-4xl font-bold mt-10 mx-4 mb-5" sx= {{marginRight: "10px"}}>
-                                Course X
+                                Course {course_id}
                             </Typography>
                         </Box>
                     </Grid>
@@ -80,18 +99,18 @@ export default function UserCourseDetail() {
                     <Grid container spacing={2}>
                         <Grid item xs={3} sx={{borderRight: "1px solid #ccc"}}>
                             <Grid item container direction= "column">
-                                {materials.map((material) => (
+                                {section.map((material) => (
                                     <Grid sx= {{display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "10px"}} key= {material.id}>
                                         {(material.id == material_idInt) &&
-                                            <Link href={`/course/1/${material.id}`} style={{   color: "black" }}>
+                                            <Link href={`/course/${course_id}/${material.id}`} style={{   color: "black" }}>
                                                 {/* <a style={{ color: "black" }}> */}
-                                                    <div>{material.name}</div>
+                                                <div className="font-bold">{material.title}</div>
                                                 {/* </a> */}
                                             </Link>                                        }
                                         {(material.id != material_idInt) &&
-                                            <Link href={`/course/1/${material.id}`} style={{ textDecoration: "none", color: "black" }}>
+                                            <Link href={`/course/${course_id}/${material.id}`} style={{ textDecoration: "none", color: "black" }}>
                                             {/* <a style={{ color: "black" }}> */}
-                                                <div>{material.name}</div>
+                                                <div>{material.title}</div>
                                             {/* </a> */}
                                         </Link>
                                         }
@@ -100,7 +119,10 @@ export default function UserCourseDetail() {
                             </Grid>
                         </Grid>
                         <Grid item xs={9} sx={{ paddingLeft: '20px' }}>
-                            <Grid item><ReactMarkdown>Bla bla bla</ReactMarkdown></Grid>
+                            <Grid item>
+                            {file
+                                ? <div dangerouslySetInnerHTML={{__html : file!.toString()}}></div> : <div>loading ... </div>}
+                            </Grid>
                         </Grid>
                     </Grid>
                 </Grid>
