@@ -1,50 +1,59 @@
-import React, {useState}  from "react";
+import React, {useState, useEffect}  from "react";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
+import Container from "@mui/material/Container";
 import Link from "@mui/material/Link";
-import ReactMarkdown from 'react-markdown'
+import {LinkProps} from 'react-router-dom';
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import Material from "@/interfaces/material-interface";
+import { styled } from '@mui/material/styles';
+import ReactMarkdown from 'react-markdown'
+import  Material from "@/interfaces/material-interface";
+import GridComponent from '@/components/GridComponent';
 import { Button, Grid, Typography } from "@mui/material";
 import { useRouter, Router } from 'next/router';
-import Container from "@mui/material/Container";
-import {LinkProps} from 'react-router-dom';
-import { styled } from '@mui/material/styles';
-import GridComponent from '@/components/GridComponent';
+import Section from "@/interfaces/section-interface";
+import Category from "@/interfaces/category-interface";
+import SectionService from "@/services/section-service";
+import fileService from "@/services/file-service";
+import CategoryService from "@/services/category-service";
 
 
-const materials: Material[] = [
-    {
-        id: 1,
-        name: "Introduction to Web Development",
-        text:
-            "Learn the basics of web development and build your own website from scratch.",
-        video_url: "https://picsum.photos/300/300?random=1",
-        course_id: 1,
-    },
-    {
-        id: 2,
-        name: "JavaScript Fundamentals",
-        text:
-            "Understand the core concepts of JavaScript and how to use it to build dynamic web applications.",
-        video_url: "https://picsum.photos/300/300?random=2",
-        course_id: 1,
-    },
-]
 
 const theme = createTheme();
 
 export default function UserCourseDetail() {
-    const [selectedMaterial, setSelectedMaterial] = useState(null);
-
     const router = useRouter();
-    // let {course_id, material_id} = router.query;
-    // TO DO - fix error
-    const course_id: string = router.query.course_id ? router.query.course_id.toString() : '';
-    const material_id: string = router.query.material_id ? router.query.material_id.toString() : '';
+    const [course_id, setCourseId] = useState("");
 
-    const course_idInt = parseInt(course_id);
-    const material_idInt = parseInt(material_id);
+    useEffect(() => {
+        if (router.isReady) {
+          setCourseId(router.query.course_id!.toString());
+        }
+    }, [router.isReady]);
+    const material_idInt = -1;
+
+    const [section, setSection] = useState<Section[]>([]);
+
+    useEffect(() => {
+        SectionService
+          .getSectionByCourse(course_id)
+          .then((response) => {
+            console.log(response.data.data);
+            setSection(response.data.data);
+          })
+          .catch((error) => console.log(error));
+      }, [course_id]);
+    
+    const [selectedSection, setSelectedSection] = useState<Section | null>(null);
+
+    const [categories, setCategories] = useState<Category[]>([]);
+    useEffect(() => {
+      CategoryService.getAll()
+        .then((response) => {
+          setCategories(response.data.data);
+        })
+        .catch((error) => console.log(error));
+    }, []);
 
     return(
         <ThemeProvider theme={theme}>
@@ -54,7 +63,7 @@ export default function UserCourseDetail() {
                     <Grid container direction= "row" justifyContent= "space-between" alignItems="center" sx={{justifyContent: 'center'}}>
                         <Box sx= {{display: "flex", alignItems: "center"}}>
                             <Typography variant= "h4" className= "text-4xl font-bold mt-10 mx-4 mb-5" sx= {{marginRight: "10px"}}>
-                                Course X
+                                Course {course_id}
                             </Typography>
                         </Box>
                     </Grid>
@@ -65,18 +74,18 @@ export default function UserCourseDetail() {
                     <Grid container spacing={2}>
                         <Grid item xs={3} sx={{borderRight: "1px solid #ccc"}}>
                             <Grid item container direction= "column">
-                                {materials.map((material) => (
+                                {section.map((material) => (
                                     <Grid sx= {{display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "10px"}} key= {material.id}>
                                         {(material.id == material_idInt) &&
-                                            <Link href={`/course/1/${material.id}`} style={{   color: "black" }}>
+                                            <Link href={`/course/${course_id}/${material.id}`} style={{   color: "black" }}>
                                                 {/* <a style={{ color: "black" }}> */}
-                                                    <div>{material.name}</div>
+                                                <div className="font-bold">{material.title}</div>
                                                 {/* </a> */}
                                             </Link>                                        }
                                         {(material.id != material_idInt) &&
-                                            <Link href={`/course/1/${material.id}`} style={{ textDecoration: "none", color: "black" }}>
+                                            <Link href={`/course/${course_id}/${material.id}`} style={{ textDecoration: "none", color: "black" }}>
                                             {/* <a style={{ color: "black" }}> */}
-                                                <div>{material.name}</div>
+                                                <div>{material.title}</div>
                                             {/* </a> */}
                                         </Link>
                                         }
@@ -85,7 +94,9 @@ export default function UserCourseDetail() {
                             </Grid>
                         </Grid>
                         <Grid item xs={9} sx={{ paddingLeft: '20px' }}>
-                            <Grid item><ReactMarkdown>Bla b;a bla</ReactMarkdown></Grid>
+                            <Grid item>
+                                <p>Description</p>
+                            </Grid>
                         </Grid>
                     </Grid>
                 </Grid>
