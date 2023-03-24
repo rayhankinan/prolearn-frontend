@@ -5,6 +5,12 @@ import dynamic from "next/dynamic";
 import SectionService from "@/services/section-service";
 import "react-quill/dist/quill.snow.css";
 
+import InputLabel from "@material-ui/core/InputLabel";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
+import FormControl from "@material-ui/core/FormControl";
+import { Button } from "@mui/material";
+
 const DynamicReactQuill = dynamic(() => import("react-quill"), {
   ssr: false,
 });
@@ -70,7 +76,7 @@ const AddSectionModal = ({
   
 
   return (
-    <Grid container spacing={3}>
+    <Grid container spacing={3} style={{height: "600px", overflow: "auto"}}>
       <Grid item xs={3} style={{ marginTop: "16px" }}>
         <label>Material Name</label>
       </Grid>
@@ -120,6 +126,120 @@ const AddSectionModal = ({
           onChange={handleObjectiveChange}
         />
       </Grid>
+      <Grid item xs={3} style={{ marginTop: "16px" }}>
+        <label>Quiz Title</label>
+      </Grid>
+      <Grid item xs={9}>
+        <TextField
+          variant="outlined"
+          fullWidth
+          // value={name}
+          // onChange={handleNameChange}
+        />
+      </Grid>
+      <Grid item xs={3} style={{ marginTop: "16px" }}>
+        <label>Jumlah Soal</label>
+      </Grid>
+      <Grid item xs={9}>
+        <TextField
+          variant="outlined"
+          fullWidth
+          type="number"
+          // value={duration}
+          // onChange={handleDurationChange}
+        />
+      </Grid>
+      {/* Create Dropdown for question */}
+      <Grid item xs={3} style={{ marginTop: "16px" }}>
+        <label>Question</label>
+      </Grid>
+      <Grid item xs={9}>
+        <FormControl variant="outlined" fullWidth>
+          <InputLabel id="demo-simple-select-outlined-label">
+            Questions
+          </InputLabel>
+          <Select
+            labelId="demo-simple-select-outlined-label"
+            id="demo-simple-select-outlined"
+            // value={age}
+            // onChange={handleChange}
+            label="Question"
+          >
+            <MenuItem >Question 1</MenuItem>
+            <MenuItem >Question 2</MenuItem>
+            <MenuItem >Question 3</MenuItem>
+          </Select>
+        </FormControl>
+      </Grid>
+      <Grid item xs={3} style={{ marginTop: "16px" }}>
+        <label>Material Text</label>
+      </Grid>
+      <Grid item xs={9}>
+        <div style={{overflow: "auto", maxHeight : "350px" }}>
+          <DynamicReactQuill
+            placeholder="Write something amazing"
+            // modules={AddSectionModal.modules}
+            // formats={AddSectionModal.formats}
+            // onChange={handleBodyChange}
+            // value={body}
+          />
+        </div>
+        <Button
+          variant="contained"
+          color="primary"
+          fullWidth
+          className="bg-green-500 hover:bg-green-600"
+          style={{color: "white", marginTop: "16px" }}
+          // onClick={() => handleAddAnswer(answer1)}
+        >
+          Add
+        </Button>
+      </Grid>
+      <Grid item xs={3} style={{ marginTop: "16px" }}>
+        <label>Answers</label>
+      </Grid>
+      <Grid item xs={7}>
+        <TextField
+          variant="outlined"
+          fullWidth
+          // value={answer1}
+          // onChange={(e) => setAnswer1(e.target.value)}
+        />
+      </Grid>
+      <Grid item xs={2} style={{ display: "flex", alignItems: "center" }}>
+        <Button
+          variant="contained"
+          color="primary"
+          fullWidth
+          className="bg-green-500 hover:bg-green-600"
+          style={{color: "white" }}
+          // onClick={() => handleAddAnswer(answer1)}
+        >
+          Add
+        </Button>
+      </Grid>
+      <Grid item xs={3} style={{ marginTop: "16px" }}>
+        <label>Correct Answer</label>
+      </Grid>
+      <Grid item xs={9}>
+        <FormControl variant="outlined" fullWidth>
+          <InputLabel id="demo-simple-select-outlined-label">
+            Correct Answer
+          </InputLabel>
+          <Select
+            labelId="demo-simple-select-outlined-label"
+            id="demo-simple-select-outlined"
+            // value={age}
+            // onChange={handleChange}
+            label="Correct Answer"
+          >
+            <MenuItem >Answer 1</MenuItem>
+            <MenuItem >Answer 2</MenuItem>
+            <MenuItem >Answer 3</MenuItem>
+          </Select>
+        </FormControl>
+      </Grid>
+
       <Grid item xs={12}>
         <div className="flex justify-center mt-5">
           <button
