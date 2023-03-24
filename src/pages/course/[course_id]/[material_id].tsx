@@ -16,6 +16,7 @@ import Category from "@/interfaces/category-interface";
 import SectionService from "@/services/section-service";
 import fileService from "@/services/file-service";
 import CategoryService from "@/services/category-service";
+import QuizSection from "@/components/userCourse/quizSection";
 
 
 
@@ -120,8 +121,9 @@ export default function UserCourseDetail() {
                         </Grid>
                         <Grid item xs={9} sx={{ paddingLeft: '20px' }}>
                             <Grid item>
-                            {file
-                                ? <div dangerouslySetInnerHTML={{__html : file!.toString()}}></div> : <div>loading ... </div>}
+                            {/* {file
+                                ? <div dangerouslySetInnerHTML={{__html : file!.toString()}}></div> : <div>loading ... </div>} */}
+                                <QuizSection />
                             </Grid>
                         </Grid>
                     </Grid>
