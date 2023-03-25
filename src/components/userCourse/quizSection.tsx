@@ -20,8 +20,29 @@ const Answer = [
   
 ]
 
+type qContent = {
+  title: string;
+  question: [
+      {
+          option: [
+              {
+                  content: string;
+                  isCorrect: boolean;
+              }
+          ]
+      }
+  ]
+  description: string;
+}
 
-const QuizSection: React.FC = () => {
+interface QuizSectionProps {
+  quizContent: qContent;
+}
+
+const QuizSection: React.FC<QuizSectionProps> = ({ quizContent }) => {
+
+  console.log(quizContent);
+
   return (
     <div className="bg-gray-100 w-full h-full p-6 rounded-md">
       <div className="flex flex-col  font-sans">
