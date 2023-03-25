@@ -180,56 +180,58 @@ const AddSectionModal = ({
       formData.append("file", file);
     }
 
-    const quizContent = {
-      title: quiz,
-      description: quiz,
-      question: [
-        {
-          content: listQuestion[0].question,
-          option: [
-            {
-              content: answerList[0].answer[0].a,
-              isCorrect: answerList[0].answer[0].isCorrect
-            },
-            {
-              content: answerList[0].answer[1].b,
-              isCorrect: answerList[0].answer[1].isCorrect
-            },
-            {
-              content: answerList[0].answer[2].c,
-              isCorrect: answerList[0].answer[2].isCorrect
-            },
-            {
-              content: answerList[0].answer[3].d,
-              isCorrect: answerList[0].answer[3].isCorrect
-            }
-          ]
-        },
-        {
-          content: listQuestion[1].question,
-          option: [
-            {
-              content: answerList[1].answer[0].a,
-              isCorrect: answerList[1].answer[0].isCorrect
-            },
-            {
-              content: answerList[1].answer[1].b,
-              isCorrect: answerList[1].answer[1].isCorrect
-            },
-            {
-              content: answerList[1].answer[2].c,
-              isCorrect: answerList[1].answer[2].isCorrect
-            },
-            {
-              content: answerList[1].answer[3].d,
-              isCorrect: answerList[1].answer[3].isCorrect
-            }
-          ]
-        },
-      ]
+    if (quiz !== "") {
+      const quizContent = {
+        title: quiz,
+        description: quiz,
+        question: [
+          {
+            content: listQuestion[0].question,
+            option: [
+              {
+                content: answerList[0].answer[0].a,
+                isCorrect: answerList[0].answer[0].isCorrect
+              },
+              {
+                content: answerList[0].answer[1].b,
+                isCorrect: answerList[0].answer[1].isCorrect
+              },
+              {
+                content: answerList[0].answer[2].c,
+                isCorrect: answerList[0].answer[2].isCorrect
+              },
+              {
+                content: answerList[0].answer[3].d,
+                isCorrect: answerList[0].answer[3].isCorrect
+              }
+            ]
+          },
+          {
+            content: listQuestion[1].question,
+            option: [
+              {
+                content: answerList[1].answer[0].a,
+                isCorrect: answerList[1].answer[0].isCorrect
+              },
+              {
+                content: answerList[1].answer[1].b,
+                isCorrect: answerList[1].answer[1].isCorrect
+              },
+              {
+                content: answerList[1].answer[2].c,
+                isCorrect: answerList[1].answer[2].isCorrect
+              },
+              {
+                content: answerList[1].answer[3].d,
+                isCorrect: answerList[1].answer[3].isCorrect
+              }
+            ]
+          },
+        ]
+      }
+  
+      formData.append("quizContent", JSON.stringify(quizContent));
     }
-
-    formData.append("quizContent", JSON.stringify(quizContent));
 
     console.log(formData)
     SectionService.create(formData)
