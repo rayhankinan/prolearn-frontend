@@ -1,24 +1,73 @@
-import React from "react";
+import React, { useState } from "react";
 
-const Answer = [
+const QuestionAndAnswer = [
   {
-    answer: "Let",
-    isCorrect: false,
+    question: "What is the correct syntax for referring to an external script called 'xxx.js'?",
+    answer: [
+      {
+        content: "script src='xxx.js'",
+        isCorrect: false,
+      },
+      {
+        content: "script href='xxx.js'",
+        isCorrect: false,
+      },
+      {
+        content: "script name='xxx.js'",
+        isCorrect: false,
+      },
+      {
+        content: "script src='xxx.js'",
+        isCorrect: true,
+      },
+    ],
+    description: "The src attribute specifies the URL of an external script file.",
   },
   {
-    answer: "Async",
-    isCorrect: false,
+    question: "How do you write 'Hello World' in an alert box?",
+    answer: [
+      {
+        content: "alertBox('Hello World');",
+        isCorrect: false,
+      },
+      {
+        content: "msg('Hello World');",
+        isCorrect: false,
+      },
+      {
+        content: "alert('Hello World');",
+        isCorrect: true,
+      },
+      {
+        content: "msgBox('Hello World');",
+        isCorrect: false,
+      },
+    ],
+    description: "The src attribute specifies the URL of an external script file.",
   },
   {
-    answer: "Const",
-    isCorrect: false,
-  },
-  {
-    answer: "Var",
-    isCorrect: false,
-  },
-  
-]
+    question: "How do you create a function in JavaScript?",
+    answer: [
+      {
+        content: "function:myFunction()",
+        isCorrect: false,
+      },
+      {
+        content: "function = myFunction()",
+        isCorrect: false,
+      },
+      {
+        content: "function myFunction()",
+        isCorrect: true,
+      },
+      {
+        content: "function myFunction()",
+        isCorrect: false,
+      },
+    ],
+    description: "The src attribute specifies the URL of an external script file.",
+  }
+];
 
 type qContent = {
   title: string;
@@ -33,19 +82,29 @@ type qContent = {
       }
   ]
   description: string;
-}
+};
 
 interface QuizSectionProps {
   quizContent: qContent;
 }
 
 const QuizSection: React.FC<QuizSectionProps> = ({ quizContent }) => {
+  const [currentQuestion, setCurrentQuestion] = useState(0);
 
-  console.log(quizContent);
+  const handleNextClick = () => {
+    setCurrentQuestion((prev) => prev + 1);
+  };
+
+  const handlePrevClick = () => {
+    setCurrentQuestion((prev) => prev - 1);
+  };
+
+  const isLastQuestion = currentQuestion === QuestionAndAnswer.length - 1;
+  const isFirstQuestion = currentQuestion === 0;
 
   return (
     <div className="bg-gray-100 w-full h-full p-6 rounded-md">
-      <div className="flex flex-col  font-sans">
+      <div className="flex flex-col font-sans">
         <div className="flex flex-row w-full">
           <div className="w-1/2">
             <div className="flex flex-col">
@@ -58,54 +117,63 @@ const QuizSection: React.FC<QuizSectionProps> = ({ quizContent }) => {
           </div>
         </div>
 
-        <div className="flex flex-col">
-
+        <div className="flex flex-col mt-6">
           <div>
-            <div className="flex justify-center mt-2">
+            <div className="flex justify-center mt-2 mb-10">
               <img src="https://forum.nwoods.com/uploads/db3963/original/2X/e/ea8bc6988360ead92fa1419b3ffa8e937ad4c1ef.png" alt="Logo" className="rounded-xl"/>
             </div>
           </div>
-
-          <div>
-            <div className="flex mt-8 ml-28 mb-4 font-bold">
-              <h1>Question 1:</h1>
+          <div className="flex flex-row">
+            <div className="w-1/2">
+              <h1 className="text-2xl font-bold">Question {currentQuestion + 1}</h1>
+            </div>
+            <div className="w-1/2 text-end">
+              <h1 className="text-2xl font-bold">
+                {currentQuestion + 1} / {QuestionAndAnswer.length}
+              </h1>
             </div>
           </div>
-
-          <div>
-            <div className="flex ml-36 mt-2 font-bold">
-              <h1>What is the correct syntax for referring to an external script called "xxx.js"?</h1>
-            </div>
-          </div>
-
-          {
-            Answer.map((item, index) => {
-              return (
-                <div className="flex flex-row ml-36">
-                  <input type={"radio"} className="mr-2"/>
-                  <button className=" text-black  py-2 px-4 rounded mr-4">{item.answer}</button>
+          <div className="flex flex-col mt-6">
+            <h1 className="text-2xl font-bold">{QuestionAndAnswer[currentQuestion].question}</h1>
+            <div className="flex flex-col mt-6">
+              {QuestionAndAnswer[currentQuestion].answer.map((answer, index) => (
+                <div className="flex flex-row mt-4">
+                  <div className="w-1/12">
+                    <input type="radio" name="answer" id={`answer${index}`} />
+                  </div>
+                  <div className="w-11/12">
+                    <label htmlFor={`answer${index}`}>{answer.content}</label>
+                  </div>
                 </div>
-              )
-            })
-          }
+              ))}
+            </div>
+          </div>
         </div>
 
-        <div>
-          <div className="flex flex-row justify-end mt-8">
-            <button className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded w-40">
-              Previous
+        <div className="flex flex-row mt-12 mb-10">
+          {!isFirstQuestion && (
+            <div className="w-1/2">
+              <button
+                className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
+                onClick={handlePrevClick}
+              >
+                Prev
+              </button>
+            </div>
+          )}
+          <div className="w-1/2 text-end">
+            <button
+              className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
+              onClick={handleNextClick}
+            >
+              {isLastQuestion ? "Finish" : "Next"}
             </button>
-            <button className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded w-40 ml-4">
-              Next
-            </button>
-            {/* <button className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded w-40 ml-4">
-              Submit
-            </button> */}
           </div>
         </div>
       </div>
     </div>
   );
 };
+
 
 export default QuizSection;

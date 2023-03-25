@@ -142,7 +142,7 @@ export default function UserCourseDetail() {
                             <Grid item>
                             {/* {file
                                 ? <div dangerouslySetInnerHTML={{__html : file!.toString()}}></div> : <div>loading ... </div>} */}
-                                {/* <QuizSection /> */}
+                                <QuizSection />
                             {quizContent ? <QuizSection quizContent={quizContent} /> : <div></div>}
                             </Grid>
                         </Grid>
