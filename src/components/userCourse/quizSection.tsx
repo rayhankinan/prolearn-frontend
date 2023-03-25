@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 
+
 const QuestionAndAnswer = [
   {
     question: "What is the correct syntax for referring to an external script called 'xxx.js'?",
@@ -90,13 +91,34 @@ interface QuizSectionProps {
 
 const QuizSection: React.FC<QuizSectionProps> = ({ quizContent }) => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [showModal, setShowModal] = useState(false);
+  const [numCorrectAnswers, setNumCorrectAnswers] = useState(0);
 
   const handleNextClick = () => {
-    setCurrentQuestion((prev) => prev + 1);
+    // setCurrentQuestion((prev) => prev + 1);
+    if (currentQuestion < QuestionAndAnswer.length - 1) {
+      setCurrentQuestion((prev) => prev + 1);
+    } else {
+      handleFinishClick();
+    }
   };
 
   const handlePrevClick = () => {
     setCurrentQuestion((prev) => prev - 1);
+  };
+  
+  const handleFinishClick = () => {
+    // const numCorrect = quizContent.reduce(
+    //   (acc, { answer }, index) =>
+    //     acc + (answer === QuestionAndAnswer[index].selectedAnswer ? 1 : 0),
+    //   0
+    // );
+    // setNumCorrectAnswers(numCorrect);
+    setShowModal(true);
+  };
+
+  const handleCloseModalClick = () => {
+    setShowModal(false);
   };
 
   const isLastQuestion = currentQuestion === QuestionAndAnswer.length - 1;
@@ -171,6 +193,31 @@ const QuizSection: React.FC<QuizSectionProps> = ({ quizContent }) => {
           </div>
         </div>
       </div>
+      {
+        showModal && (
+          <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
+            <div className="bg-white w-1/2 h-1/2 rounded-md flex flex-col justify-center items-center">
+              <img src="../../prize.png" alt="prize" className="w-40 h-40 mb-12" />
+              <h1 className="text-2xl font-bold">You have finished the quiz</h1>
+              <h1 className="text-2xl font-bold mt-4">You got {numCorrectAnswers} out of {QuestionAndAnswer.length} correct</h1>
+              <div className="flex flex-row mt-12 justify-between">
+                <button
+                  className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 mt-4 mr-4"
+                  onClick={handleCloseModalClick}
+                >
+                  Close
+                </button>
+                <button
+                  className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 mt-4 ml-4"
+                  // onClick={handleCloseModalClick}
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          </div>
+        )
+      }
     </div>
   );
 };
