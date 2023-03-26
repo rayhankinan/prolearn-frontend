@@ -183,11 +183,11 @@ const AddSectionModal = ({
     if (quiz !== "") {
       const quizContent = {
         title: quiz,
-        description: quiz,
-        question: [
+        content: quiz,
+        questions: [
           {
             content: listQuestion[0].question,
-            option: [
+            options: [
               {
                 content: answerList[0].answer[0].a,
                 isCorrect: answerList[0].answer[0].isCorrect
@@ -208,7 +208,7 @@ const AddSectionModal = ({
           },
           {
             content: listQuestion[1].question,
-            option: [
+            options: [
               {
                 content: answerList[1].answer[0].a,
                 isCorrect: answerList[1].answer[0].isCorrect
