@@ -1,106 +1,50 @@
 import React, { useState } from "react";
-
-
-const QuestionAndAnswer = [
-  {
-    question: "What is the correct syntax for referring to an external script called 'xxx.js'?",
-    answer: [
-      {
-        content: "script src='xxx.js'",
-        isCorrect: false,
-      },
-      {
-        content: "script href='xxx.js'",
-        isCorrect: false,
-      },
-      {
-        content: "script name='xxx.js'",
-        isCorrect: false,
-      },
-      {
-        content: "script src='xxx.js'",
-        isCorrect: true,
-      },
-    ],
-    description: "The src attribute specifies the URL of an external script file.",
-  },
-  {
-    question: "How do you write 'Hello World' in an alert box?",
-    answer: [
-      {
-        content: "alertBox('Hello World');",
-        isCorrect: false,
-      },
-      {
-        content: "msg('Hello World');",
-        isCorrect: false,
-      },
-      {
-        content: "alert('Hello World');",
-        isCorrect: true,
-      },
-      {
-        content: "msgBox('Hello World');",
-        isCorrect: false,
-      },
-    ],
-    description: "The src attribute specifies the URL of an external script file.",
-  },
-  {
-    question: "How do you create a function in JavaScript?",
-    answer: [
-      {
-        content: "function:myFunction()",
-        isCorrect: false,
-      },
-      {
-        content: "function = myFunction()",
-        isCorrect: false,
-      },
-      {
-        content: "function myFunction()",
-        isCorrect: true,
-      },
-      {
-        content: "function myFunction()",
-        isCorrect: false,
-      },
-    ],
-    description: "The src attribute specifies the URL of an external script file.",
-  }
-];
+import quizService from "@/services/quiz-service";
 
 type qContent = {
-  title: string;
-  question: [
-      {
-          option: [
-              {
-                  content: string;
-                  isCorrect: boolean;
-              }
-          ]
-      }
-  ]
-  description: string;
-};
-
+  id: number;
+  content: {
+    title: string;
+    question: [
+        {
+            option: [
+                {
+                    content: string;
+                    isCorrect: boolean;
+                }
+            ],
+            content: string;
+        }
+    ]
+    description: string;
+  }
+}
 interface QuizSectionProps {
   quizContent: qContent;
 }
 
+let listOfAnswers: number[] = [];
+
 const QuizSection: React.FC<QuizSectionProps> = ({ quizContent }) => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [showModal, setShowModal] = useState(false);
+  const [indexAnswer, setIndexAnswer] = useState<number | null>(null);
   const [numCorrectAnswers, setNumCorrectAnswers] = useState(0);
+
+  const handleAnswerClick = (index: number) => {
+    setIndexAnswer(index);
+    listOfAnswers[currentQuestion] = index;
+  }
 
   const handleNextClick = () => {
     // setCurrentQuestion((prev) => prev + 1);
-    if (currentQuestion < QuestionAndAnswer.length - 1) {
+    if (currentQuestion < quizContent.content.question.length - 1) {
       setCurrentQuestion((prev) => prev + 1);
+      setIndexAnswer(null);
     } else {
       handleFinishClick();
     }
+    console.log(listOfAnswers);
   };
 
   const handlePrevClick = () => {
@@ -108,12 +52,20 @@ const QuizSection: React.FC<QuizSectionProps> = ({ quizContent }) => {
   };
   
   const handleFinishClick = () => {
-    // const numCorrect = quizContent.reduce(
-    //   (acc, { answer }, index) =>
-    //     acc + (answer === QuestionAndAnswer[index].selectedAnswer ? 1 : 0),
-    //   0
-    // );
-    // setNumCorrectAnswers(numCorrect);
+    const sendQuizReq = {
+      quizId: quizContent.id,
+      answer: listOfAnswers,
+    }
+
+    console.log(sendQuizReq);
+    quizService.submitQuiz(sendQuizReq)
+      .then((response) => {
+        console.log(response.data);
+        setNumCorrectAnswers(response.data.correct_answer);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
     setShowModal(true);
   };
 
@@ -121,7 +73,9 @@ const QuizSection: React.FC<QuizSectionProps> = ({ quizContent }) => {
     setShowModal(false);
   };
 
-  const isLastQuestion = currentQuestion === QuestionAndAnswer.length - 1;
+  console.log(quizContent.content.question.length);
+
+  const isLastQuestion = currentQuestion === quizContent.content.question.length - 1;
   const isFirstQuestion = currentQuestion === 0;
 
   return (
@@ -130,7 +84,7 @@ const QuizSection: React.FC<QuizSectionProps> = ({ quizContent }) => {
         <div className="flex flex-row w-full">
           <div className="w-1/2">
             <div className="flex flex-col">
-              <h1 className="text-4xl font-bold">JavaScript Basic Quiz</h1>
+              <h1 className="text-4xl font-bold">{quizContent.content.title}</h1>
               <h1 className="mt-6">Answer The Question Below</h1>
             </div>
           </div>
@@ -140,28 +94,23 @@ const QuizSection: React.FC<QuizSectionProps> = ({ quizContent }) => {
         </div>
 
         <div className="flex flex-col mt-6">
-          <div>
-            <div className="flex justify-center mt-2 mb-10">
-              <img src="https://forum.nwoods.com/uploads/db3963/original/2X/e/ea8bc6988360ead92fa1419b3ffa8e937ad4c1ef.png" alt="Logo" className="rounded-xl"/>
-            </div>
-          </div>
           <div className="flex flex-row">
             <div className="w-1/2">
               <h1 className="text-2xl font-bold">Question {currentQuestion + 1}</h1>
             </div>
             <div className="w-1/2 text-end">
               <h1 className="text-2xl font-bold">
-                {currentQuestion + 1} / {QuestionAndAnswer.length}
+                {currentQuestion + 1} / {quizContent.content.question.length}
               </h1>
             </div>
           </div>
           <div className="flex flex-col mt-6">
-            <h1 className="text-2xl font-bold">{QuestionAndAnswer[currentQuestion].question}</h1>
+            <h1 className="text-2xl font-bold">{quizContent.content.question[currentQuestion].content}</h1>
             <div className="flex flex-col mt-6">
-              {QuestionAndAnswer[currentQuestion].answer.map((answer, index) => (
+              {quizContent.content.question[currentQuestion].option.map((answer, index) => (
                 <div className="flex flex-row mt-4">
                   <div className="w-1/12">
-                    <input type="radio" name="answer" id={`answer${index}`} />
+                    <input type="radio" name="answer" id={`answer${index}`} onClick={() => handleAnswerClick(index)} checked={indexAnswer === index} />
                   </div>
                   <div className="w-11/12">
                     <label htmlFor={`answer${index}`}>{answer.content}</label>
@@ -199,7 +148,7 @@ const QuizSection: React.FC<QuizSectionProps> = ({ quizContent }) => {
             <div className="bg-white w-1/2 h-1/2 rounded-md flex flex-col justify-center items-center">
               <img src="../../prize.png" alt="prize" className="w-40 h-40 mb-12" />
               <h1 className="text-2xl font-bold">You have finished the quiz</h1>
-              <h1 className="text-2xl font-bold mt-4">You got {numCorrectAnswers} out of {QuestionAndAnswer.length} correct</h1>
+              <h1 className="text-2xl font-bold mt-4">You got {numCorrectAnswers} out of {quizContent.content.question.length} correct</h1>
               <div className="flex flex-row mt-12 justify-between">
                 <button
                   className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 mt-4 mr-4"
