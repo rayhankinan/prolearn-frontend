@@ -11,6 +11,7 @@ import { Pagination } from "@mui/material";
 
 export default function Courses() {
   const [courses, setCourses] = useState<Course[]>([]);
+  const [subscribedCourses, setSubscribedCourses] = useState<number[]>([]);
   const [page, setPage] = useState(1);
   const [perPage, setPerPage] = useState(9);
   const [count, setCount] = useState(1);
@@ -25,6 +26,19 @@ export default function Courses() {
       .then((response) => {
         setCourses(response.data.data);
         setCount(response.data.meta.totalPage);
+      })
+      .catch((error) => console.log(error));
+    CourseService.getAll({
+      page: page,
+      limit: perPage,
+      title: search,
+      subscribed: true,
+    })
+      .then((response) => {
+        const subscribedCourseId = response.data.data.map(
+          (course: Course) => course.id
+        );
+        setSubscribedCourses(subscribedCourseId);
       })
       .catch((error) => console.log(error));
   }, [page, perPage]);
@@ -46,6 +60,23 @@ export default function Courses() {
         setCourses(response.data.data);
         setPage(1);
         setCount(response.data.meta.totalPage);
+      })
+      .catch((error) => console.log(error));
+    CourseService.getAll({
+      page: page,
+      limit: perPage,
+      title: search,
+      difficulty: difficultyList.includes(difficulty.toLowerCase())
+        ? difficulty.toLowerCase()
+        : undefined,
+      categoryId: selected,
+      subscribed: true,
+    })
+      .then((response) => {
+        const subscribedCourseId = response.data.data.map(
+          (course: Course) => course.id
+        );
+        setSubscribedCourses(subscribedCourseId);
       })
       .catch((error) => console.log(error));
   };
@@ -93,7 +124,7 @@ export default function Courses() {
           <div className="flex justify-center">
             <SearchBar searchTerm={search} setSearchTerm={setSearch} />
           </div>
-          <CourseCards courses={courses} />
+          <CourseCards courses={courses} subscribedCourses={subscribedCourses} />
           <Grid container direction="row" justifyContent="center" marginTop={2}>
             <Pagination
               count={count}
