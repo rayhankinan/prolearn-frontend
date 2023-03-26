@@ -5,9 +5,9 @@ type qContent = {
   id: number;
   content: {
     title: string;
-    question: [
+    questions: [
         {
-            option: [
+            options: [
                 {
                     content: string;
                     isCorrect: boolean;
@@ -38,7 +38,7 @@ const QuizSection: React.FC<QuizSectionProps> = ({ quizContent }) => {
 
   const handleNextClick = () => {
     // setCurrentQuestion((prev) => prev + 1);
-    if (currentQuestion < quizContent.content.question.length - 1) {
+    if (currentQuestion < quizContent.content.questions.length - 1) {
       setCurrentQuestion((prev) => prev + 1);
       setIndexAnswer(null);
     } else {
@@ -73,9 +73,9 @@ const QuizSection: React.FC<QuizSectionProps> = ({ quizContent }) => {
     setShowModal(false);
   };
 
-  console.log(quizContent.content.question.length);
+  console.log(quizContent.content.questions.length);
 
-  const isLastQuestion = currentQuestion === quizContent.content.question.length - 1;
+  const isLastQuestion = currentQuestion === quizContent.content.questions.length - 1;
   const isFirstQuestion = currentQuestion === 0;
 
   return (
@@ -100,14 +100,14 @@ const QuizSection: React.FC<QuizSectionProps> = ({ quizContent }) => {
             </div>
             <div className="w-1/2 text-end">
               <h1 className="text-2xl font-bold">
-                {currentQuestion + 1} / {quizContent.content.question.length}
+                {currentQuestion + 1} / {quizContent.content.questions.length}
               </h1>
             </div>
           </div>
           <div className="flex flex-col mt-6">
-            <h1 className="text-2xl font-bold">{quizContent.content.question[currentQuestion].content}</h1>
+            <h1 className="text-2xl font-bold">{quizContent.content.questions[currentQuestion].content}</h1>
             <div className="flex flex-col mt-6">
-              {quizContent.content.question[currentQuestion].option.map((answer, index) => (
+              {quizContent.content.questions[currentQuestion].options.map((answer, index) => (
                 <div className="flex flex-row mt-4">
                   <div className="w-1/12">
                     <input type="radio" name="answer" id={`answer${index}`} onClick={() => handleAnswerClick(index)} checked={indexAnswer === index} />
@@ -148,7 +148,7 @@ const QuizSection: React.FC<QuizSectionProps> = ({ quizContent }) => {
             <div className="bg-white w-1/2 h-1/2 rounded-md flex flex-col justify-center items-center">
               <img src="../../prize.png" alt="prize" className="w-40 h-40 mb-12" />
               <h1 className="text-2xl font-bold">You have finished the quiz</h1>
-              <h1 className="text-2xl font-bold mt-4">You got {numCorrectAnswers} out of {quizContent.content.question.length} correct</h1>
+              <h1 className="text-2xl font-bold mt-4">You got {numCorrectAnswers} out of {quizContent.content.questions.length} correct</h1>
               <div className="flex flex-row mt-12 justify-between">
                 <button
                   className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 mt-4 mr-4"

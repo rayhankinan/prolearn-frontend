@@ -18,6 +18,7 @@ import Section from "@/interfaces/section-interface";
 import sectionService from "@/services/section-service";
 import fileService from "@/services/file-service";
 import { HtmlProps } from "next/dist/shared/lib/html-context";
+import QuizSectionAdm from "@/components/adminCourse/quizSectionAdm";
 
 const theme = createTheme();
 
@@ -204,8 +205,9 @@ export default function CourseDetailAdmin() {
             </Grid>
             <Grid item xs={9} sx={{ paddingLeft: "20px" }}>
               <Grid item>
-                {file
-                  ? <div dangerouslySetInnerHTML={{__html : file!.toString()}}></div> : <div>loading ... </div>}
+                {/* {file
+                  ? <div dangerouslySetInnerHTML={{__html : file!.toString()}}></div> : <div>loading ... </div>} */}
+                  <QuizSectionAdm />
               </Grid>
             </Grid>
           </Grid>

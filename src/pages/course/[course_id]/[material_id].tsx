@@ -22,9 +22,9 @@ type qContent = {
   id: number;
   content: {
     title: string;
-    question: [
+    questions: [
         {
-            option: [
+            options: [
                 {
                     content: string;
                     isCorrect: boolean;
