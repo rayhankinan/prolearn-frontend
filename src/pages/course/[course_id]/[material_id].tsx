@@ -19,6 +19,8 @@ import CategoryService from "@/services/category-service";
 import QuizSection from "@/components/userCourse/quizSection";
 
 type qContent = {
+  id: number;
+  content: {
     title: string;
     question: [
         {
@@ -27,10 +29,12 @@ type qContent = {
                     content: string;
                     isCorrect: boolean;
                 }
-            ]
+            ],
+            content: string;
         }
     ]
     description: string;
+  }
 }
 
 const theme = createTheme();
@@ -42,6 +46,7 @@ export default function UserCourseDetail() {
     const [file_id, setFileId] = useState(1);
     const [material_idInt, setMaterialIdInt] = useState(-1);
     const [file, setFile] = useState<File | null>(null);
+    const [quizId, setQuizId] = useState(1);
     const [quizContent, setQuizContent] = useState<qContent | null>(null);
 
     useEffect(() => {
@@ -70,7 +75,7 @@ export default function UserCourseDetail() {
             );
             setFileId(material.__file__.id);
             if (material.__quiz__ !== null) {
-              setQuizContent(material.__quiz__.content);
+              setQuizContent(material.__quiz__);
             }
           })
           .catch((error) => console.log(error));
@@ -142,7 +147,7 @@ export default function UserCourseDetail() {
                             <Grid item>
                             {/* {file
                                 ? <div dangerouslySetInnerHTML={{__html : file!.toString()}}></div> : <div>loading ... </div>} */}
-                                <QuizSection />
+                                {/* {/* <QuizSection /> */}
                             {quizContent ? <QuizSection quizContent={quizContent} /> : <div></div>}
                             </Grid>
                         </Grid>
