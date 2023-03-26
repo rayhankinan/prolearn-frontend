@@ -183,6 +183,15 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent }) => {
                     </div>
                 </div>
               ))}
+              <div>
+                <div className="flex flex-row mt-6">
+                  <div className="w-1/2">
+                    <button className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700">
+                      Add Option
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
