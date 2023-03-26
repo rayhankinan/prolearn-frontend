@@ -1,12 +1,8 @@
 import React, { useState, useEffect } from "react";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
 import Link from "@mui/material/Link";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { styled } from "@mui/material/styles";
-import ReactMarkdown from "react-markdown";
-import Material from "@/interfaces/material-interface";
 import Modal from "@/components/modal";
 import GridComponent from "@/components/GridComponent";
 import AddSectionModal from "@/components/AddSectionModal";
@@ -17,7 +13,6 @@ import Category from "@/interfaces/category-interface";
 import Section from "@/interfaces/section-interface";
 import sectionService from "@/services/section-service";
 import fileService from "@/services/file-service";
-import { HtmlProps } from "next/dist/shared/lib/html-context";
 
 const theme = createTheme();
 
@@ -27,7 +22,8 @@ export default function CourseDetailAdmin() {
   const [material_id, setMaterialId] = useState("");
   const [file_id, setFileId] = useState(1);
   const [material_idInt, setMaterialIdInt] = useState(-1);
-  const [file, setFile] = useState<File | null>(null);
+  const [file, setFile] = useState<Blob | null>(null);
+  const [fileString, setFileString] = useState(" ");
 
   useEffect(() => {
     if (router.isReady) {
@@ -64,12 +60,16 @@ export default function CourseDetailAdmin() {
     console.log(file_id);
     fileService.getFile(file_id).then((response) => {
       setFile(response.data);
+      //convert file to string
+      const reader = new FileReader();
+      reader.readAsBinaryString(response.data);
+      reader.onloadend = () => {
+        setFileString(reader.result as string);
+      };
     })
     .catch((error) => console.log(error));
     
   }, [file_id]);
-
-  console.log(file);
 
   const [selectedSection, setSelectedSection] = useState<Section | null>(null);
   const [showEditButton, setShowEditButton] = useState(false);
@@ -130,7 +130,7 @@ export default function CourseDetailAdmin() {
                   onClick={() => handleShowEditButton()}
                   className=" bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mt-10 mx-4 mb-5"
                 >
-                  Edit Course
+                  Edit Section
                 </button>
               )}
 
@@ -204,8 +204,8 @@ export default function CourseDetailAdmin() {
             </Grid>
             <Grid item xs={9} sx={{ paddingLeft: "20px" }}>
               <Grid item>
-                {file
-                  ? <div dangerouslySetInnerHTML={{__html : file!.toString()}}></div> : <div>loading ... </div>}
+                {fileString
+                  ? <div dangerouslySetInnerHTML={{__html : fileString}}></div> : <div>loading ... </div>}
               </Grid>
             </Grid>
           </Grid>

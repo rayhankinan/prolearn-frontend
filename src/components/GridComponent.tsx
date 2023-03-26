@@ -37,7 +37,12 @@ const GridComponent = ({ section }: GridComponentProps = {}) => {
       FileService
       .getFile(file_id)
       .then((response) => {
-        setBody(response.data);
+        //file as string
+        const reader = new FileReader();
+        reader.readAsBinaryString(response.data);
+        reader.onloadend = () => {
+          setBody(reader.result as string);
+        };
       })
       .catch((error) => console.log(error));
     }
