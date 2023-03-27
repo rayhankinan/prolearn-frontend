@@ -15,22 +15,7 @@ const DynamicReactQuill = dynamic(() => import("react-quill"), {
   ssr: false,
 });
 
-type lQ = {
-  number: number;
-  question: string;
-}
-
-type lA = {
-  number: number;
-  answer: [
-    { a: string; isCorrect: boolean },
-    { b: string; isCorrect: boolean },
-    { c: string; isCorrect: boolean },
-    { d: string; isCorrect: boolean }
-  ]
-}
-
-type lQA = {
+type questionAndOptions = {
   content: string;
   options: [
     { content: string; isCorrect: boolean },
@@ -45,43 +30,10 @@ interface AddSectionModalProps {
   courseId: string;
 }
 
-// let listQuestion: lQ[] = [];
-// for (let i = 0; i < 2; i++) {
-//   listQuestion[i] = {
-//     number: (i + 1),
-//     question: " ",
-//   };
-// }
-// console.log(listQuestion);
-
-// let answerList: lA[] = [];
-// for (let i = 0; i < 2; i++) {
-//   answerList[i] = {
-//     number: (i + 1),
-//     answer: [
-//       {
-//         a: " ", isCorrect: false
-//       },
-//       {
-//         b: " ", isCorrect: false
-//       },
-//       {
-//         c: " ", isCorrect: false
-//       },
-//       {
-//         d: " ", isCorrect: false
-//       },
-//     ]
-//   };
-// }
-// console.log(answerList);
-
 const AddSectionModal = ({ 
   material, courseId }: AddSectionModalProps) => {
 
-  const [listQuestion, setListQuestion] = useState<lQ[]>([]);
-  const [answerList, setAnswerList] = useState<lA[]>([]);
-  const [questionAnswerList, setQuestionAnswerList] = useState<lQA[]>([]);
+  const [questionAnswerList, setQuestionAnswerList] = useState<questionAndOptions[]>([]);
   const [name, setName] = useState(material?.title || "");
   const [body, setBody] = useState(" ");
   const [duration, setDuration] = useState(material?.duration || 0);
@@ -117,34 +69,27 @@ const AddSectionModal = ({
 
   const handleCountQuestionChange = (event: ChangeEvent<HTMLInputElement>) => {
     setCountQuestion(parseInt(event.target.value));
-      setListQuestion((listQuestion) => [
-        ... listQuestion,
-        {
-          number: (countQuestion + 1),
-          question: " ",
-        },
-      ]);
-  
-      setAnswerList((answerList) => [
-        ... answerList,
-        {
-          number: (countQuestion + 1),
-          answer: [
-            {
-              a: " ", isCorrect: false
-            },
-            {
-              b: " ", isCorrect: false
-            },
-            {
-              c: " ", isCorrect: false
-            },
-            {
-              d: " ", isCorrect: false
-            },
-          ]
-        },
-      ]);
+
+    setQuestionAnswerList((questionAnswerList) => [
+      ... questionAnswerList,
+      {
+        content: " ",
+        options: [
+          {
+            content: " ", isCorrect: false
+          },
+          {
+            content: " ", isCorrect: false
+          },
+          {
+            content: " ", isCorrect: false
+          },
+          {
+            content: " ", isCorrect: false
+          },
+        ]
+      },
+    ]);
   };
 
   const handleNumberChange = (event: any) => {
@@ -158,8 +103,7 @@ const AddSectionModal = ({
   }
 
   const handleAddQuestion = () => {
-    listQuestion[number - 1].question = question;
-    console.log(listQuestion);
+    questionAnswerList[number - 1].content = question;
   }
 
   const handleAnswerChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -167,58 +111,32 @@ const AddSectionModal = ({
   }
 
   const handleAddAnswer = () => {
-    // always add to the first choice if not " "
-    if (answerList[number - 1].answer[0].a == " ") {
-      answerList[number - 1].answer[0].a = answer;
-    } else if (answerList[number - 1].answer[1].b == " ") {
-      answerList[number - 1].answer[1].b = answer;
-    } else if (answerList[number - 1].answer[2].c == " ") {
-      answerList[number - 1].answer[2].c = answer;
-    } else if (answerList[number - 1].answer[3].d == " ") {
-      answerList[number - 1].answer[3].d = answer;
+    if (questionAnswerList[number - 1].options[0].content == " ") {
+      questionAnswerList[number - 1].options[0].content = answer;
+    } else if (questionAnswerList[number - 1].options[1].content == " ") {
+      questionAnswerList[number - 1].options[1].content = answer;
+    }
+    else if (questionAnswerList[number - 1].options[2].content == " ") {
+      questionAnswerList[number - 1].options[2].content = answer;
+    } else if (questionAnswerList[number - 1].options[3].content == " ") {
+      questionAnswerList[number - 1].options[3].content = answer;
     } else {
       console.log("full");
     }
-
-    console.log(answerList);
   }
 
   const handleTrueAnswerChange = (event: any) => {
-    if (answerList[number - 1].answer[0].a == event.target.value) {
-      answerList[number - 1].answer[0].isCorrect = true;
-    } else if (answerList[number - 1].answer[1].b == event.target.value) {
-      answerList[number - 1].answer[1].isCorrect = true;
-    } else if (answerList[number - 1].answer[2].c == event.target.value) {
-      answerList[number - 1].answer[2].isCorrect = true;
-    } else if (answerList[number - 1].answer[3].d == event.target.value) {
-      answerList[number - 1].answer[3].isCorrect = true;
-    }
     setTrueAnswer(event.target.value);
 
-    setQuestionAnswerList((questionAnswerList) => [
-      ... questionAnswerList,
-      {
-        content: listQuestion[number - 1].question,
-        options: [
-          {
-            content: answerList[number - 1].answer[0].a,
-            isCorrect: answerList[number - 1].answer[0].isCorrect
-          },
-          {
-            content: answerList[number - 1].answer[1].b,
-            isCorrect: answerList[number - 1].answer[1].isCorrect
-          },
-          {
-            content: answerList[number - 1].answer[2].c,
-            isCorrect: answerList[number - 1].answer[2].isCorrect
-          },
-          {
-            content: answerList[number - 1].answer[3].d,
-            isCorrect: answerList[number - 1].answer[3].isCorrect
-          },
-        ]
-      },
-    ]);
+    if (questionAnswerList[number - 1].options[0].content == event.target.value) {
+      questionAnswerList[number - 1].options[0].isCorrect = true;
+    } else if (questionAnswerList[number - 1].options[1].content == event.target.value) {
+      questionAnswerList[number - 1].options[1].isCorrect = true;
+    } else if (questionAnswerList[number - 1].options[2].content == event.target.value) {
+      questionAnswerList[number - 1].options[2].isCorrect = true;
+    } else if (questionAnswerList[number - 1].options[3].content == event.target.value) {
+      questionAnswerList[number - 1].options[3].isCorrect = true;
+    }
   }
 
   const handleSave = () => {
@@ -260,8 +178,6 @@ const AddSectionModal = ({
       );
   };
   
-  console.log(listQuestion);
-  console.log(answerList);
   console.log(questionAnswerList);
   console.log(number);
   console.log(answer);
@@ -356,10 +272,10 @@ const AddSectionModal = ({
             onChange={handleNumberChange}
             label="Question"
           >
-            {listQuestion.map((item, index) => {
+            {questionAnswerList.map((item, index) => {
               return (
-                <MenuItem key={index} value={item.number}>
-                  {item.number}
+                <MenuItem key={index} value={index+1}>
+                  {index+1}
                 </MenuItem>
               );
             })}
@@ -429,10 +345,10 @@ const AddSectionModal = ({
             onChange={handleTrueAnswerChange}
             label="Correct Answer"
           >
-            <MenuItem value={answerList[number - 1].answer[0].a}>{answerList[number - 1].answer[0].a}</MenuItem>
-            <MenuItem value={answerList[number - 1].answer[1].b}>{answerList[number - 1].answer[1].b}</MenuItem>
-            <MenuItem value={answerList[number - 1].answer[2].c}>{answerList[number - 1].answer[2].c}</MenuItem>
-            <MenuItem value={answerList[number - 1].answer[3].d}>{answerList[number - 1].answer[3].d}</MenuItem>
+            <MenuItem value={questionAnswerList[number - 1].options[0].content}>{questionAnswerList[number - 1].options[0].content}</MenuItem>
+            <MenuItem value={questionAnswerList[number - 1].options[1].content}>{questionAnswerList[number - 1].options[1].content}</MenuItem>
+            <MenuItem value={questionAnswerList[number - 1].options[2].content}>{questionAnswerList[number - 1].options[2].content}</MenuItem>
+            <MenuItem value={questionAnswerList[number - 1].options[3].content}>{questionAnswerList[number - 1].options[3].content}</MenuItem>
           </Select>
             : 
           <Select
