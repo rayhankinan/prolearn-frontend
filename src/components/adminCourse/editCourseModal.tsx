@@ -42,6 +42,7 @@ export const EditCourseModal = ({
   const [imgNameError, setImgNameError] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState<String>("");
+  const [courseCategory, setCourseCategory] = useState<Category[]>(course.__categories__! as unknown as Category[]);
   const handleCloseModal = () => {
     setModalOpen(false);
   };
@@ -58,6 +59,18 @@ export const EditCourseModal = ({
       .catch((error) => {
         console.log(error);
       });
+  }, []);
+
+  useEffect(() => {
+    if(courseCategory == null) return;
+    const selected = categories.filter((category) =>
+
+      //loop the course.__category__ and check if the id is equal to the category.id
+      courseCategory!.some((categories) => categories.id === category.id)
+
+    );
+    setSelectedCategories(selected);
+    console.log(selected)
   }, []);
 
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {

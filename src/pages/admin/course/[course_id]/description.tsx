@@ -1,12 +1,8 @@
 import React, { useState, useEffect } from "react";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
 import Link from "@mui/material/Link";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { styled } from "@mui/material/styles";
-import ReactMarkdown from "react-markdown";
-import Material from "@/interfaces/material-interface";
 import Modal from "@/components/modal";
 import GridComponent from "@/components/GridComponent";
 import AddSectionModal from "@/components/AddSectionModal";
@@ -42,6 +38,7 @@ export default function CourseDetailAdmin() {
   const [category, setCategory] = useState<Category[] | null>(null);
 
   useEffect(() => {
+    if (course_id === "") return;
     SectionService
       .getSectionByCourse(course_id)
       .then((response) => {
@@ -198,7 +195,9 @@ export default function CourseDetailAdmin() {
             </Grid>
             <Grid item xs={9} sx={{ paddingLeft: "20px" }}>
               <Grid item>
-                <ReactMarkdown></ReactMarkdown>
+                <Box>
+
+                </Box>
               </Grid>
             </Grid>
           </Grid>

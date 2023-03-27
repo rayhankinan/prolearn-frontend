@@ -8,11 +8,14 @@ import GridComponent from "@/components/GridComponent";
 import AddSectionModal from "@/components/AddSectionModal";
 import { Button, Grid, Typography } from "@mui/material";
 import { useRouter } from "next/router";
+import CourseService from "@/services/course-service";
 import CategoryService from "@/services/category-service";
+import Course from "@/interfaces/course-interface";
 import Category from "@/interfaces/category-interface";
 import Section from "@/interfaces/section-interface";
 import sectionService from "@/services/section-service";
 import fileService from "@/services/file-service";
+import { EditCourseModal } from "@/components/adminCourse/editCourseModal";
 
 const theme = createTheme();
 
@@ -38,9 +41,14 @@ export default function CourseDetailAdmin() {
 
   const [showModal, setShowModal] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
   const [section, setSection] = useState<Section[]>([]);
+  const [course, setCourse] = useState<Course | null>(null);
+  const [category, setCategory] = useState<Category[] | null>(null);
+
 
   useEffect(() => {
+    if(course_id === "" || material_idInt === -1) return;
     sectionService
       .getSectionByCourse(course_id)
       .then((response) => {
@@ -54,12 +62,20 @@ export default function CourseDetailAdmin() {
         setFileId(material.__file__.id);
       })
       .catch((error) => console.log(error));
+
+      CourseService.getById(parseInt(course_id))
+        .then((response) => {
+          console.log(response.data.data);
+          setCourse(response.data.data);
+        })
+        .catch((error) => console.log(error));
   }, [course_id, material_idInt]);
 
   useEffect(() => {
-    console.log(file_id);
+    if (course_id === "" || material_idInt === -1) return;
     fileService.getFile(file_id).then((response) => {
       setFile(response.data);
+      console.log(file)
       //convert file to string
       const reader = new FileReader();
       reader.readAsBinaryString(response.data);
@@ -71,6 +87,15 @@ export default function CourseDetailAdmin() {
     
   }, [file_id]);
 
+  useEffect(() => {
+      CategoryService.getAll()
+        .then((response) => {
+          console.log(response.data.data);
+          setCategory(response.data.data);
+        })
+        .catch((error) => console.log(error));
+  }, []);
+
   const [selectedSection, setSelectedSection] = useState<Section | null>(null);
   const [showEditButton, setShowEditButton] = useState(false);
 
@@ -81,6 +106,10 @@ export default function CourseDetailAdmin() {
   const handleEditSection = (section: Section) => {
     setSelectedSection(section);
     setShowModal(true);
+  };
+
+  const handleEditCourse = () => {
+    setShowEditModal(true);
   };
 
   const handleShowEditButton = () => {
@@ -149,6 +178,13 @@ export default function CourseDetailAdmin() {
               >
                 Add Material
               </button>
+
+              <button
+                onClick={() => handleEditCourse()}
+                className=" bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mt-10 mx-4 mb-5"
+              >
+                Edit Course
+              </button>
             </Box>
           </Grid>
           {/* horizontal line that have space on the left and right */}
@@ -204,13 +240,25 @@ export default function CourseDetailAdmin() {
             </Grid>
             <Grid item xs={9} sx={{ paddingLeft: "20px" }}>
               <Grid item>
-                {fileString
-                  ? <div dangerouslySetInnerHTML={{__html : fileString}}></div> : <div>loading ... </div>}
+                {fileString ? (
+                  <div dangerouslySetInnerHTML={{ __html: fileString }}></div>
+                ) : (
+                  <div>loading ... </div>
+                )}
               </Grid>
             </Grid>
           </Grid>
         </Grid>
       </main>
+
+      {showEditModal && (
+        <EditCourseModal
+          open={showEditModal}
+          onClose={() => setShowEditModal(false)}
+          categories={category!}
+          course={course!}
+        />
+      )}
 
       {selectedSection && (
         <Modal show={showModal} onClose={() => setShowModal(false)}>
