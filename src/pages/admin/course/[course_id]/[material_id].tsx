@@ -13,30 +13,12 @@ import CategoryService from "@/services/category-service";
 import Course from "@/interfaces/course-interface";
 import Category from "@/interfaces/category-interface";
 import Section from "@/interfaces/section-interface";
+import Quiz from "@/interfaces/quiz-interface";
 import sectionService from "@/services/section-service";
 import fileService from "@/services/file-service";
 import { EditCourseModal } from "@/components/adminCourse/editCourseModal";
 import { HtmlProps } from "next/dist/shared/lib/html-context";
 import QuizSectionAdm from "@/components/adminCourse/quizSectionAdm";
-
-type qContent = {
-  id: number;
-  content: {
-    title: string;
-    questions: [
-        {
-            options: [
-                {
-                    content: string;
-                    isCorrect: boolean;
-                }
-            ],
-            content: string;
-        }
-    ]
-    description: string;
-  }
-}
 
 const theme = createTheme();
 
@@ -48,7 +30,7 @@ export default function CourseDetailAdmin() {
   const [material_idInt, setMaterialIdInt] = useState(-1);
   const [file, setFile] = useState<Blob | null>(null);
   const [fileString, setFileString] = useState(" ");
-  const [quizContent, setQuizContent] = useState<qContent | null>(null);
+  const [quizContent, setQuizContent] = useState<Quiz | null>(null);
 
   useEffect(() => {
     if (router.isReady) {

@@ -1,26 +1,9 @@
 import React, { useState } from "react";
 import quizService from "@/services/quiz-service";
+import Quiz from "@/interfaces/quiz-interface";
 
-type qContent = {
-  id: number;
-  content: {
-    title: string;
-    questions: [
-        {
-            options: [
-                {
-                    content: string;
-                    isCorrect: boolean;
-                }
-            ],
-            content: string;
-        }
-    ]
-    description: string;
-  }
-}
 interface QuizSectionProps {
-  quizContent: qContent;
+  quizContent: Quiz;
 }
 
 let listOfAnswers: number[] = [];

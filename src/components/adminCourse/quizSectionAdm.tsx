@@ -1,26 +1,8 @@
 import React, { useState } from "react";
-
-type qContent = {
-  id: number;
-  content: {
-    title: string;
-    questions: [
-        {
-            options: [
-                {
-                    content: string;
-                    isCorrect: boolean;
-                }
-            ],
-            content: string;
-        }
-    ]
-    description: string;
-  }
-}
+import Quiz from "@/interfaces/quiz-interface";
 
 interface QuizSectionProps {
-  quizContent: qContent;
+  quizContent: Quiz;
 }
 
 const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent }) => {
@@ -86,11 +68,6 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent }) => {
         </div>
 
         <div className="flex flex-col mt-6">
-          <div>
-            <div className="flex justify-center mt-2 mb-10">
-              <img src="https://forum.nwoods.com/uploads/db3963/original/2X/e/ea8bc6988360ead92fa1419b3ffa8e937ad4c1ef.png" alt="Logo" className="rounded-xl"/>
-            </div>
-          </div>
           <div className="flex flex-row">
             <div className="w-1/2 flex flex-row">
               <h1 className="text-2xl font-bold">Question {currentQuestion + 1}</h1>

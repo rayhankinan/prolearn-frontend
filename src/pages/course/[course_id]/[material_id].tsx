@@ -13,29 +13,11 @@ import { Button, Grid, Typography } from "@mui/material";
 import { useRouter, Router } from 'next/router';
 import Section from "@/interfaces/section-interface";
 import Category from "@/interfaces/category-interface";
+import Quiz from "@/interfaces/quiz-interface";
 import SectionService from "@/services/section-service";
 import fileService from "@/services/file-service";
 import CategoryService from "@/services/category-service";
 import QuizSection from "@/components/userCourse/quizSection";
-
-type qContent = {
-  id: number;
-  content: {
-    title: string;
-    questions: [
-        {
-            options: [
-                {
-                    content: string;
-                    isCorrect: boolean;
-                }
-            ],
-            content: string;
-        }
-    ]
-    description: string;
-  }
-}
 
 const theme = createTheme();
 
@@ -45,9 +27,10 @@ export default function UserCourseDetail() {
     const [material_id, setMaterialId] = useState("");
     const [file_id, setFileId] = useState(1);
     const [material_idInt, setMaterialIdInt] = useState(-1);
-    const [file, setFile] = useState<File | null>(null);
+    const [file, setFile] = useState<Blob | null>(null);
+    const [fileString, setFileString] = useState(" ");
     const [quizId, setQuizId] = useState(1);
-    const [quizContent, setQuizContent] = useState<qContent | null>(null);
+    const [quizContent, setQuizContent] = useState<Quiz | null>(null);
 
     useEffect(() => {
         if (router.isReady) {
@@ -63,6 +46,7 @@ export default function UserCourseDetail() {
     const [section, setSection] = useState<Section[]>([]);
 
     useEffect(() => {
+        if (course_id === "" || material_idInt === -1) return;
         SectionService
           .getSectionByCourse(course_id)
           .then((response) => {
@@ -82,9 +66,16 @@ export default function UserCourseDetail() {
     }, [course_id, material_idInt]);
     
     useEffect(() => {
+        if (course_id === "" || material_idInt === -1) return;
         console.log(file_id);
         fileService.getFile(file_id).then((response) => {
-          setFile(response.data);
+            setFile(response.data);
+
+            const reader = new FileReader();
+            reader.readAsBinaryString(response.data);
+            reader.onload = () => {
+                setFileString(reader.result as string);
+            }
         })
         .catch((error) => console.log(error));
         
