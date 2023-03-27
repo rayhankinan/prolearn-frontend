@@ -15,18 +15,13 @@ const DynamicReactQuill = dynamic(() => import("react-quill"), {
   ssr: false,
 });
 
-type lQ = {
-  number: number;
-  question: string;
-}
-
-type lA = {
-  number: number;
-  answer: [
-    { a: string; isCorrect: boolean },
-    { b: string; isCorrect: boolean },
-    { c: string; isCorrect: boolean },
-    { d: string; isCorrect: boolean }
+type questionAndOptions = {
+  content: string;
+  options: [
+    { content: string; isCorrect: boolean },
+    { content: string; isCorrect: boolean },
+    { content: string; isCorrect: boolean },
+    { content: string; isCorrect: boolean }
   ]
 }
 
@@ -35,48 +30,17 @@ interface AddSectionModalProps {
   courseId: string;
 }
 
-let listQuestion: lQ[] = [];
-for (let i = 0; i < 2; i++) {
-  listQuestion[i] = {
-    number: (i + 1),
-    question: " ",
-  };
-}
-console.log(listQuestion);
-
-let answerList: lA[] = [];
-for (let i = 0; i < 2; i++) {
-  answerList[i] = {
-    number: (i + 1),
-    answer: [
-      {
-        a: " ", isCorrect: false
-      },
-      {
-        b: " ", isCorrect: false
-      },
-      {
-        c: " ", isCorrect: false
-      },
-      {
-        d: " ", isCorrect: false
-      },
-    ]
-  };
-}
-console.log(answerList);
-
 const AddSectionModal = ({ 
   material, courseId }: AddSectionModalProps) => {
 
-
+  const [questionAnswerList, setQuestionAnswerList] = useState<questionAndOptions[]>([]);
   const [name, setName] = useState(material?.title || "");
   const [body, setBody] = useState(" ");
   const [duration, setDuration] = useState(material?.duration || 0);
   const [objective, setObjective] = useState(material?.objective || "");
   const [quiz, setQuiz] = useState(material?.quiz || "");
   const [countQuestion, setCountQuestion] = useState(0);
-  const [number, setNumber] = useState(listQuestion[0].number);
+  const [number, setNumber] = useState(0);
   const [question, setQuestion] = useState(" ");
   const [answer, setAnswer] = useState(" ");
   const [trueAnswer, setTrueAnswer] = useState(" ");
@@ -105,13 +69,32 @@ const AddSectionModal = ({
 
   const handleCountQuestionChange = (event: ChangeEvent<HTMLInputElement>) => {
     setCountQuestion(parseInt(event.target.value));
-    // for (let i = 0; i < 3; i++) {
-    //   listQuestion[i] = {
-    //     number: "Question " + (i + 1),
-    //     question: " ",
-    //   };
-    // }
-    // console.log(listQuestion);
+
+    setQuestionAnswerList((questionAnswerList) => [
+      ... questionAnswerList,
+      {
+        content: " ",
+        options: [
+          {
+            content: " ", isCorrect: false
+          },
+          {
+            content: " ", isCorrect: false
+          },
+          {
+            content: " ", isCorrect: false
+          },
+          {
+            content: " ", isCorrect: false
+          },
+        ]
+      },
+    ]);
+
+    // if the length of the list more than the event.target.value, make the list shorter
+    if (questionAnswerList.length > parseInt(event.target.value)) {
+      setQuestionAnswerList(questionAnswerList.slice(0, parseInt(event.target.value)));
+    }
   };
 
   const handleNumberChange = (event: any) => {
@@ -125,8 +108,7 @@ const AddSectionModal = ({
   }
 
   const handleAddQuestion = () => {
-    listQuestion[number - 1].question = question;
-    console.log(listQuestion);
+    questionAnswerList[number - 1].content = question;
   }
 
   const handleAnswerChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -134,34 +116,32 @@ const AddSectionModal = ({
   }
 
   const handleAddAnswer = () => {
-    // always add to the first choice if not " "
-    if (answerList[number - 1].answer[0].a == " ") {
-      answerList[number - 1].answer[0].a = answer;
-    } else if (answerList[number - 1].answer[1].b == " ") {
-      answerList[number - 1].answer[1].b = answer;
-    } else if (answerList[number - 1].answer[2].c == " ") {
-      answerList[number - 1].answer[2].c = answer;
-    } else if (answerList[number - 1].answer[3].d == " ") {
-      answerList[number - 1].answer[3].d = answer;
+    if (questionAnswerList[number - 1].options[0].content == " ") {
+      questionAnswerList[number - 1].options[0].content = answer;
+    } else if (questionAnswerList[number - 1].options[1].content == " ") {
+      questionAnswerList[number - 1].options[1].content = answer;
+    }
+    else if (questionAnswerList[number - 1].options[2].content == " ") {
+      questionAnswerList[number - 1].options[2].content = answer;
+    } else if (questionAnswerList[number - 1].options[3].content == " ") {
+      questionAnswerList[number - 1].options[3].content = answer;
     } else {
       console.log("full");
     }
-
-    console.log(answerList);
   }
 
   const handleTrueAnswerChange = (event: any) => {
-    if (answerList[number - 1].answer[0].a == event.target.value) {
-      answerList[number - 1].answer[0].isCorrect = true;
-    } else if (answerList[number - 1].answer[1].b == event.target.value) {
-      answerList[number - 1].answer[1].isCorrect = true;
-    } else if (answerList[number - 1].answer[2].c == event.target.value) {
-      answerList[number - 1].answer[2].isCorrect = true;
-    } else if (answerList[number - 1].answer[3].d == event.target.value) {
-      answerList[number - 1].answer[3].isCorrect = true;
-    }
+    setTrueAnswer(event.target.value);
 
-    console.log(answerList);
+    if (questionAnswerList[number - 1].options[0].content == event.target.value) {
+      questionAnswerList[number - 1].options[0].isCorrect = true;
+    } else if (questionAnswerList[number - 1].options[1].content == event.target.value) {
+      questionAnswerList[number - 1].options[1].isCorrect = true;
+    } else if (questionAnswerList[number - 1].options[2].content == event.target.value) {
+      questionAnswerList[number - 1].options[2].isCorrect = true;
+    } else if (questionAnswerList[number - 1].options[3].content == event.target.value) {
+      questionAnswerList[number - 1].options[3].isCorrect = true;
+    }
   }
 
   const handleSave = () => {
@@ -183,51 +163,8 @@ const AddSectionModal = ({
     if (quiz !== "") {
       const quizContent = {
         title: quiz,
-        description: quiz,
-        question: [
-          {
-            content: listQuestion[0].question,
-            option: [
-              {
-                content: answerList[0].answer[0].a,
-                isCorrect: answerList[0].answer[0].isCorrect
-              },
-              {
-                content: answerList[0].answer[1].b,
-                isCorrect: answerList[0].answer[1].isCorrect
-              },
-              {
-                content: answerList[0].answer[2].c,
-                isCorrect: answerList[0].answer[2].isCorrect
-              },
-              {
-                content: answerList[0].answer[3].d,
-                isCorrect: answerList[0].answer[3].isCorrect
-              }
-            ]
-          },
-          {
-            content: listQuestion[1].question,
-            option: [
-              {
-                content: answerList[1].answer[0].a,
-                isCorrect: answerList[1].answer[0].isCorrect
-              },
-              {
-                content: answerList[1].answer[1].b,
-                isCorrect: answerList[1].answer[1].isCorrect
-              },
-              {
-                content: answerList[1].answer[2].c,
-                isCorrect: answerList[1].answer[2].isCorrect
-              },
-              {
-                content: answerList[1].answer[3].d,
-                isCorrect: answerList[1].answer[3].isCorrect
-              }
-            ]
-          },
-        ]
+        content: quiz,
+        questions: questionAnswerList,
       }
   
       formData.append("quizContent", JSON.stringify(quizContent));
@@ -246,6 +183,9 @@ const AddSectionModal = ({
       );
   };
   
+  console.log(questionAnswerList);
+  console.log(number);
+  console.log(answer);
 
   return (
     <Grid container spacing={3} style={{height: "600px", overflow: "auto"}}>
@@ -337,8 +277,13 @@ const AddSectionModal = ({
             onChange={handleNumberChange}
             label="Question"
           >
-            <MenuItem value={listQuestion[0].number}>{listQuestion[0].number}</MenuItem>
-            <MenuItem value={listQuestion[1].number}>{listQuestion[1].number}</MenuItem>
+            {questionAnswerList.map((item, index) => {
+              return (
+                <MenuItem key={index} value={index+1}>
+                  {index+1}
+                </MenuItem>
+              );
+            })}
           </Select>
         </FormControl>
       </Grid>
@@ -397,18 +342,30 @@ const AddSectionModal = ({
           <InputLabel id="demo-simple-select-outlined-label">
             Correct Answer
           </InputLabel>
+          {number !== 0 ? 
           <Select
             labelId="demo-simple-select-outlined-label"
             id="demo-simple-select-outlined"
-            value={answer}
+            value={trueAnswer}
             onChange={handleTrueAnswerChange}
             label="Correct Answer"
           >
-            <MenuItem value={answerList[number - 1].answer[0].a}>{answerList[number - 1].answer[0].a}</MenuItem>
-            <MenuItem value={answerList[number - 1].answer[1].b}>{answerList[number - 1].answer[1].b}</MenuItem>
-            <MenuItem value={answerList[number - 1].answer[2].c}>{answerList[number - 1].answer[2].c}</MenuItem>
-            <MenuItem value={answerList[number - 1].answer[3].d}>{answerList[number - 1].answer[3].d}</MenuItem>
+            <MenuItem value={questionAnswerList[number - 1].options[0].content}>{questionAnswerList[number - 1].options[0].content}</MenuItem>
+            <MenuItem value={questionAnswerList[number - 1].options[1].content}>{questionAnswerList[number - 1].options[1].content}</MenuItem>
+            <MenuItem value={questionAnswerList[number - 1].options[2].content}>{questionAnswerList[number - 1].options[2].content}</MenuItem>
+            <MenuItem value={questionAnswerList[number - 1].options[3].content}>{questionAnswerList[number - 1].options[3].content}</MenuItem>
           </Select>
+            : 
+          <Select
+            labelId="demo-simple-select-outlined-label"
+            id="demo-simple-select-outlined"
+            value={trueAnswer}
+            onChange={handleTrueAnswerChange}
+            label="Correct Answer"
+          >
+            <MenuItem value={0}>0</MenuItem>
+          </Select>
+          }
         </FormControl>
       </Grid>
 

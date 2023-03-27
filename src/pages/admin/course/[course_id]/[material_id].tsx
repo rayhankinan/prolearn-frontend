@@ -16,6 +16,27 @@ import Section from "@/interfaces/section-interface";
 import sectionService from "@/services/section-service";
 import fileService from "@/services/file-service";
 import { EditCourseModal } from "@/components/adminCourse/editCourseModal";
+import { HtmlProps } from "next/dist/shared/lib/html-context";
+import QuizSectionAdm from "@/components/adminCourse/quizSectionAdm";
+
+type qContent = {
+  id: number;
+  content: {
+    title: string;
+    questions: [
+        {
+            options: [
+                {
+                    content: string;
+                    isCorrect: boolean;
+                }
+            ],
+            content: string;
+        }
+    ]
+    description: string;
+  }
+}
 
 const theme = createTheme();
 
@@ -27,6 +48,7 @@ export default function CourseDetailAdmin() {
   const [material_idInt, setMaterialIdInt] = useState(-1);
   const [file, setFile] = useState<Blob | null>(null);
   const [fileString, setFileString] = useState(" ");
+  const [quizContent, setQuizContent] = useState<qContent | null>(null);
 
   useEffect(() => {
     if (router.isReady) {
@@ -60,6 +82,9 @@ export default function CourseDetailAdmin() {
         }
         );
         setFileId(material.__file__.id);
+        if (material.__quiz__ !== null) {
+          setQuizContent(material.__quiz__);
+        }
       })
       .catch((error) => console.log(error));
 
@@ -95,6 +120,8 @@ export default function CourseDetailAdmin() {
         })
         .catch((error) => console.log(error));
   }, []);
+  // console.log(file);
+  console.log(quizContent);
 
   const [selectedSection, setSelectedSection] = useState<Section | null>(null);
   const [showEditButton, setShowEditButton] = useState(false);
@@ -245,6 +272,9 @@ export default function CourseDetailAdmin() {
                 ) : (
                   <div>loading ... </div>
                 )}
+                {/* {file
+                  ? <div dangerouslySetInnerHTML={{__html : file!.toString()}}></div> : <div>loading ... </div>} */}
+                {quizContent ? <QuizSectionAdm quizContent={quizContent} /> : <></>}
               </Grid>
             </Grid>
           </Grid>
