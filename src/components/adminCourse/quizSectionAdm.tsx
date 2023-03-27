@@ -105,7 +105,8 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent }) => {
             </div>
           </div>
           <div className="flex flex-col mt-6">
-            <h1 className="text-2xl font-bold">{quizContent.content.questions[currentQuestion].content}</h1>
+            {/* <h1 className="text-2xl font-bold">{quizContent.content.questions[currentQuestion].content}</h1> */}
+            <h1 className="text-2xl font-bold" dangerouslySetInnerHTML={{ __html: quizContent.content.questions[currentQuestion].content }}></h1>
             <div className="flex flex-col mt-6">
               {quizContent.content.questions[currentQuestion].options.map((answer, index) => (
                 <div className="flex flex-row mt-4">

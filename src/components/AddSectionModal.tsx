@@ -90,6 +90,11 @@ const AddSectionModal = ({
         ]
       },
     ]);
+
+    // if the length of the list more than the event.target.value, make the list shorter
+    if (questionAnswerList.length > parseInt(event.target.value)) {
+      setQuestionAnswerList(questionAnswerList.slice(0, parseInt(event.target.value)));
+    }
   };
 
   const handleNumberChange = (event: any) => {

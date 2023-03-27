@@ -1,21 +1,20 @@
 import React, { useState, useEffect } from "react";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
 import Link from "@mui/material/Link";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { styled } from "@mui/material/styles";
-import ReactMarkdown from "react-markdown";
-import Material from "@/interfaces/material-interface";
 import Modal from "@/components/modal";
 import GridComponent from "@/components/GridComponent";
 import AddSectionModal from "@/components/AddSectionModal";
+import { EditCourseModal } from "@/components/adminCourse/editCourseModal";
 import { Button, Grid, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import CategoryService from "@/services/category-service";
+import SectionService from "@/services/section-service";
+import CourseService from "@/services/course-service";
 import Category from "@/interfaces/category-interface";
 import Section from "@/interfaces/section-interface";
-import sectionService from "@/services/section-service";
+import Course from "@/interfaces/course-interface";
 
 const theme = createTheme();
 
@@ -33,16 +32,38 @@ export default function CourseDetailAdmin() {
 
   const [showModal, setShowModal] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
   const [section, setSection] = useState<Section[]>([]);
+  const [course, setCourse] = useState<Course | null>(null);
+  const [category, setCategory] = useState<Category[] | null>(null);
+
   useEffect(() => {
-    sectionService
+    if (course_id === "") return;
+    SectionService
       .getSectionByCourse(course_id)
       .then((response) => {
         console.log(response.data.data);
         setSection(response.data.data);
       })
       .catch((error) => console.log(error));
+    
+    CourseService
+      .getById(parseInt(course_id))
+      .then((response) => {
+        console.log(response.data.data);
+        setCourse(response.data.data);
+      })
+      .catch((error) => console.log(error));
   }, [course_id]);
+
+  useEffect(() => {
+    CategoryService.getAll()
+      .then((response) => {
+        console.log(response.data.data);
+        setCategory(response.data.data);
+      })
+      .catch((error) => console.log(error));
+  }, []);
 
   const [selectedSection, setSelectedSection] = useState<Section | null>(
     null
@@ -58,6 +79,10 @@ export default function CourseDetailAdmin() {
     setShowModal(true);
   };
 
+  const handleEditCourse = () => {
+    setShowEditModal(true);
+  };
+
   const handleShowEditButton = () => {
     setShowEditButton(true);
   };
@@ -68,16 +93,8 @@ export default function CourseDetailAdmin() {
   const handleClose = () => {
     setShowModal(false);
     setShowAddModal(false);
+    setShowEditModal(false);
   };
-
-  const [categories, setCategories] = useState<Category[]>([]);
-  useEffect(() => {
-    CategoryService.getAll()
-      .then((response) => {
-        setCategories(response.data.data);
-      })
-      .catch((error) => console.log(error));
-  }, []);
 
   return (
     <ThemeProvider theme={theme}>
@@ -98,14 +115,14 @@ export default function CourseDetailAdmin() {
                 className="text-4xl font-bold mt-10 mx-4 mb-5"
                 sx={{ marginRight: "10px" }}
               >
-                COURSE {course_id}
+                COURSE {course?.title}
               </Typography>
               {!showEditButton && (
                 <button
                   onClick={() => handleShowEditButton()}
                   className=" bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mt-10 mx-4 mb-5"
                 >
-                  Edit Course
+                  Edit Section
                 </button>
               )}
 
@@ -123,6 +140,13 @@ export default function CourseDetailAdmin() {
                 className=" bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mt-10 mx-4 mb-5"
               >
                 Add Material
+              </button>
+
+              <button
+                onClick={() => handleEditCourse()}
+                className=" bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mt-10 mx-4 mb-5"
+              >
+                Edit Course
               </button>
             </Box>
           </Grid>
@@ -171,16 +195,27 @@ export default function CourseDetailAdmin() {
             </Grid>
             <Grid item xs={9} sx={{ paddingLeft: "20px" }}>
               <Grid item>
-                <ReactMarkdown></ReactMarkdown>
+                <Box>
+
+                </Box>
               </Grid>
             </Grid>
           </Grid>
         </Grid>
       </main>
 
+      {showEditModal && (
+      <EditCourseModal
+        open={showEditModal}
+        onClose={() => setShowEditModal(false)}
+        categories={category!}
+        course={course!}
+      />
+      )}
+
       {selectedSection && (
         <Modal show={showModal} onClose={() => setShowModal(false)}>
-          <GridComponent section ={selectedSection} />
+          <GridComponent section={selectedSection} />
           <div className="flex justify-center mt-5">
             <button
               onClick={handleClose}

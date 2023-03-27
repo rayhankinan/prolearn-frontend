@@ -1,22 +1,21 @@
 import React, { useState, useEffect } from "react";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
 import Link from "@mui/material/Link";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { styled } from "@mui/material/styles";
-import ReactMarkdown from "react-markdown";
-import Material from "@/interfaces/material-interface";
 import Modal from "@/components/modal";
 import GridComponent from "@/components/GridComponent";
 import AddSectionModal from "@/components/AddSectionModal";
 import { Button, Grid, Typography } from "@mui/material";
 import { useRouter } from "next/router";
+import CourseService from "@/services/course-service";
 import CategoryService from "@/services/category-service";
+import Course from "@/interfaces/course-interface";
 import Category from "@/interfaces/category-interface";
 import Section from "@/interfaces/section-interface";
 import sectionService from "@/services/section-service";
 import fileService from "@/services/file-service";
+import { EditCourseModal } from "@/components/adminCourse/editCourseModal";
 import { HtmlProps } from "next/dist/shared/lib/html-context";
 import QuizSectionAdm from "@/components/adminCourse/quizSectionAdm";
 
@@ -47,7 +46,8 @@ export default function CourseDetailAdmin() {
   const [material_id, setMaterialId] = useState("");
   const [file_id, setFileId] = useState(1);
   const [material_idInt, setMaterialIdInt] = useState(-1);
-  const [file, setFile] = useState<File | null>(null);
+  const [file, setFile] = useState<Blob | null>(null);
+  const [fileString, setFileString] = useState(" ");
   const [quizContent, setQuizContent] = useState<qContent | null>(null);
 
   useEffect(() => {
@@ -63,9 +63,14 @@ export default function CourseDetailAdmin() {
 
   const [showModal, setShowModal] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
   const [section, setSection] = useState<Section[]>([]);
+  const [course, setCourse] = useState<Course | null>(null);
+  const [category, setCategory] = useState<Category[] | null>(null);
+
 
   useEffect(() => {
+    if(course_id === "" || material_idInt === -1) return;
     sectionService
       .getSectionByCourse(course_id)
       .then((response) => {
@@ -82,17 +87,39 @@ export default function CourseDetailAdmin() {
         }
       })
       .catch((error) => console.log(error));
+
+      CourseService.getById(parseInt(course_id))
+        .then((response) => {
+          console.log(response.data.data);
+          setCourse(response.data.data);
+        })
+        .catch((error) => console.log(error));
   }, [course_id, material_idInt]);
 
   useEffect(() => {
-    console.log(file_id);
+    if (course_id === "" || material_idInt === -1) return;
     fileService.getFile(file_id).then((response) => {
       setFile(response.data);
+      console.log(file)
+      //convert file to string
+      const reader = new FileReader();
+      reader.readAsBinaryString(response.data);
+      reader.onloadend = () => {
+        setFileString(reader.result as string);
+      };
     })
     .catch((error) => console.log(error));
     
   }, [file_id]);
 
+  useEffect(() => {
+      CategoryService.getAll()
+        .then((response) => {
+          console.log(response.data.data);
+          setCategory(response.data.data);
+        })
+        .catch((error) => console.log(error));
+  }, []);
   // console.log(file);
   console.log(quizContent);
 
@@ -106,6 +133,10 @@ export default function CourseDetailAdmin() {
   const handleEditSection = (section: Section) => {
     setSelectedSection(section);
     setShowModal(true);
+  };
+
+  const handleEditCourse = () => {
+    setShowEditModal(true);
   };
 
   const handleShowEditButton = () => {
@@ -155,7 +186,7 @@ export default function CourseDetailAdmin() {
                   onClick={() => handleShowEditButton()}
                   className=" bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mt-10 mx-4 mb-5"
                 >
-                  Edit Course
+                  Edit Section
                 </button>
               )}
 
@@ -173,6 +204,13 @@ export default function CourseDetailAdmin() {
                 className=" bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mt-10 mx-4 mb-5"
               >
                 Add Material
+              </button>
+
+              <button
+                onClick={() => handleEditCourse()}
+                className=" bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mt-10 mx-4 mb-5"
+              >
+                Edit Course
               </button>
             </Box>
           </Grid>
@@ -229,6 +267,11 @@ export default function CourseDetailAdmin() {
             </Grid>
             <Grid item xs={9} sx={{ paddingLeft: "20px" }}>
               <Grid item>
+                {fileString ? (
+                  <div dangerouslySetInnerHTML={{ __html: fileString }}></div>
+                ) : (
+                  <div>loading ... </div>
+                )}
                 {/* {file
                   ? <div dangerouslySetInnerHTML={{__html : file!.toString()}}></div> : <div>loading ... </div>} */}
                 {quizContent ? <QuizSectionAdm quizContent={quizContent} /> : <></>}
@@ -237,6 +280,15 @@ export default function CourseDetailAdmin() {
           </Grid>
         </Grid>
       </main>
+
+      {showEditModal && (
+        <EditCourseModal
+          open={showEditModal}
+          onClose={() => setShowEditModal(false)}
+          categories={category!}
+          course={course!}
+        />
+      )}
 
       {selectedSection && (
         <Modal show={showModal} onClose={() => setShowModal(false)}>
