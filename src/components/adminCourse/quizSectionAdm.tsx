@@ -26,6 +26,9 @@ interface QuizSectionProps {
 const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent }) => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [showModal, setShowModal] = useState(false);
+  const [showEditQModal, setShowEditQModal] = useState(false);
+  const [showEditAModal, setShowEditAModal] = useState(false);
+  const [newAnswer, setNewAnswer] = useState("");
   const [numCorrectAnswers, setNumCorrectAnswers] = useState(0);
 
   const handleNextClick = () => {
@@ -35,6 +38,10 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent }) => {
     } else {
       handleFinishClick();
     }
+  };
+
+  const handleEditAnswerClick = () => {
+    setShowEditAModal(true);
   };
 
   const handlePrevClick = () => {
@@ -104,12 +111,12 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent }) => {
                 <div className="flex flex-row mt-4">
                     <div className="flex w-1/6 ">
                         <div className="">
-                            <button className="bg-blue-500 text-white mr-2 font-bold py-2 px-4 rounded hover:bg-blue-700">
+                            <button className="bg-blue-500 text-white mr-2 font-bold py-2 px-4 rounded hover:bg-blue-700" onClick={handleEditAnswerClick}>
                                 <i className="fas fa-edit"></i>
                             </button>
-                            <button className="bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-700">
+                            {/* <button className="bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-700">
                                 <i className="fas fa-trash"></i>
-                            </button>
+                            </button> */}
                         </div>
                     </div>
                     <div className="w-5/6" style={{paddingTop: "4px"}}>
@@ -184,6 +191,58 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent }) => {
                   // onClick={handleCloseModalClick}
                 >
                   Next
+                </button>
+              </div>
+            </div>
+          </div>
+        )
+      }
+      {
+        showEditQModal && (
+          <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
+            <div className="bg-white w-1/2 h-1/2 rounded-md flex flex-col justify-center items-center">
+              <h1 className="text-2xl font-bold">Add New Question</h1>
+              <input type="text" className="border-2 border-gray-300 p-2 rounded-md w-1/2 mb-12 mt-12" placeholder="Enter New Question" />
+              <div className="flex flex-row mt-2 justify-between">
+                <button
+                  className="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-700 mt-4 mr-4"
+                  // onClick={handleCloseModalClick}
+                >
+                  Save
+                </button>
+                <button
+                  className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 mt-4 ml-4"
+                  onClick={handleCloseModalClick}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        )
+      }
+      {
+        showEditAModal && (
+          <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
+            <div className="bg-white w-1/2 h-1/2 rounded-md flex flex-col justify-center items-center">
+              <h1 className="text-2xl font-bold">Add New Answers</h1>
+              <input
+                type="text"
+                className="border-2 border-gray-300 p-2 rounded-md w-1/2 mb-12 mt-12"
+                placeholder="Enter New Answers"
+              />
+              <div className="flex flex-row mt-2 justify-between">
+                <button
+                  className="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-700 mt-4 mr-4"
+                  // onClick={handleAnswerSaveClick}
+                >
+                  Save
+                </button>
+                <button
+                  className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 mt-4 ml-4"
+                  onClick={handleCloseModalClick}
+                >
+                  Cancel
                 </button>
               </div>
             </div>
