@@ -2,8 +2,9 @@ import Image from "next/image";
 import Course from "@/interfaces/course-interface";
 import { Chip } from "@mui/material";
 import Link from "next/link";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardActions, Typography } from "@mui/material";
-import { Button } from "@mui/material";
+import { Button, Skeleton } from "@mui/material";
 import userService from "@/services/user-service";
 import fileService from "@/services/file-service";
 
@@ -12,6 +13,24 @@ interface CourseCardProps {
 }
 
 const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
+
+  const [file, setFile] = useState<File | null>(null);
+
+  useEffect(() => {
+    if (course.__thumbnail__) {
+      fileService
+        .getFile(course.__thumbnail__.id)
+        .then((response) => {
+          const selectedImage = new File([response.data], "image.png");
+          setFile(selectedImage);
+        })
+        .catch((error) => {
+          console.log(error);
+          setFile(null);
+        });
+    }
+  }, []);
+
   const imageLoader = ({ src }: { src: string }): string => {
     return `${src}`;
   };
@@ -55,18 +74,28 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
             paddingTop: "56.25%",
           }}
         >
-          <Image
-            fill
-            src={
-              course.__thumbnail__
-                ? `/api/file/${course.__thumbnail__.id}`
-                : "https://source.unsplash.com/random"
-            }
-            alt="course thumbnail"
-            loader={imageLoader}
-            className="absolute top-0 left-0 w-full h-full 
-            object-contain rounded object-center py-3 px-3 bg-zinc-100"
-          />
+          {file && (
+            <Image
+              fill
+              src={
+                file
+                  ? URL.createObjectURL(file)
+                  : "https://source.unsplash.com/random"
+              }
+              alt="course thumbnail"
+              loader={imageLoader}
+              className="absolute top-0 left-0 w-full h-full 
+              object-contain rounded object-center py-3 px-3 bg-zinc-100"
+            />
+          )}
+          {!file && (
+            <div
+              className="absolute top-0 left-0 w-full h-full 
+              object-contain rounded object-center py-3 px-3 bg-zinc-100"
+            >
+              <Skeleton className = "absolute inset-0 m-auto w-full h-full" variant="rectangular" width={210} height={118} />
+            </div>
+          )}
         </div>
         <CardContent>
           <Typography

@@ -12,6 +12,7 @@ import {
   TextField,
   SelectChangeEvent,
   Modal,
+  Skeleton,
 } from "@mui/material";
 import Course from "@/interfaces/course-interface";
 import Category from "@/interfaces/category-interface";
@@ -58,6 +59,7 @@ export const EditCourseModal = ({
       })
       .catch((error) => {
         console.log(error);
+        setImage(null)
       });
   }, []);
 
@@ -163,6 +165,11 @@ export const EditCourseModal = ({
         {imgFile && (
           <div className="mb-4">
             <img src={URL.createObjectURL(imgFile)} alt="Course Image" />
+          </div>
+        )}
+        {!imgFile && (
+          <div className="mb-4">
+            <Skeleton variant="rectangular" width={210} height={118} />
           </div>
         )}
         <TextField

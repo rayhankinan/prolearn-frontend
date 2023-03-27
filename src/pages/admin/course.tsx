@@ -21,8 +21,7 @@ import Course from "@/interfaces/course-interface";
 import Category from "@/interfaces/category-interface";
 import FilterBar from "@/components/adminCourse/filterBar";
 import { useRouter } from "next/router";
-import CourseContext from "@/contexts/CourseContext";
-//import fileService from "@/services/file-service";
+import CourseCard from "@/components/adminCourse/courseCard";
 
 const theme = createTheme();
 
@@ -44,6 +43,7 @@ export default function Album() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [showAll, setShowAll] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [file , setFile] = useState<File | null>(null);
   
   useEffect(() => {
     CourseService.getAll({
@@ -340,78 +340,7 @@ export default function Album() {
               sx={{ alignItems: "center", marginTop: 0 }}
             >
               {courses.map((card) => (
-                <Grid item key={card.id} xs={12} sm={6} md={4}>
-                  <Card
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                    }}
-                  >
-                    <CardMedia
-                      component="img"
-                      image={
-                        card.__thumbnail__
-                          ? `/api/file/${card.__thumbnail__.id}`
-                          : "https://source.unsplash.com/random"
-                      }
-                      alt="random"
-                      sx={{ height: "300px", objectFit: "cover" }}
-                    />
-                    <CardContent sx={{ flexGrow: 1 }}>
-                      <Typography
-                        gutterBottom
-                        variant="h5"
-                        component="h2"
-                        className="font-bold custom-Source-Code-Pro"
-                      >
-                        {card.title}
-                      </Typography>
-                      <Typography
-                        className="custom-Source-Code-Pro text-greytext"
-                        sx={{
-                          minHeight: "50px",
-                          maxHeight: "50px",
-                          overflow: "auto",
-                        }}
-                      >
-                        {card.description}
-                      </Typography>
-                    </CardContent>
-
-                    <Box
-                      sx={{
-                        mt: "auto",
-                        p: 2,
-                        display: "flex",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <Typography variant="caption" component="p"></Typography>
-                      <Typography variant="caption" component="p">
-                        {card.difficulty.toUpperCase()}
-                      </Typography>
-                    </Box>
-                    <CardActions className="flex justify-between">
-                        <Button
-                          size="small"
-                          variant="contained"
-                          className="w-64 rounded-full bg-blackbutton text-white"
-                          onClick={() => handleEdit(card.id)}
-                        >
-                          Edit
-                        </Button>
-
-                      <Button
-                        size="small"
-                        variant="contained"
-                        className="w-64 rounded-full bg-redButton text-white"
-                        onClick={() => handleDelete(card.id)}
-                      >
-                        Delete
-                      </Button>
-                    </CardActions>
-                  </Card>
-                </Grid>
+                <CourseCard key={card.id} course={card} handleEdit={handleEdit} handleDelete={handleDelete} />
               ))}
               <Grid item>
                 <Plus handlePlusClick={handlePlusClick} />
