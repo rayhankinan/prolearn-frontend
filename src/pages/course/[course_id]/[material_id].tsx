@@ -136,8 +136,8 @@ export default function UserCourseDetail() {
                         </Grid>
                         <Grid item xs={9} sx={{ paddingLeft: '20px' }}>
                             <Grid item>
-                            {/* {file
-                                ? <div dangerouslySetInnerHTML={{__html : file!.toString()}}></div> : <div>loading ... </div>} */}
+                            {fileString
+                                ? <div dangerouslySetInnerHTML={{__html : fileString }}></div> : <div>loading ... </div>}
                                 {/* {/* <QuizSection /> */}
                             {quizContent ? <QuizSection quizContent={quizContent} /> : <div></div>}
                             </Grid>
