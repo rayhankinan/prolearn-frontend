@@ -20,6 +20,25 @@ import fileService from "@/services/file-service";
 import { HtmlProps } from "next/dist/shared/lib/html-context";
 import QuizSectionAdm from "@/components/adminCourse/quizSectionAdm";
 
+type qContent = {
+  id: number;
+  content: {
+    title: string;
+    questions: [
+        {
+            options: [
+                {
+                    content: string;
+                    isCorrect: boolean;
+                }
+            ],
+            content: string;
+        }
+    ]
+    description: string;
+  }
+}
+
 const theme = createTheme();
 
 export default function CourseDetailAdmin() {
@@ -29,6 +48,7 @@ export default function CourseDetailAdmin() {
   const [file_id, setFileId] = useState(1);
   const [material_idInt, setMaterialIdInt] = useState(-1);
   const [file, setFile] = useState<File | null>(null);
+  const [quizContent, setQuizContent] = useState<qContent | null>(null);
 
   useEffect(() => {
     if (router.isReady) {
@@ -57,6 +77,9 @@ export default function CourseDetailAdmin() {
         }
         );
         setFileId(material.__file__.id);
+        if (material.__quiz__ !== null) {
+          setQuizContent(material.__quiz__);
+        }
       })
       .catch((error) => console.log(error));
   }, [course_id, material_idInt]);
@@ -70,7 +93,8 @@ export default function CourseDetailAdmin() {
     
   }, [file_id]);
 
-  console.log(file);
+  // console.log(file);
+  console.log(quizContent);
 
   const [selectedSection, setSelectedSection] = useState<Section | null>(null);
   const [showEditButton, setShowEditButton] = useState(false);
@@ -207,7 +231,7 @@ export default function CourseDetailAdmin() {
               <Grid item>
                 {/* {file
                   ? <div dangerouslySetInnerHTML={{__html : file!.toString()}}></div> : <div>loading ... </div>} */}
-                  <QuizSectionAdm />
+                {quizContent ? <QuizSectionAdm quizContent={quizContent} /> : <></>}
               </Grid>
             </Grid>
           </Grid>

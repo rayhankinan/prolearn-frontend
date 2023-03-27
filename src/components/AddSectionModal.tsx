@@ -30,16 +30,58 @@ type lA = {
   ]
 }
 
+type lQA = {
+  content: string;
+  options: [
+    { content: string; isCorrect: boolean },
+    { content: string; isCorrect: boolean },
+    { content: string; isCorrect: boolean },
+    { content: string; isCorrect: boolean }
+  ]
+}
+
 interface AddSectionModalProps {
   material?: Section;
   courseId: string;
 }
+
+// let listQuestion: lQ[] = [];
+// for (let i = 0; i < 2; i++) {
+//   listQuestion[i] = {
+//     number: (i + 1),
+//     question: " ",
+//   };
+// }
+// console.log(listQuestion);
+
+// let answerList: lA[] = [];
+// for (let i = 0; i < 2; i++) {
+//   answerList[i] = {
+//     number: (i + 1),
+//     answer: [
+//       {
+//         a: " ", isCorrect: false
+//       },
+//       {
+//         b: " ", isCorrect: false
+//       },
+//       {
+//         c: " ", isCorrect: false
+//       },
+//       {
+//         d: " ", isCorrect: false
+//       },
+//     ]
+//   };
+// }
+// console.log(answerList);
 
 const AddSectionModal = ({ 
   material, courseId }: AddSectionModalProps) => {
 
   const [listQuestion, setListQuestion] = useState<lQ[]>([]);
   const [answerList, setAnswerList] = useState<lA[]>([]);
+  const [questionAnswerList, setQuestionAnswerList] = useState<lQA[]>([]);
   const [name, setName] = useState(material?.title || "");
   const [body, setBody] = useState(" ");
   const [duration, setDuration] = useState(material?.duration || 0);
@@ -152,7 +194,31 @@ const AddSectionModal = ({
       answerList[number - 1].answer[3].isCorrect = true;
     }
     setTrueAnswer(event.target.value);
-    console.log(answerList);
+
+    setQuestionAnswerList((questionAnswerList) => [
+      ... questionAnswerList,
+      {
+        content: listQuestion[number - 1].question,
+        options: [
+          {
+            content: answerList[number - 1].answer[0].a,
+            isCorrect: answerList[number - 1].answer[0].isCorrect
+          },
+          {
+            content: answerList[number - 1].answer[1].b,
+            isCorrect: answerList[number - 1].answer[1].isCorrect
+          },
+          {
+            content: answerList[number - 1].answer[2].c,
+            isCorrect: answerList[number - 1].answer[2].isCorrect
+          },
+          {
+            content: answerList[number - 1].answer[3].d,
+            isCorrect: answerList[number - 1].answer[3].isCorrect
+          },
+        ]
+      },
+    ]);
   }
 
   const handleSave = () => {
@@ -175,50 +241,7 @@ const AddSectionModal = ({
       const quizContent = {
         title: quiz,
         content: quiz,
-        questions: [
-          {
-            content: listQuestion[0].question,
-            options: [
-              {
-                content: answerList[0].answer[0].a,
-                isCorrect: answerList[0].answer[0].isCorrect
-              },
-              {
-                content: answerList[0].answer[1].b,
-                isCorrect: answerList[0].answer[1].isCorrect
-              },
-              {
-                content: answerList[0].answer[2].c,
-                isCorrect: answerList[0].answer[2].isCorrect
-              },
-              {
-                content: answerList[0].answer[3].d,
-                isCorrect: answerList[0].answer[3].isCorrect
-              }
-            ]
-          },
-          {
-            content: listQuestion[1].question,
-            options: [
-              {
-                content: answerList[1].answer[0].a,
-                isCorrect: answerList[1].answer[0].isCorrect
-              },
-              {
-                content: answerList[1].answer[1].b,
-                isCorrect: answerList[1].answer[1].isCorrect
-              },
-              {
-                content: answerList[1].answer[2].c,
-                isCorrect: answerList[1].answer[2].isCorrect
-              },
-              {
-                content: answerList[1].answer[3].d,
-                isCorrect: answerList[1].answer[3].isCorrect
-              }
-            ]
-          },
-        ]
+        questions: questionAnswerList,
       }
   
       formData.append("quizContent", JSON.stringify(quizContent));
@@ -236,7 +259,12 @@ const AddSectionModal = ({
       }
       );
   };
-
+  
+  console.log(listQuestion);
+  console.log(answerList);
+  console.log(questionAnswerList);
+  console.log(number);
+  console.log(answer);
 
   return (
     <Grid container spacing={3} style={{height: "600px", overflow: "auto"}}>
