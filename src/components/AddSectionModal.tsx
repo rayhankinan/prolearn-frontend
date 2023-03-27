@@ -35,48 +35,18 @@ interface AddSectionModalProps {
   courseId: string;
 }
 
-let listQuestion: lQ[] = [];
-for (let i = 0; i < 2; i++) {
-  listQuestion[i] = {
-    number: (i + 1),
-    question: " ",
-  };
-}
-console.log(listQuestion);
-
-let answerList: lA[] = [];
-for (let i = 0; i < 2; i++) {
-  answerList[i] = {
-    number: (i + 1),
-    answer: [
-      {
-        a: " ", isCorrect: false
-      },
-      {
-        b: " ", isCorrect: false
-      },
-      {
-        c: " ", isCorrect: false
-      },
-      {
-        d: " ", isCorrect: false
-      },
-    ]
-  };
-}
-console.log(answerList);
-
 const AddSectionModal = ({ 
   material, courseId }: AddSectionModalProps) => {
 
-
+  const [listQuestion, setListQuestion] = useState<lQ[]>([]);
+  const [answerList, setAnswerList] = useState<lA[]>([]);
   const [name, setName] = useState(material?.title || "");
   const [body, setBody] = useState(" ");
   const [duration, setDuration] = useState(material?.duration || 0);
   const [objective, setObjective] = useState(material?.objective || "");
   const [quiz, setQuiz] = useState(material?.quiz || "");
   const [countQuestion, setCountQuestion] = useState(0);
-  const [number, setNumber] = useState(listQuestion[0].number);
+  const [number, setNumber] = useState(0);
   const [question, setQuestion] = useState(" ");
   const [answer, setAnswer] = useState(" ");
   const [trueAnswer, setTrueAnswer] = useState(" ");
@@ -105,13 +75,34 @@ const AddSectionModal = ({
 
   const handleCountQuestionChange = (event: ChangeEvent<HTMLInputElement>) => {
     setCountQuestion(parseInt(event.target.value));
-    // for (let i = 0; i < 3; i++) {
-    //   listQuestion[i] = {
-    //     number: "Question " + (i + 1),
-    //     question: " ",
-    //   };
-    // }
-    // console.log(listQuestion);
+      setListQuestion((listQuestion) => [
+        ... listQuestion,
+        {
+          number: (countQuestion + 1),
+          question: " ",
+        },
+      ]);
+  
+      setAnswerList((answerList) => [
+        ... answerList,
+        {
+          number: (countQuestion + 1),
+          answer: [
+            {
+              a: " ", isCorrect: false
+            },
+            {
+              b: " ", isCorrect: false
+            },
+            {
+              c: " ", isCorrect: false
+            },
+            {
+              d: " ", isCorrect: false
+            },
+          ]
+        },
+      ]);
   };
 
   const handleNumberChange = (event: any) => {
@@ -160,7 +151,7 @@ const AddSectionModal = ({
     } else if (answerList[number - 1].answer[3].d == event.target.value) {
       answerList[number - 1].answer[3].isCorrect = true;
     }
-
+    setTrueAnswer(event.target.value);
     console.log(answerList);
   }
 
@@ -245,7 +236,7 @@ const AddSectionModal = ({
       }
       );
   };
-  
+
 
   return (
     <Grid container spacing={3} style={{height: "600px", overflow: "auto"}}>
@@ -337,8 +328,13 @@ const AddSectionModal = ({
             onChange={handleNumberChange}
             label="Question"
           >
-            <MenuItem value={listQuestion[0].number}>{listQuestion[0].number}</MenuItem>
-            <MenuItem value={listQuestion[1].number}>{listQuestion[1].number}</MenuItem>
+            {listQuestion.map((item, index) => {
+              return (
+                <MenuItem key={index} value={item.number}>
+                  {item.number}
+                </MenuItem>
+              );
+            })}
           </Select>
         </FormControl>
       </Grid>
@@ -397,10 +393,11 @@ const AddSectionModal = ({
           <InputLabel id="demo-simple-select-outlined-label">
             Correct Answer
           </InputLabel>
+          {number !== 0 ? 
           <Select
             labelId="demo-simple-select-outlined-label"
             id="demo-simple-select-outlined"
-            value={answer}
+            value={trueAnswer}
             onChange={handleTrueAnswerChange}
             label="Correct Answer"
           >
@@ -409,6 +406,17 @@ const AddSectionModal = ({
             <MenuItem value={answerList[number - 1].answer[2].c}>{answerList[number - 1].answer[2].c}</MenuItem>
             <MenuItem value={answerList[number - 1].answer[3].d}>{answerList[number - 1].answer[3].d}</MenuItem>
           </Select>
+            : 
+          <Select
+            labelId="demo-simple-select-outlined-label"
+            id="demo-simple-select-outlined"
+            value={trueAnswer}
+            onChange={handleTrueAnswerChange}
+            label="Correct Answer"
+          >
+            <MenuItem value={0}>0</MenuItem>
+          </Select>
+          }
         </FormControl>
       </Grid>
 
