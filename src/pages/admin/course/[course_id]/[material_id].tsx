@@ -82,7 +82,7 @@ export default function CourseDetailAdmin() {
     if (course_id === "" || material_idInt === -1) return;
     fileService.getFile(file_id).then((response) => {
       setFile(response.data);
-      console.log(file)
+      console.log(file);
       //convert file to string
       const reader = new FileReader();
       reader.readAsBinaryString(response.data);

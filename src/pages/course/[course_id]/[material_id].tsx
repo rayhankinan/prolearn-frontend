@@ -14,16 +14,19 @@ import { useRouter, Router } from 'next/router';
 import Section from "@/interfaces/section-interface";
 import Category from "@/interfaces/category-interface";
 import Quiz from "@/interfaces/quiz-interface";
+import CourseService from "@/services/course-service";
 import SectionService from "@/services/section-service";
 import fileService from "@/services/file-service";
 import CategoryService from "@/services/category-service";
 import QuizSection from "@/components/userCourse/quizSection";
+import Course from "@/interfaces/course-interface";
 
 const theme = createTheme();
 
 export default function UserCourseDetail() {
     const router = useRouter();
     const [course_id, setCourseId] = useState("");
+    const [course, setCourse] = useState<Course | null>(null);
     const [material_id, setMaterialId] = useState("");
     const [file_id, setFileId] = useState(1);
     const [material_idInt, setMaterialIdInt] = useState(-1);
@@ -46,7 +49,7 @@ export default function UserCourseDetail() {
     const [section, setSection] = useState<Section[]>([]);
 
     useEffect(() => {
-        if (course_id === "" || material_idInt === -1) return;
+        if(course_id === "" || material_idInt === -1) return;
         SectionService
           .getSectionByCourse(course_id)
           .then((response) => {
@@ -63,14 +66,21 @@ export default function UserCourseDetail() {
             }
           })
           .catch((error) => console.log(error));
-    }, [course_id, material_idInt]);
+    
+          CourseService.getById(parseInt(course_id))
+            .then((response) => {
+              console.log(response.data.data);
+              setCourse(response.data.data);
+            })
+            .catch((error) => console.log(error));
+      }, [course_id, material_idInt]);
     
     useEffect(() => {
         if (course_id === "" || material_idInt === -1) return;
-        console.log(file_id);
         fileService.getFile(file_id).then((response) => {
             setFile(response.data);
-
+            console.log(file);
+            //convert file to string
             const reader = new FileReader();
             reader.readAsBinaryString(response.data);
             reader.onload = () => {
@@ -80,6 +90,16 @@ export default function UserCourseDetail() {
         .catch((error) => console.log(error));
         
     }, [file_id]);
+
+    const [category, setCategory] = useState<Category[] | null>(null);
+    useEffect(() => {
+        CategoryService.getAll()
+          .then((response) => {
+            console.log(response.data.data);
+            setCategory(response.data.data);
+          })
+          .catch((error) => console.log(error));
+    }, []);
 
     // console.log(file);
     
@@ -104,7 +124,7 @@ export default function UserCourseDetail() {
                     <Grid container direction= "row" justifyContent= "space-between" alignItems="center" sx={{justifyContent: 'center'}}>
                         <Box sx= {{display: "flex", alignItems: "center"}}>
                             <Typography variant= "h4" className= "text-4xl font-bold mt-10 mx-4 mb-5" sx= {{marginRight: "10px"}}>
-                                Course {course_id}
+                                COURSE {course_id}
                             </Typography>
                         </Box>
                     </Grid>
@@ -136,8 +156,11 @@ export default function UserCourseDetail() {
                         </Grid>
                         <Grid item xs={9} sx={{ paddingLeft: '20px' }}>
                             <Grid item>
-                            {fileString
-                                ? <div dangerouslySetInnerHTML={{__html : fileString }}></div> : <div>loading ... </div>}
+                            {fileString ? (
+                              <div dangerouslySetInnerHTML={{ __html: fileString }}></div>
+                            ) : (
+                              <div>loading ... </div>
+                            )}
                                 {/* {/* <QuizSection /> */}
                             {quizContent ? <QuizSection quizContent={quizContent} /> : <div></div>}
                             </Grid>
