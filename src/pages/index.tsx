@@ -56,8 +56,7 @@ export default function CourseLanding() {
 
   return (
     <div>
-      {/* <Login_navbar />1 */}
-      <Navbar />
+      <Login_navbar />
       <div className="flex flex-row justify-between">
         <div className="flex flex-col justify-center">
           <h1 className="font-sans text-6xl font-bold ml-24">

@@ -4,10 +4,10 @@ import Sidebar from "@/components/userCourse/courseSidebar";
 import CourseCards from "@/components/userCourse/courseCards";
 import Course from "@/interfaces/course-interface";
 import CourseService from "@/services/course-service";
-import Navbar from "../components/navbar";
 import SearchBar from "@/components/adminCourse/search";
 import { Grid } from "@mui/material";
 import { Pagination } from "@mui/material";
+import Login_navbar from "@/components/login_navbar";
 
 export default function Courses() {
   const [courses, setCourses] = useState<Course[]>([]);
@@ -95,7 +95,7 @@ export default function Courses() {
 
   return (
     <>
-      <Navbar />
+      <Login_navbar/>
       <div className="container mx-auto justify-center custom-Poppins ">
         <Hero
           title="Courses"

@@ -44,9 +44,6 @@ const Login_navbar: React.FC = () => {
             className="inline-block w-32 h-auto text-xl px-4 py-2 leading-none border
             rounded-xl text-black bg-red-400 mt-4 lg:mt-0 mr-5 text-center align-middle
             hover:transition ease-in-out hover:scale-110 duration-300"
-            onClick={() => {
-                localStorage.removeItem("token");
-                }}
           >
             Logout
           </a>
