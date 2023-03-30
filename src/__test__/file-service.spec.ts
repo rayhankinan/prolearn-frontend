@@ -10,18 +10,13 @@ describe("File Service", () => {
     
   it("should get file", async () => {
     const id = 1;
-    const mockedResponse = {
-      data: {
-        message: "File",
-        data: [],
-      }
-    };
+    const mockedResponse = new Blob(['Test Blob'], {type: "text/plain"});
 
     (http.get as jest.Mock).mockResolvedValueOnce({ data: mockedResponse });
 
     const result = await fileService.getFile(id);
 
-    expect(http.get).toHaveBeenCalledWith(`/file/${id}`);
+    expect(http.get).toHaveBeenCalledWith(`/file/${id}`, { responseType: "blob" });
     expect(result.data).toEqual(mockedResponse);
   });
 
