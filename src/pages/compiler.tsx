@@ -19,12 +19,17 @@ const Compiler = () => {
   const [output, setOutput] = useState("");
   const [jobId, setJobId] = useState<number>(0);
   const [status, setStatus] = useState<string | null>(null);
+  const [input, setInput] = useState("");
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor>();
 
   let pollInterval: number;
 
   const handleLanguageChange = (event) => {
     setSelectedLanguage(event.target.value);
+  };
+
+  const handleInputChange = (event) => {
+    setInput(event.target.value);
   };
 
   function handleEditorDidMount(
@@ -40,9 +45,17 @@ const Compiler = () => {
     
     let payload: CodeSubmit;
 
-    payload = {
-      extension: extension,
-      code: editorRef.current?.getValue() as string,
+    if (input !== "") {
+      payload = {
+        extension: extension,
+        code: editorRef.current?.getValue() as string,
+        input: input,
+      };
+    } else {
+      payload = {
+        extension: extension,
+        code: editorRef.current?.getValue() as string,
+      }
     }
 
     try {
@@ -130,6 +143,7 @@ const Compiler = () => {
                     className="w-full h-full border-4 border-gray-400 rounded-md placeholder:text-gray-500 pl-[14px] pt-[14px]" 
                     style={{resize: "none"}}
                     placeholder="Enter your input here"
+                    onChange={handleInputChange}
                     />
                 </div>
             </div>
