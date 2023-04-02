@@ -4,6 +4,7 @@ import * as monaco from "monaco-editor";
 import Navbar from "@/components/navbar";
 import CodeSubmit from "@/interfaces/code-submit-interface";
 import jobsService from "@/services/jobs-service";
+import { AuthContext } from "@/contexts/AuthContext";
 
 const languages: {
   [key: string]: string;
@@ -21,6 +22,7 @@ const Compiler = () => {
   const [status, setStatus] = useState<string | null>(null);
   const [input, setInput] = useState("");
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor>();
+  const { isLoggedIn } = React.useContext(AuthContext);
 
   let pollInterval: number;
 
@@ -83,7 +85,7 @@ const Compiler = () => {
 
   return (
     <div className="flex flex-col h-screen">
-      <Navbar />
+      <Navbar isLoggedIn = {isLoggedIn}/>
       <h1 className="text-3xl font-bold mt-6 text-center font-mono mb-6">
           Online Compiler
         </h1>

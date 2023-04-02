@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext} from "react";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import Grid from "@mui/material/Grid";
@@ -15,6 +15,8 @@ import { PersonOutlined } from "@mui/icons-material";
 import { useRouter } from "next/router";
 import ModalFailed from "../user/modalFailed";
 import ModalSuccess from "../user/modalSucess";
+import { AuthContext } from "@/contexts/AuthContext";
+
 
 // create login page
 const theme = createTheme();
@@ -29,6 +31,7 @@ export default function Login() {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalSuccessOpen, setModalSuccessOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState<String>("");
+  const { setIsLoggedIn } = useContext(AuthContext);
   const handleCloseModal = () => {
     setModalOpen(false);
   };
@@ -76,6 +79,8 @@ export default function Login() {
     userService
       .logIn(dataUser)
       .then((response) => {
+        setIsLoggedIn(true);
+        
         localStorage.setItem("token", response.data);
         if (response.role === "admin") {
           router.push("/admin/course");

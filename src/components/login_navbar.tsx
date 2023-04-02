@@ -1,6 +1,8 @@
 import React from "react";
 
-const Login_navbar: React.FC = () => {
+
+
+const Login_navbar = (isLoggedIn : boolean) => {
   return (
     <nav className="flex w-full items-center justify-between flex-wrap bg-gray-300 p-6">
       <div className="flex items-center flex-shrink-0 mr-6">

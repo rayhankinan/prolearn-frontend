@@ -4,12 +4,12 @@ import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import CourseService from "@/services/course-service";
 import CategoryService from "@/services/category-service";
-import fileService from "@/services/file-service";
 import Course from "@/interfaces/course-interface";
 import Category from "@/interfaces/category-interface";
-import Login_navbar from "@/components/login_navbar";
+import { AuthContext } from "@/contexts/AuthContext";
 
 export default function CourseLanding() {
+  const { isLoggedIn } = React.useContext(AuthContext);
   const [courses, setCourses] = useState<Course[]>([]);
   useEffect(() => {
     CourseService.getAllForVisitor({
@@ -56,7 +56,8 @@ export default function CourseLanding() {
 
   return (
     <div>
-      <Login_navbar />
+      {/* <Login_navbar />1 */}
+      <Navbar isLoggedIn = {isLoggedIn} />
       <div className="flex flex-row justify-between">
         <div className="flex flex-col justify-center">
           <h1 className="font-sans text-6xl font-bold ml-24">

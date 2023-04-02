@@ -7,7 +7,8 @@ import CourseService from "@/services/course-service";
 import SearchBar from "@/components/adminCourse/search";
 import { Grid } from "@mui/material";
 import { Pagination } from "@mui/material";
-import Login_navbar from "@/components/login_navbar";
+import Navbar from "@/components/navbar";
+import { AuthContext } from "@/contexts/AuthContext";
 
 export default function Courses() {
   const [courses, setCourses] = useState<Course[]>([]);
@@ -16,6 +17,7 @@ export default function Courses() {
   const [perPage, setPerPage] = useState(9);
   const [count, setCount] = useState(1);
   const [search, setSearch] = useState("");
+  const { isLoggedIn } = React.useContext(AuthContext);
 
   useEffect(() => {
     CourseService.getAll({
@@ -93,9 +95,10 @@ export default function Courses() {
     setPage(value);
   };
 
+  console.log(isLoggedIn)
   return (
     <>
-      <Login_navbar/>
+      <Navbar isLoggedIn = {isLoggedIn}/>
       <div className="container mx-auto justify-center custom-Poppins ">
         <Hero
           title="Courses"
