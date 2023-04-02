@@ -63,10 +63,7 @@ export default function CourseLanding() {
             {" "}
             Learn Everywhere Like a Professional
           </h1>
-          <p className="font-sans text-2xl ml-24 mt-10">
-            | A learning system based on formalised teaching with the help of
-            resources.
-          </p>
+          <p className="font-sans text-2xl ml-24 mt-10 border-l-2 border-gray-400 p-4">A learning system based on formalised teaching with the help of resources.</p>
           <div className="flex flex-row justify-start ml-14 mt-10">
             <a href="/auth/register" className="inline-block w-auto h-16 text-xl px-4 py-5 
               leading-none border border-gray-300 shadow-xl text-black bg-white mt-4 lg:mt-0
