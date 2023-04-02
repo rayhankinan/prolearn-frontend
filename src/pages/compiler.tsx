@@ -1,26 +1,71 @@
-import React, { useState } from "react";
-import dynamic from "next/dynamic"; // import dynamic from Next.js
-
+import React, { useState, useEffect, useRef } from "react";
+import Editor, { Monaco } from "@monaco-editor/react";
+import * as monaco from "monaco-editor";
 import Navbar from "@/components/navbar";
+import CodeSubmit from "@/interfaces/code-submit-interface";
+import jobsService from "@/services/jobs-service";
 
-const Editor = dynamic(import("@monaco-editor/react"), { ssr: false }); // dinamis impor Monaco Editor
+const languages: {
+  [key: string]: string;
+} = {
+  javascript: 'js',
+  cpp: 'cpp',
+  c: 'c',
+  python: 'py',
+};
 
 const Compiler = () => {
   const [selectedLanguage, setSelectedLanguage] = useState("");
-  const [postBody, setPostBody] = React.useState("");
-  const [output, setOutput] = useState(""); // state untuk output
+  const [output, setOutput] = useState("");
+  const [jobId, setJobId] = useState<number>(0);
+  const [status, setStatus] = useState<string | null>(null);
+  const editorRef = useRef<monaco.editor.IStandaloneCodeEditor>();
+
+  let pollInterval: number;
 
   const handleLanguageChange = (event) => {
     setSelectedLanguage(event.target.value);
   };
 
+  function handleEditorDidMount(
+    editor: monaco.editor.IStandaloneCodeEditor,
+    monaco: Monaco,
+  ) {
+    editorRef.current = editor;
+  }
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(selectedLanguage); // log the selected language to console
-    // code for compiling goes here
+    const extension = languages[selectedLanguage];
+    
+    let payload: CodeSubmit;
 
-    // contoh output
-    setOutput("Output code here");
+    payload = {
+      extension: extension,
+      code: editorRef.current?.getValue() as string,
+    }
+
+    try {
+      setOutput("Compiling...");
+      setStatus(null);
+      jobsService.runJobs(payload).then((response) => {
+        setJobId(response.data.id);
+        setStatus(response.data.status);
+        pollInterval = window.setInterval(async () => {
+          jobsService.getStatus(response.data.id).then((response) => {
+            console.log(response.data);
+            setStatus(response.data.status);
+            if (status !== "PENDING") {
+              clearInterval(pollInterval);
+              setOutput(response.data.output);
+            }
+          });
+        }, 1000);
+      });
+    } catch (error) {
+      console.log(error);
+      setOutput("Error");
+    }
   };
 
   return (
@@ -45,48 +90,23 @@ const Compiler = () => {
             <option value="javascript">JavaScript</option>
             <option value="python">Python</option>
             <option value="java">Java</option>
-            <option value="c++">C++</option>
+            <option value="cpp">C++</option>
           </select>
         </div>
         <form className="flex flex-col gap-2" onSubmit={handleSubmit}>
           <label htmlFor="input-code" className="font-semibold">
             Input Your Code:
           </label>
-          {/* Use dynamic component */}
           <Editor
-            editorDidMount={() => {
-              // @ts-ignore
-              window.MonacoEnvironment.getWorkerUrl = (
-                _moduleId: string,
-                label: string
-              ) => {
-                if (label === "json")
-                  return "_next/static/json.worker.js";
-                if (label === "css")
-                  return "_next/static/css.worker.js";
-                if (label === "html")
-                  return "_next/static/html.worker.js";
-                if (
-                  label === "typescript" ||
-                  label === "javascript"
-                )
-                  return "_next/static/ts.worker.js";
-                return "_next/static/editor.worker.js";
-              };
-            }}
-            width="800"
             height="50vh"
-            language="javascript"
+            language={selectedLanguage}
+            onMount={handleEditorDidMount}
             theme="vs-dark"
-            value={postBody}
             options={{
-              minimap: {
-                enabled: false
-              }
+              automaticLayout: true,
+              fontSize: 16,
             }}
-            onChange={setPostBody}
           />
-
           <button
             type="submit"
             disabled={!selectedLanguage}
