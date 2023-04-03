@@ -1,5 +1,7 @@
 import React, { useState } from "react";
+import axios from "axios";
 import Quiz from "@/interfaces/quiz-interface";
+import quizService from "@/services/quiz-service";
 
 interface QuizSectionProps {
   quizContent: Quiz;
@@ -7,11 +9,38 @@ interface QuizSectionProps {
 
 const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent }) => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [currentAnswer, setCurrentAnswer] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [showEditQModal, setShowEditQModal] = useState(false);
   const [showEditAModal, setShowEditAModal] = useState(false);
+  const [showEditTModal, setShowEditTModal] = useState(false);
   const [newAnswer, setNewAnswer] = useState("");
   const [numCorrectAnswers, setNumCorrectAnswers] = useState(0);
+  const [quizTitle, setQuizTitle] = useState<string>(quizContent.content.title);
+  const [newQuestion, setNewQuestion] = useState<string>(quizContent.content.questions[currentQuestion].content);
+  const [idQuiz, setIdQuiz] = useState<number>(0);
+  
+
+  const handleQuizTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setQuizTitle(event.target.value);
+  };
+  
+  const handleQuestionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNewQuestion(event.target.value);
+  };
+
+  const handleAnswerChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNewAnswer(event.target.value);
+  };
+
+  // const handleSaveTitleClick = async () => {
+  //   try {
+  //     await quizService.updateTitle(idQuiz, quizTitle);
+  //     setShowEditTModal(false);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   const handleNextClick = () => {
     // setCurrentQuestion((prev) => prev + 1);
@@ -20,6 +49,15 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent }) => {
     } else {
       handleFinishClick();
     }
+  };
+
+  const handleEditTitleClick = (quizId) => {
+    setShowEditTModal(true);
+    setIdQuiz(quizId);
+  };
+
+  const handleEditQuestionClick = () => {
+    setShowEditQModal(true);
   };
 
   const handleEditAnswerClick = () => {
@@ -55,7 +93,11 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent }) => {
             <div className="flex flex-col">
               <div className="flex flex-row">
                 <h1 className="text-4xl font-bold">{quizContent.content.title}</h1>
-                <button className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 ml-6 flex justify-center">
+                <button 
+                className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 ml-6 flex justify-center"
+                onClick={() => handleEditTitleClick(quizContent.id)}
+
+                >
                   <i className="fas fa-edit" style={{paddingTop: "3px"}}></i>
                 </button>
               </div>
@@ -71,7 +113,10 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent }) => {
           <div className="flex flex-row">
             <div className="w-1/2 flex flex-row">
               <h1 className="text-2xl font-bold">Question {currentQuestion + 1}</h1>
-              <button className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 ml-6 flex justify-center">
+              <button 
+              className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 ml-6 flex justify-center"
+              onClick={() => setShowEditQModal(true)}
+              >
                 <i className="fas fa-edit"></i>
                 </button>
             </div>
@@ -89,7 +134,13 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent }) => {
                 <div className="flex flex-row mt-4">
                     <div className="flex w-1/6 ">
                         <div className="">
-                            <button className="bg-blue-500 text-white mr-2 font-bold py-2 px-4 rounded hover:bg-blue-700" onClick={handleEditAnswerClick}>
+                            <button 
+                            className="bg-blue-500 text-white mr-2 font-bold py-2 px-4 rounded hover:bg-blue-700" 
+                            onClick={() => {
+                              setShowEditAModal(true);
+                              setNewAnswer(answer.content);}
+                            }
+                            >
                                 <i className="fas fa-edit"></i>
                             </button>
                             {/* <button className="bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-700">
@@ -180,17 +231,26 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent }) => {
           <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
             <div className="bg-white w-1/2 h-1/2 rounded-md flex flex-col justify-center items-center">
               <h1 className="text-2xl font-bold">Add New Question</h1>
-              <input type="text" className="border-2 border-gray-300 p-2 rounded-md w-1/2 mb-12 mt-12" placeholder="Enter New Question" />
+              <input 
+              type="text" 
+              className="border-2 border-gray-300 p-2 rounded-md w-1/2 mb-12 mt-12" 
+              placeholder="Enter New Question" 
+              value = {newQuestion}
+              onChange={handleQuestionChange}
+              />
               <div className="flex flex-row mt-2 justify-between">
                 <button
                   className="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-700 mt-4 mr-4"
-                  // onClick={handleCloseModalClick}
+                  onClick={() => {
+                    setShowEditQModal(false);
+                    quizContent.content.questions[currentQuestion].content = newQuestion;
+                  }}
                 >
                   Save
                 </button>
                 <button
                   className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 mt-4 ml-4"
-                  onClick={handleCloseModalClick}
+                  onClick={() => setShowEditQModal(false)}
                 >
                   Cancel
                 </button>
@@ -208,17 +268,22 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent }) => {
                 type="text"
                 className="border-2 border-gray-300 p-2 rounded-md w-1/2 mb-12 mt-12"
                 placeholder="Enter New Answers"
+                value={newAnswer}
+                onChange={handleAnswerChange}
               />
               <div className="flex flex-row mt-2 justify-between">
                 <button
                   className="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-700 mt-4 mr-4"
-                  // onClick={handleAnswerSaveClick}
+                  onClick={() => {
+                    setShowEditAModal(false);
+                    quizContent.content.questions[currentQuestion].options[currentAnswer].content = newAnswer;
+                  }}
                 >
                   Save
                 </button>
                 <button
                   className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 mt-4 ml-4"
-                  onClick={handleCloseModalClick}
+                  onClick={() => setShowEditAModal(false)}
                 >
                   Cancel
                 </button>
@@ -227,6 +292,37 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent }) => {
           </div>
         )
       }
+      {showEditTModal && (
+        <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white w-1/2 h-1/2 rounded-md flex flex-col justify-center items-center">
+            <h1 className="text-2xl font-bold">Edit Quiz Title</h1>
+            <input
+              type="text"
+              value={quizTitle}
+              onChange={handleQuizTitleChange}
+              className="border-gray-400 border-2 p-2 rounded-md w-full mb-4"
+            />
+            <div className="flex flex-row mt-2 justify-between">
+              <button
+                className="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-700 mt-4 mr-4"
+                onClick={() => {
+                  setShowEditTModal(false);
+                  quizContent.content.title = quizTitle;
+                }}
+              >
+                Save
+              </button>
+              <button
+                className="bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-700"
+                onClick={() => setShowEditTModal(false)}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };
