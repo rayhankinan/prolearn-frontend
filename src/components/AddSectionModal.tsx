@@ -257,7 +257,7 @@ const AddSectionModal = ({
         />
       </Grid>
       {/* Create Dropdown for question */}
-        {Array.from(Array(countQuestion), (e, i) => {
+        {countQuestion > 0 && Array.from(Array(Math.max(0, countQuestion)), (e, i) => {
         const questionAnswer = questionAnswerList[i] || {options: []};
         return (
           <React.Fragment key={i}>
