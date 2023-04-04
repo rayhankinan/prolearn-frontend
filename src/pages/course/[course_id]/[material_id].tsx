@@ -116,6 +116,11 @@ export default function UserCourseDetail() {
         .catch((error) => console.log(error));
     }, []);
 
+    const [quizStarted, setQuizStarted] = useState(false);
+    const handleStartQuiz = () =>{
+        setQuizStarted(true);
+    }
+
     return(
         <ThemeProvider theme={theme}>
             <CssBaseline />
@@ -162,7 +167,12 @@ export default function UserCourseDetail() {
                               <div>loading ... </div>
                             )}
                                 {/* {/* <QuizSection /> */}
-                            {quizContent ? <QuizSection quizContent={quizContent} /> : <div></div>}
+                            {quizContent && !quizStarted &&
+                                <Box>
+                                    <button onClick={() => handleStartQuiz()}>Start Quiz</button>
+                                </Box>
+                            }
+                            {quizContent && quizStarted ? <QuizSection quizContent={quizContent} /> : <div></div>}
                             </Grid>
                         </Grid>
                     </Grid>
