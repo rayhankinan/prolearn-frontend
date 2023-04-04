@@ -8,6 +8,18 @@ interface Quiz {
           {
             content: string;
             isCorrect: boolean;
+          },
+          {
+            content: string;
+            isCorrect: boolean;
+          },
+          {
+            content: string;
+            isCorrect: boolean;
+          },
+          {
+            content: string;
+            isCorrect: boolean;
           }
         ],
         content: string;

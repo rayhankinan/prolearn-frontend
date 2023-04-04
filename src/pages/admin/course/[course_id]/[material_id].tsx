@@ -28,6 +28,7 @@ export default function CourseDetailAdmin() {
   const [material_id, setMaterialId] = useState("");
   const [file_id, setFileId] = useState(1);
   const [material_idInt, setMaterialIdInt] = useState(-1);
+  const [title, setTitle] = useState(" ");
   const [file, setFile] = useState<Blob | null>(null);
   const [fileString, setFileString] = useState(" ");
   const [quizContent, setQuizContent] = useState<Quiz | null>(null);
@@ -63,6 +64,7 @@ export default function CourseDetailAdmin() {
           return material.id === material_idInt;
         }
         );
+        setTitle(material.title);
         setFileId(material.__file__.id);
         if (material.__quiz__ !== null) {
           setQuizContent(material.__quiz__);
@@ -82,7 +84,7 @@ export default function CourseDetailAdmin() {
     if (course_id === "" || material_idInt === -1) return;
     fileService.getFile(file_id).then((response) => {
       setFile(response.data);
-      console.log(file);
+      // console.log(file);
       //convert file to string
       const reader = new FileReader();
       reader.readAsBinaryString(response.data);
@@ -102,8 +104,6 @@ export default function CourseDetailAdmin() {
         })
         .catch((error) => console.log(error));
   }, []);
-  // console.log(file);
-  console.log(quizContent);
 
   const [selectedSection, setSelectedSection] = useState<Section | null>(null);
   const [showEditButton, setShowEditButton] = useState(false);
@@ -256,7 +256,7 @@ export default function CourseDetailAdmin() {
                 )}
                 {/* {file
                   ? <div dangerouslySetInnerHTML={{__html : file!.toString()}}></div> : <div>loading ... </div>} */}
-                {quizContent ? <QuizSectionAdm quizContent={quizContent} /> : <></>}
+                {quizContent ? <QuizSectionAdm quizContent={quizContent} title={title} courseId={course_id} materialId={material_idInt} /> : <></>}
               </Grid>
             </Grid>
           </Grid>
