@@ -115,20 +115,20 @@ const AddSectionModal = ({
     setAnswer(event.target.value);
   }
 
-  const handleAddAnswer = () => {
-    if (questionAnswerList[number - 1].options[0].content == " ") {
-      questionAnswerList[number - 1].options[0].content = answer;
-    } else if (questionAnswerList[number - 1].options[1].content == " ") {
-      questionAnswerList[number - 1].options[1].content = answer;
-    }
-    else if (questionAnswerList[number - 1].options[2].content == " ") {
-      questionAnswerList[number - 1].options[2].content = answer;
-    } else if (questionAnswerList[number - 1].options[3].content == " ") {
-      questionAnswerList[number - 1].options[3].content = answer;
-    } else {
-      console.log("full");
-    }
-  }
+  // const handleAddAnswer = () => {
+  //   if (questionAnswerList[number - 1].options[0].content == " ") {
+  //     questionAnswerList[number - 1].options[0].content = answer;
+  //   } else if (questionAnswerList[number - 1].options[1].content == " ") {
+  //     questionAnswerList[number - 1].options[1].content = answer;
+  //   }
+  //   else if (questionAnswerList[number - 1].options[2].content == " ") {
+  //     questionAnswerList[number - 1].options[2].content = answer;
+  //   } else if (questionAnswerList[number - 1].options[3].content == " ") {
+  //     questionAnswerList[number - 1].options[3].content = answer;
+  //   } else {
+  //     console.log("full");
+  //   }
+  // }
 
   const handleTrueAnswerChange = (event: any) => {
     setTrueAnswer(event.target.value);
@@ -186,6 +186,26 @@ const AddSectionModal = ({
   console.log(questionAnswerList);
   console.log(number);
   console.log(answer);
+
+  // QUIZ BARUUUUUU
+  const [choices, setChoices] = useState([]);
+  const handleAddAnswer = () => {
+    const choiceElements = document.querySelectorAll("input[type='text']");
+    const newChoices = [];
+    choiceElements.forEach((element) => {
+      newChoices.push(element.value);
+    });
+    setChoices(newChoices);
+    console.log("isi choice: ", choices);
+  };
+  
+  const handleChoiceChange = (event, index) => {
+    const newChoices = [...choices];
+    newChoices[index] = event.target.value;
+    setChoices(newChoices);
+  };
+  
+  
 
   return (
     <Grid container spacing={3} style={{height: "600px", overflow: "auto"}}>
@@ -263,7 +283,7 @@ const AddSectionModal = ({
       </Grid>
       {/* Create Dropdown for question */}
       <Grid item xs={3} style={{ marginTop: "16px" }}>
-        <label>Question</label>
+        <label>Question Number</label>
       </Grid>
       <Grid item xs={9}>
         <FormControl variant="outlined" fullWidth>
@@ -308,18 +328,51 @@ const AddSectionModal = ({
           style={{color: "white", marginTop: "16px" }}
           onClick={handleAddQuestion}
         >
-          Add
+          Save Question
         </Button>
       </Grid>
       <Grid item xs={3} style={{ marginTop: "16px" }}>
-        <label>Answers</label>
+        <label>Choice a</label>
       </Grid>
       <Grid item xs={7}>
         <TextField
           variant="outlined"
           fullWidth
-          value={answer}
-          onChange={handleAnswerChange}
+          value={choices[0]}
+          onChange={(event) => handleChoiceChange(event, 0)}
+        />
+      </Grid>
+      <Grid item xs={3} style={{ marginTop: "16px" }}>
+        <label>Choice b</label>
+      </Grid>
+      <Grid item xs={7}>
+        <TextField
+          variant="outlined"
+          fullWidth
+          value={choices[1]}
+          onChange={(event) => handleChoiceChange(event, 1)}
+        />
+      </Grid>
+      <Grid item xs={3} style={{ marginTop: "16px" }}>
+        <label>Choice c</label>
+      </Grid>
+      <Grid item xs={7}>
+        <TextField
+          variant="outlined"
+          fullWidth
+          value={choices[2]}
+          onChange={(event) => handleChoiceChange(event, 2)}
+        />
+      </Grid>
+      <Grid item xs={3} style={{ marginTop: "16px" }}>
+        <label>Choice d</label>
+      </Grid>
+      <Grid item xs={7}>
+        <TextField
+          variant="outlined"
+          fullWidth
+          value={choices[3]}
+          onChange={(event) => handleChoiceChange(event, 3)}
         />
       </Grid>
       <Grid item xs={2} style={{ display: "flex", alignItems: "center" }}>
@@ -331,7 +384,7 @@ const AddSectionModal = ({
           style={{color: "white" }}
           onClick={() => handleAddAnswer()}
         >
-          Add
+          Save All Choice
         </Button>
       </Grid>
       <Grid item xs={3} style={{ marginTop: "16px" }}>
@@ -350,10 +403,10 @@ const AddSectionModal = ({
             onChange={handleTrueAnswerChange}
             label="Correct Answer"
           >
-            <MenuItem value={questionAnswerList[number - 1].options[0].content}>{questionAnswerList[number - 1].options[0].content}</MenuItem>
-            <MenuItem value={questionAnswerList[number - 1].options[1].content}>{questionAnswerList[number - 1].options[1].content}</MenuItem>
-            <MenuItem value={questionAnswerList[number - 1].options[2].content}>{questionAnswerList[number - 1].options[2].content}</MenuItem>
-            <MenuItem value={questionAnswerList[number - 1].options[3].content}>{questionAnswerList[number - 1].options[3].content}</MenuItem>
+            <MenuItem value={"a"}>a</MenuItem>
+            <MenuItem value={"b"}>b</MenuItem>
+            <MenuItem value={"c"}>c</MenuItem>
+            <MenuItem value={"d"}>d</MenuItem>
           </Select>
             : 
           <Select
