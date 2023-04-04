@@ -14,12 +14,16 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent }) => {
   const [showEditQModal, setShowEditQModal] = useState(false);
   const [showEditAModal, setShowEditAModal] = useState(false);
   const [showEditTModal, setShowEditTModal] = useState(false);
+  const [showAddQuestionModal, setShowAddQuestionModal] = useState(false);
   const [newAnswer, setNewAnswer] = useState("");
   const [numCorrectAnswers, setNumCorrectAnswers] = useState(0);
   const [quizTitle, setQuizTitle] = useState<string>(quizContent.content.title);
   const [newQuestion, setNewQuestion] = useState<string>(quizContent.content.questions[currentQuestion].content);
   const [idQuiz, setIdQuiz] = useState<number>(0);
   
+  const handleAddQuestionClick = () => {
+    setShowAddQuestionModal(true);
+  };
 
   const handleQuizTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setQuizTitle(event.target.value);
@@ -168,7 +172,10 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent }) => {
 
         <div className="flex flex-row mt-12 mb-4">
           <div className="w-1/2">
-            <button className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700">
+            <button 
+            className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
+            onClick={() => setShowAddQuestionModal(true)}
+            >
               Add Question
             </button>
           </div>
@@ -322,6 +329,64 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent }) => {
           </div>
         </div>
       )}
+      {showAddQuestionModal && (
+        <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
+          <div className="bg-white rounded-md w-1/2">
+            <h1 className="text-2xl font-bold p-4 border-b">Add Question</h1>
+            <div className="p-4">
+              <h2 className="mb-2">Question:</h2>
+              <input
+                type="text"
+                className="border-gray-400 border-2 p-2 rounded-md w-full mb-4"
+              />
+              <h2 className="mb-2">Option A:</h2>
+              <input
+                type="text"
+                className="border-gray-400 border-2 p-2 rounded-md w-full mb-4"
+              />
+              <h2 className="mb-2">Option B:</h2>
+              <input
+                type="text"
+                className="border-gray-400 border-2 p-2 rounded-md w-full mb-4"
+              />
+              <h2 className="mb-2">Option C:</h2>
+              <input
+                type="text"
+                className="border-gray-400 border-2 p-2 rounded-md w-full mb-4"
+              />
+              <h2 className="mb-2">Option D:</h2>
+              <input
+                type="text"
+                className="border-gray-400 border-2 p-2 rounded-md w-full mb-4"
+              />
+              <h2 className="mb-2">Correct Answer:</h2>
+              <select className="border-gray-400 border-2 p-2 rounded-md w-full mb-4">
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+                <option value="D">D</option>
+              </select>
+              <div className="flex justify-end">
+                <button
+                  className="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-700 mr-2"
+                  onClick={() => {
+                    setShowAddQuestionModal(false);
+                  }}
+                >
+                  Save
+                </button>
+                <button
+                  className="bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-700"
+                  onClick={() => setShowAddQuestionModal(false)}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
 
     </div>
   );
