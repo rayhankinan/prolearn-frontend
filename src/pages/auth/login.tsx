@@ -16,6 +16,7 @@ import { useRouter } from "next/router";
 import ModalFailed from "../user/modalFailed";
 import ModalSuccess from "../user/modalSucess";
 import { AuthContext } from "@/contexts/AuthContext";
+import Image from "next/image";
 
 
 // create login page
@@ -109,7 +110,7 @@ export default function Login() {
                 alignItems: "center",
               }}
             >
-              <img src="/logo.png" alt="Logo" className="h-12 mt-5 mb-10" />
+              <Image src="/logo.png" alt="Logo" className="h-12 mt-5 mb-10" width={250} height={61} />
               <Typography
                 component="h1"
                 variant="h4"
@@ -220,7 +221,7 @@ export default function Login() {
                   marginBottom: 5,
                 }}
               >
-                <img src="/Saly-10 (1).png" alt="Logo" />
+                <Image src="/Saly-10 (1).png" alt="Logo" width={1826} height={2084} priority />
               </Container>
               <Typography
                 component="h1"

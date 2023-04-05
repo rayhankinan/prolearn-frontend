@@ -20,6 +20,7 @@ import { useRouter } from "next/router";
 import React, { useState } from "react";
 import ModalFailed from "../user/modalFailed";
 import ModalSuccess from "../user/modalSucess";
+import Image from "next/image";
 
 const theme = createTheme();
 
@@ -130,7 +131,13 @@ export default function Register() {
                 alignItems: "center",
               }}
             >
-              <img src="/logo.png" alt="logo" className="h-12 mt-5 mb-10" />
+              <Image
+                src="/logo.png"
+                alt="Logo"
+                className="h-12 mt-5 mb-10"
+                width={250}
+                height={61}
+              />
               <Typography
                 component="h1"
                 variant="h4"
@@ -268,7 +275,12 @@ export default function Register() {
                   marginBottom: 5,
                 }}
               >
-                <img src="/Saly-10 (1).png" alt="logo" />
+                <Image
+                  src="/Saly-10 (1).png"
+                  alt="Logo"
+                  width={1826}
+                  height={2084}
+                />
               </Container>
               <Typography
                 component="h1"

@@ -16,6 +16,8 @@ Modal
 import Course from "@/interfaces/course-interface";
 import Category from "@/interfaces/category-interface";
 import ModalFailed from "@/pages/user/modalFailed";
+import CategoryService from "@/services/category-service";
+import categoryService from "@/services/category-service";
 
 type ModalProps = {
   open: boolean;
@@ -42,6 +44,7 @@ export const AddCourseModal = ({
   const [imgNameError, setImgNameError] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState<String>("");
+  const [newCategory, setNewCategory] = useState<string>("");
   const handleCloseModal = () => {
     setModalOpen(false);
   };
@@ -82,6 +85,20 @@ export const AddCourseModal = ({
       selected.includes(category.title)
     );
     setSelectedCategories(selectedCategories);
+  };
+
+  const handleAddCategory = () => {
+    console.log(newCategory);
+    // const newCategoryString = newCategory as string;
+    categoryService.create({ title: newCategory })
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((err) => {
+      setErrorMessage(err.message);
+    });
+    
+
   };
 
   const handleFormSubmit = () => {
@@ -142,6 +159,34 @@ export const AddCourseModal = ({
           error={descriptionNameError}
           helperText={descriptionNameError ? "Description is required" : ""}
         />
+        <TextField
+          margin="dense"
+          id="new-category"
+          label="New category"
+          type="text"
+          fullWidth
+          value={newCategory}
+          onChange={(e) => setNewCategory(e.target.value)}
+          className="mt-2"
+        />
+        <Button
+          variant="contained"
+          color="primary"
+          disabled={!newCategory}
+          onClick={() => {
+            const newCategoryObj = {
+              id: categories.length + 1,
+              title: newCategory,
+              total_course : 0,
+            };
+            categories.push(newCategoryObj);
+            handleAddCategory();
+            setNewCategory("");
+          }}
+          className="mb-3 bg-green-500 hover:bg-green-500/opacity-80"
+        >
+          Add
+        </Button>
         <FormControl fullWidth>
           <InputLabel id="difficulty-select-label">Difficulty</InputLabel>
           <Select
@@ -199,9 +244,9 @@ export const AddCourseModal = ({
           </Select>
         </FormControl>
         <Modal open={modalOpen} onClose={handleCloseModal}>
-          <ModalFailed 
-            open={modalOpen} 
-            onClose={handleCloseModal} 
+          <ModalFailed
+            open={modalOpen}
+            onClose={handleCloseModal}
             error={errorMessage}
           />
         </Modal>
