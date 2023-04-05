@@ -168,14 +168,11 @@ export default function UserCourseDetail() {
                             )}
                                 {/* {/* <QuizSection /> */}
                             {quizContent && !quizStarted &&
-                                <Box display="flex" justifyContent="space-between">
-                                <Box>
-                                  NILAI: 0
-                                </Box>
-                                <Box>
-                                  <button onClick={() => handleStartQuiz()}>Start Quiz</button>
-                                </Box>
-                              </Box>
+                                <div className="flex flex-col md:flex-row justify-between items-center bg-gray-200 p-4 rounded-lg shadow-md">
+                                <div className="font-bold text-lg mb-2 md:mb-0 md:mr-2">Grade: 0</div>
+                                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => handleStartQuiz()}>Start Quiz</button>
+                              </div>                              
+                              
                             }
                             {quizContent && quizStarted ? <QuizSection quizContent={quizContent} /> : <div></div>}
                             </Grid>
