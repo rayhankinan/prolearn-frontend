@@ -168,9 +168,14 @@ export default function UserCourseDetail() {
                             )}
                                 {/* {/* <QuizSection /> */}
                             {quizContent && !quizStarted &&
+                                <Box display="flex" justifyContent="space-between">
                                 <Box>
-                                    <button onClick={() => handleStartQuiz()}>Start Quiz</button>
+                                  NILAI: 0
                                 </Box>
+                                <Box>
+                                  <button onClick={() => handleStartQuiz()}>Start Quiz</button>
+                                </Box>
+                              </Box>
                             }
                             {quizContent && quizStarted ? <QuizSection quizContent={quizContent} /> : <div></div>}
                             </Grid>
