@@ -30,6 +30,7 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, course
   const [showEditAModal, setShowEditAModal] = useState(false);
   const [showEditTModal, setShowEditTModal] = useState(false);
   const [showAddQuestionModal, setShowAddQuestionModal] = useState(false);
+  const [showDeleteQuestionModal, setShowDeleteQuestionModal] = useState(false);
   const [option, setOption] = useState(0);
   const [newQuestion, setNewQuestion] = useState<string>("");
   const [newAnswer, setNewAnswer] = useState("");
@@ -38,10 +39,15 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, course
   const [newAnswerC, setNewAnswerC] = useState<options>({ content: "", isCorrect: false });
   const [newAnswerD, setNewAnswerD] = useState<options>({ content: "", isCorrect: false });
   const [quizTitle, setQuizTitle] = useState<string>('');
+  const [idQuiz, setIdQuiz] = useState<number>(0);
 
   const setQuizContent = (content: any) => {
     quizContent = content;
   }
+
+  const getQuizIndex = (quizId: number) => {
+    return quizContent.content.questions.findIndex((quiz) => quizContent.id === quizId);
+  };
 
   const handleCorrectAnswerChange = (event: React.ChangeEvent<HTMLSelectElement>, index: number) => {
     const newQuizContent = { ...quizContent };
@@ -93,15 +99,27 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, course
     }
   }
 
-  const handleDeleteQuestion = () => {
-    const newQuestions = questions.content.questions.filter((question, index) => index !== currentQuestion);
-    setQuestions({ content: { questions: newQuestions } });
-    if (isFirstQuestion) {
-      setCurrentQuestion((prev) => prev);
-    } else {
-      setCurrentQuestion((prev) => prev - 1);
+  const handleDeleteQuestion = (index: number) => {
+    const newQuestions = {
+      ...questions,
+      content: {
+        ...questions.content,
+        questions: [
+          ...questions.content.questions.slice(0, index),
+          ...questions.content.questions.slice(index + 1),
+        ],
+      },
+    };
+
+    setQuestions(newQuestions);
+
+    if (index === currentQuestion) {
+      setCurrentQuestion(0);
+    } else if (index < currentQuestion) {
+      setCurrentQuestion(currentQuestion - 1);
     }
-  }
+  };
+  
 
   // const handleSaveTitleClick = async () => {
   //   try {
@@ -221,50 +239,66 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, course
             </div>
           </div>
           <div className="flex flex-col mt-6">
-            {/* <h1 className="text-2xl font-bold">{quizContent.content.questions[currentQuestion].content}</h1> */}
-            <h1 className="text-2xl font-bold" dangerouslySetInnerHTML={{ __html: quizContent.content.questions[currentQuestion].content }}></h1>
-            <div className="flex flex-col mt-6">
-              <button 
-                className="bg-blue-500 text-white mr-2 font-bold py-2 px-4 rounded hover:bg-blue-700" 
-                onClick={() => {
-                  setShowEditAModal(true);
-                }}
+          {quizContent.content.questions.length > 0 && currentQuestion < quizContent.content.questions.length ? (
+            <>
+              {/* <h1 className="text-2xl font-bold">{quizContent.content.questions[currentQuestion].content}</h1> */}
+              <h1 className="text-2xl font-bold" dangerouslySetInnerHTML={{ __html: quizContent.content.questions[currentQuestion].content }}></h1>
+              <div className="flex flex-col mt-6">
+                <button 
+                  className="bg-blue-500 text-white mr-2 font-bold py-2 px-4 rounded hover:bg-blue-700" 
+                  onClick={() => {
+                    setShowEditAModal(true);
+                  }}
                 >
-                    <i className="fas fa-edit"></i>
-              </button>
-              {quizContent.content.questions[currentQuestion].options.map((answer, index) => (
-                <div className="flex flex-row mt-4">
+                  <i className="fas fa-edit"></i>
+                </button>
+                {quizContent.content.questions[currentQuestion].options.map((answer, index) => (
+                  <div className="flex flex-row mt-4">
                     <div className="flex w-1/6 ">
-                        <div className="">
-                            <p className="text-xl font-bold">Opsi {index + 1}</p>
-                        </div>
+                      <div className="">
+                        <p className="text-xl font-bold">Opsi {index + 1}</p>
+                      </div>
                     </div>
                     <div className="w-5/6" style={{paddingTop: "4px"}}>
-                        <label htmlFor={`answer${index}`}>{answer.content}</label>
+                      <label htmlFor={`answer${index}`}>{answer.content}</label>
                     </div>
+                  </div>
+                ))}
+              </div>
+              <div className="flex flex-row mt-12 mb-4">
+                <div className="w-1/2">
+                  <button 
+                  className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
+                  onClick={() => setShowAddQuestionModal(true)}
+                  >
+                    Add Question
+                  </button>
                 </div>
-              ))}
+                <div className="w-1/2 text-end">
+                  <button 
+                  className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
+                  onClick={() => setShowDeleteQuestionModal(true)}
+                  >
+                    Delete Question
+                  </button>
+                </div>
+              </div>
+            </>
+          ) : (
+            <div className="flex flex-col justify-center items-center mt-6">
+              <p className="text-2xl font-bold">There are no questions in this quiz yet.</p>
+              <button 
+                className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 mt-4" 
+                onClick={() => {
+                  setShowAddQuestionModal(true);
+                }}
+              >
+                Add Question
+              </button>
             </div>
-          </div>
+          )}
         </div>
-
-        <div className="flex flex-row mt-12 mb-4">
-          <div className="w-1/2">
-            <button 
-            className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
-            onClick={() => setShowAddQuestionModal(true)}
-            >
-              Add Question
-            </button>
-          </div>
-          <div className="w-1/2 text-end">
-            <button className="bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-700" onClick={handleDeleteQuestion}>
-              Delete Question
-            </button>
-          </div>
         </div>
-
-
         <div className="flex flex-row mt-12 mb-10">
           {!isFirstQuestion && (
             <div className="w-1/2">
@@ -429,6 +463,63 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, course
             </div>
           </div>
         </div>
+      )}
+      {showDeleteQuestionModal && (
+      <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
+        <div className="bg-white w-1/2 h-1/2 rounded-md flex flex-col justify-center items-center">
+          <h1 className="text-2xl font-bold">Delete Question</h1>
+          <p className="text-lg font-bold mt-4">
+            Are you sure you want to delete this question?
+          </p>
+          <div className="flex flex-col mt-2">
+            {questions.content.questions.map((question, index) => (
+              <div key={index} className="flex flex-row items-center mt-2">
+                <p className="text-lg font-bold mr-2">
+                  {index + 1}. {question.content}
+                </p>
+                <button
+                  className="bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-700"
+                  onClick={() => {
+                    const updatedQuestions = [...questions.content.questions];
+                    updatedQuestions.splice(index, 1);
+                    setQuestions({
+                      ...questions,
+                      content: {
+                        ...questions.content,
+                        questions: updatedQuestions,
+                      },
+                    });
+                    setCurrentQuestion(0);
+                  }}
+                >
+                  Delete
+                </button>
+              </div>
+            ))}
+          </div>
+          <div className="flex flex-row mt-2 justify-between">
+            <button
+              className="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-700 mt-4 mr-4"
+              onClick={() => {
+                setShowDeleteQuestionModal(false);
+              }}
+            >
+              Cancel
+            </button>
+            <button
+              className="bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-700 mt-4"
+              onClick={() => {
+                // save changes to questions
+                setCurrentQuestion(0);
+                handleFinishClick();
+                setShowDeleteQuestionModal(false);
+              }}
+            >
+              Save
+            </button>
+          </div>
+        </div>
+      </div>
       )}
       {showAddQuestionModal && (
         <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
