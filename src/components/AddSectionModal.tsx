@@ -136,7 +136,7 @@ const AddSectionModal = ({
       return newList;
     });
     setTrueAnswer((prev) => {
-      const newTrueAnswer = [...prev];
+      const newTrueAnswer: any = [...prev];
       newTrueAnswer[index] = value;
       return newTrueAnswer;
     });

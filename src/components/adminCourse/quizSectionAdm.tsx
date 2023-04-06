@@ -23,6 +23,7 @@ type options = {
 
 const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, courseId, materialId }) => {
   const [name, setName] = useState(title || "");
+  const [questions, setQuestions] = useState<Quiz>(quizContent);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [showEditQModal, setShowEditQModal] = useState(false);
@@ -36,9 +37,7 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, course
   const [newAnswerB, setNewAnswerB] = useState<options>({ content: "", isCorrect: false });
   const [newAnswerC, setNewAnswerC] = useState<options>({ content: "", isCorrect: false });
   const [newAnswerD, setNewAnswerD] = useState<options>({ content: "", isCorrect: false });
-  const [numCorrectAnswers, setNumCorrectAnswers] = useState(0);
   const [quizTitle, setQuizTitle] = useState<string>('');
-  const [idQuiz, setIdQuiz] = useState<number>(0);
   
   const handleAddQuestionClick = () => {
     setShowAddQuestionModal(true);
@@ -82,11 +81,11 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, course
   }
 
   const handleDeleteQuestion = () => {
-    quizContent.content.questions.splice(currentQuestion, 1);
+    const newQuestions = questions.content.questions.filter((question, index) => index !== currentQuestion);
+    setQuestions({ content: { questions: newQuestions } });
     if (isFirstQuestion) {
-      setCurrentQuestion((prev) => prev + 1);
-    }
-    if (isLastQuestion) {
+      setCurrentQuestion((prev) => prev);
+    } else {
       setCurrentQuestion((prev) => prev - 1);
     }
   }
@@ -102,7 +101,7 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, course
 
   const handleNextClick = () => {
     // setCurrentQuestion((prev) => prev + 1);
-    if (currentQuestion < quizContent.content.questions.length - 1) {
+    if (currentQuestion < questions.content.questions.length - 1) {
       setCurrentQuestion((prev) => prev + 1);
     } else {
       handleFinishClick();
@@ -141,7 +140,7 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, course
       formData.append('file', file);
     }
 
-    formData.append('quizContent', JSON.stringify(quizContent.content));
+    formData.append('quizContent', JSON.stringify(questions.content));
 
     sectionService.update(materialId.toString(), formData)
     .then((res) => {
@@ -155,16 +154,17 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, course
 
   const handleCloseModalClick = () => {
     setShowModal(false);
+    window.location.reload();
   };
 
-  const isLastQuestion = currentQuestion === quizContent.content.questions.length - 1;
+  const isLastQuestion = currentQuestion === questions.content.questions.length - 1;
   const isFirstQuestion = currentQuestion === 0;
 
-  console.log(quizContent.content);
-  console.log(currentQuestion);
-  console.log(courseId);
-  console.log(materialId);
-  console.log(name);
+  // console.log(questions);
+  // console.log(currentQuestion);
+  // console.log(courseId);
+  // console.log(materialId);
+  // console.log(name);
 
   return (
     <div className="bg-gray-100 w-full h-full p-6 rounded-md">
@@ -173,7 +173,7 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, course
           <div className="w-2/3">
             <div className="flex flex-col">
               <div className="flex flex-row">
-                <h1 className="text-4xl font-bold">{quizContent.content.title}</h1>
+                <h1 className="text-4xl font-bold">{questions.content.title}</h1>
                 <button 
                 className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 ml-6 flex justify-center"
                 onClick={() => handleEditTitleClick()}
@@ -203,15 +203,15 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, course
             </div>
             <div className="w-1/2 text-end">
               <h1 className="text-2xl font-bold">
-                {currentQuestion + 1} / {quizContent.content.questions.length}
+                {currentQuestion + 1} / {questions.content.questions.length}
               </h1>
             </div>
           </div>
           <div className="flex flex-col mt-6">
             {/* <h1 className="text-2xl font-bold">{quizContent.content.questions[currentQuestion].content}</h1> */}
-            <h1 className="text-2xl font-bold" dangerouslySetInnerHTML={{ __html: quizContent.content.questions[currentQuestion].content }}></h1>
+            <h1 className="text-2xl font-bold" dangerouslySetInnerHTML={{ __html: questions.content.questions[currentQuestion].content }}></h1>
             <div className="flex flex-col mt-6">
-              {quizContent.content.questions[currentQuestion].options.map((answer, index) => (
+              {questions.content.questions[currentQuestion].options.map((answer, index) => (
                 <div className="flex flex-row mt-4">
                     <div className="flex w-1/6 ">
                         <div className="">
@@ -290,12 +290,6 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, course
                 >
                   Close
                 </button>
-                <button
-                  className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 mt-4 ml-4"
-                  // onClick={handleCloseModalClick}
-                >
-                  Next
-                </button>
               </div>
             </div>
           </div>
@@ -318,7 +312,7 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, course
                   className="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-700 mt-4 mr-4"
                   onClick={() => {
                     setShowEditQModal(false);
-                    quizContent.content.questions[currentQuestion].content = newQuestion;
+                    questions.content.questions[currentQuestion].content = newQuestion;
                   }}
                 >
                   Save
@@ -351,7 +345,7 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, course
                   className="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-700 mt-4 mr-4"
                   onClick={() => {
                     setShowEditAModal(false);
-                    quizContent.content.questions[currentQuestion].options[option].content = newAnswer;
+                    questions.content.questions[currentQuestion].options[option].content = newAnswer;
                     setNewAnswer("");
                   }}
                 >
@@ -383,7 +377,7 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, course
                 className="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-700 mt-4 mr-4"
                 onClick={() => {
                   setShowEditTModal(false);
-                  quizContent.content.title = quizTitle;
+                  questions.content.title = quizTitle;
                 }}
               >
                 Save
@@ -447,7 +441,7 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, course
                   className="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-700 mr-2"
                   onClick={() => {
                     setShowAddQuestionModal(false);
-                    quizContent.content.questions.push({
+                    questions.content.questions.push({
                       content: newQuestion,
                       options: [
                         newAnswerA,
