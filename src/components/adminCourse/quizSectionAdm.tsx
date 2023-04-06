@@ -38,6 +38,17 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, course
   const [newAnswerC, setNewAnswerC] = useState<options>({ content: "", isCorrect: false });
   const [newAnswerD, setNewAnswerD] = useState<options>({ content: "", isCorrect: false });
   const [quizTitle, setQuizTitle] = useState<string>('');
+
+  const setQuizContent = (content: any) => {
+    quizContent = content;
+  }
+
+  const handleCorrectAnswerChange = (event: React.ChangeEvent<HTMLSelectElement>, index: number) => {
+    const newQuizContent = { ...quizContent };
+    newQuizContent.content.questions[currentQuestion].options[index].isCorrect = event.target.value === "true";
+    setQuizContent(newQuizContent);
+
+  };
   
   const handleAddQuestionClick = () => {
     setShowAddQuestionModal(true);
@@ -51,8 +62,10 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, course
     setNewQuestion(value);
   };
 
-  const handleAnswerChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNewAnswer(event.target.value);
+  const handleAnswerChange = (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
+    const newQuizContent = { ...quizContent };
+    newQuizContent.content.questions[currentQuestion].options[index].content = event.target.value;
+    setQuizContent(newQuizContent);
   };
 
   const handleAnswerChangeA = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -209,24 +222,21 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, course
           </div>
           <div className="flex flex-col mt-6">
             {/* <h1 className="text-2xl font-bold">{quizContent.content.questions[currentQuestion].content}</h1> */}
-            <h1 className="text-2xl font-bold" dangerouslySetInnerHTML={{ __html: questions.content.questions[currentQuestion].content }}></h1>
+            <h1 className="text-2xl font-bold" dangerouslySetInnerHTML={{ __html: quizContent.content.questions[currentQuestion].content }}></h1>
             <div className="flex flex-col mt-6">
-              {questions.content.questions[currentQuestion].options.map((answer, index) => (
+              <button 
+                className="bg-blue-500 text-white mr-2 font-bold py-2 px-4 rounded hover:bg-blue-700" 
+                onClick={() => {
+                  setShowEditAModal(true);
+                }}
+                >
+                    <i className="fas fa-edit"></i>
+              </button>
+              {quizContent.content.questions[currentQuestion].options.map((answer, index) => (
                 <div className="flex flex-row mt-4">
                     <div className="flex w-1/6 ">
                         <div className="">
-                            <button 
-                            className="bg-blue-500 text-white mr-2 font-bold py-2 px-4 rounded hover:bg-blue-700" 
-                            onClick={() => {
-                              setShowEditAModal(true);
-                              setOption(index);}
-                            }
-                            >
-                                <i className="fas fa-edit"></i>
-                            </button>
-                            {/* <button className="bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-700">
-                                <i className="fas fa-trash"></i>
-                            </button> */}
+                            <p className="text-xl font-bold">Opsi {index + 1}</p>
                         </div>
                     </div>
                     <div className="w-5/6" style={{paddingTop: "4px"}}>
@@ -328,40 +338,68 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, course
           </div>
         )
       }
-      {
-        showEditAModal && (
-          <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
-            <div className="bg-white w-1/2 h-1/2 rounded-md flex flex-col justify-center items-center">
-              <h1 className="text-2xl font-bold">Enter New Answers</h1>
-              <input
-                type="text"
-                className="border-2 border-gray-300 p-2 rounded-md w-1/2 mb-12 mt-12"
-                placeholder="Enter New Answers"
-                value={newAnswer}
-                onChange={handleAnswerChange}
-              />
-              <div className="flex flex-row mt-2 justify-between">
-                <button
-                  className="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-700 mt-4 mr-4"
-                  onClick={() => {
-                    setShowEditAModal(false);
-                    questions.content.questions[currentQuestion].options[option].content = newAnswer;
-                    setNewAnswer("");
-                  }}
-                >
-                  Save
-                </button>
-                <button
-                  className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 mt-4 ml-4"
-                  onClick={() => setShowEditAModal(false)}
-                >
-                  Cancel
-                </button>
+      {showEditAModal && (
+        <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white w-1/2 h-1/2 rounded-md flex flex-col justify-center items-center">
+            <h1 className="text-2xl font-bold">Enter New Answers</h1>
+            {[0, 1, 2, 3].map((index) => (
+              <div className="flex flex-row mt-4" key={index}>
+                <div className="flex w-3/12 ">
+                  <div className="">
+                    <p className="text-l font-bold">Opsi {index + 1}</p>
+                  </div>
+                </div>
+                <div className="w-6/12" style={{ paddingTop: "4px" }}>
+                  <input
+                    type="text"
+                    className="border-2 border-gray-300 p-2 rounded-md w-full mb-4"
+                    placeholder={`Enter New Answer ${index + 1}`}
+                    defaultValue={
+                      quizContent.content.questions[currentQuestion].options[index]
+                        .content
+                    }
+                    onChange={(event) =>
+                      handleAnswerChange(event, index)
+                    }
+                  />
+                </div>
+                <div className="flex w-3/12">
+                  <select
+                    className="border-2 border-gray-300 p-2 rounded-md w-full mb-4"
+                    value={
+                      quizContent.content.questions[currentQuestion].options[index]
+                        .isCorrect
+                    }
+                    onChange={(event) =>
+                      handleCorrectAnswerChange(event, index)
+                    }
+                  >
+                    <option value={true}>Correct</option>
+                    <option value={false}>Incorrect</option>
+                  </select>
+                </div>
               </div>
+            ))}
+            <div className="flex flex-row mt-2 justify-between">
+              <button
+                className="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-700 mt-4 mr-4"
+                onClick={() => {
+                  setShowEditAModal(false);
+                  
+                }}
+              >
+                Save
+              </button>
+              <button
+                className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 mt-4 ml-4"
+                onClick={() => setShowEditAModal(false)}
+              >
+                Cancel
+              </button>
             </div>
           </div>
-        )
-      }
+        </div>
+      )}
       {showEditTModal && (
         <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
           <div className="bg-white w-1/2 h-1/2 rounded-md flex flex-col justify-center items-center">
