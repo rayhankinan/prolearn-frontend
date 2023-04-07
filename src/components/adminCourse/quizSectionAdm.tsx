@@ -31,6 +31,7 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, course
   const [showEditTModal, setShowEditTModal] = useState(false);
   const [showAddQuestionModal, setShowAddQuestionModal] = useState(false);
   const [showDeleteQuestionModal, setShowDeleteQuestionModal] = useState(false);
+  const [showDeleteModal,setShowDeleteModal] = useState(false);
   const [option, setOption] = useState(0);
   const [newQuestion, setNewQuestion] = useState<string>("");
   const [newAnswer, setNewAnswer] = useState("");
@@ -39,6 +40,7 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, course
   const [newAnswerC, setNewAnswerC] = useState<options>({ content: "", isCorrect: false });
   const [newAnswerD, setNewAnswerD] = useState<options>({ content: "", isCorrect: false });
   const [quizTitle, setQuizTitle] = useState<string>('');
+  const [deleteMode, setDeleteMode] = useState(false);
   const [idQuiz, setIdQuiz] = useState<number>(0);
 
   const setQuizContent = (content: any) => {
@@ -99,28 +101,6 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, course
     }
   }
 
-  const handleDeleteQuestion = (index: number) => {
-    const newQuestions = {
-      ...questions,
-      content: {
-        ...questions.content,
-        questions: [
-          ...questions.content.questions.slice(0, index),
-          ...questions.content.questions.slice(index + 1),
-        ],
-      },
-    };
-
-    setQuestions(newQuestions);
-
-    if (index === currentQuestion) {
-      setCurrentQuestion(0);
-    } else if (index < currentQuestion) {
-      setCurrentQuestion(currentQuestion - 1);
-    }
-  };
-  
-
   // const handleSaveTitleClick = async () => {
   //   try {
   //     await quizService.updateTitle(idQuiz, quizTitle);
@@ -180,11 +160,21 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, course
     .catch((err) => {
       console.log(err);
     });
-    setShowModal(true);
+
+    if(deleteMode === true) {
+      setShowDeleteModal(true);
+    } else {
+      setShowModal(true);
+    }
   };
 
   const handleCloseModalClick = () => {
     setShowModal(false);
+    window.location.reload();
+  };
+
+  const handleCloseDeleteModalClick = () => {
+    setShowDeleteModal(false);
     window.location.reload();
   };
 
@@ -200,125 +190,129 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, course
   return (
     <div className="bg-gray-100 w-full h-full p-6 rounded-md">
       <div className="flex flex-col font-sans">
-        <div className="flex flex-row w-full">
-          <div className="w-2/3">
-            <div className="flex flex-col">
-              <div className="flex flex-row">
-                <h1 className="text-4xl font-bold">{questions.content.title}</h1>
-                <button 
-                className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 ml-6 flex justify-center"
-                onClick={() => handleEditTitleClick()}
+          <div className="flex flex-col">
+            {quizContent.content.questions.length > 0 && currentQuestion < quizContent.content.questions.length ? (
+              <>
+                <div className="flex flex-row w-full">
+                  <div className="w-2/3">
+                    <div className="flex flex-col">
+                      <div className="flex flex-row">
+                        <h1 className="text-4xl font-bold">{questions.content.title}</h1>
+                        <button 
+                        className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 ml-6 flex justify-center"
+                        onClick={() => handleEditTitleClick()}
 
-                >
-                  <i className="fas fa-edit" style={{paddingTop: "3px"}}></i>
-                </button>
-              </div>
-              <h1 className="mt-6">Answer The Question Below</h1>
-            </div>
-          </div>
-          <div className="w-1/3 text-end">
-            <h2 className="text-2xl">Timer : 00:00:00</h2>
-          </div>
-        </div>
-
-        <div className="flex flex-col mt-6">
-          <div className="flex flex-row">
-            <div className="w-1/2 flex flex-row">
-              <h1 className="text-2xl font-bold">Question {currentQuestion + 1}</h1>
-              <button 
-              className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 ml-6 flex justify-center"
-              onClick={() => setShowEditQModal(true)}
-              >
-                <i className="fas fa-edit"></i>
-                </button>
-            </div>
-            <div className="w-1/2 text-end">
-              <h1 className="text-2xl font-bold">
-                {currentQuestion + 1} / {questions.content.questions.length}
-              </h1>
-            </div>
-          </div>
-          <div className="flex flex-col mt-6">
-          {quizContent.content.questions.length > 0 && currentQuestion < quizContent.content.questions.length ? (
-            <>
-              {/* <h1 className="text-2xl font-bold">{quizContent.content.questions[currentQuestion].content}</h1> */}
-              <h1 className="text-2xl font-bold" dangerouslySetInnerHTML={{ __html: quizContent.content.questions[currentQuestion].content }}></h1>
-              <div className="flex flex-col mt-6">
-                <button 
-                  className="bg-blue-500 text-white mr-2 font-bold py-2 px-4 rounded hover:bg-blue-700" 
-                  onClick={() => {
-                    setShowEditAModal(true);
-                  }}
-                >
-                  <i className="fas fa-edit"></i>
-                </button>
-                {quizContent.content.questions[currentQuestion].options.map((answer, index) => (
-                  <div className="flex flex-row mt-4">
-                    <div className="flex w-1/6 ">
-                      <div className="">
-                        <p className="text-xl font-bold">Opsi {index + 1}</p>
+                        >
+                          <i className="fas fa-edit" style={{paddingTop: "3px"}}></i>
+                        </button>
                       </div>
-                    </div>
-                    <div className="w-5/6" style={{paddingTop: "4px"}}>
-                      <label htmlFor={`answer${index}`}>{answer.content}</label>
+                      <h1 className="mt-6">Answer The Question Below</h1>
                     </div>
                   </div>
-                ))}
-              </div>
-              <div className="flex flex-row mt-12 mb-4">
-                <div className="w-1/2">
-                  <button 
-                  className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
-                  onClick={() => setShowAddQuestionModal(true)}
-                  >
-                    Add Question
-                  </button>
+                  <div className="w-1/3 text-end">
+                    <h2 className="text-2xl">Timer : 00:00:00</h2>
+                  </div>
                 </div>
-                <div className="w-1/2 text-end">
-                  <button 
-                  className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
-                  onClick={() => setShowDeleteQuestionModal(true)}
-                  >
-                    Delete Question
-                  </button>
+
+                <div className="flex flex-col mt-6">
+                  <div className="flex flex-row mb-6">
+                    <div className="w-1/2 flex flex-row">
+                      <h1 className="text-2xl font-bold">Question {currentQuestion + 1}</h1>
+                      <button 
+                      className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 ml-6 flex justify-center"
+                      onClick={() => setShowEditQModal(true)}
+                      >
+                        <i className="fas fa-edit"></i>
+                        </button>
+                    </div>
+                    <div className="w-1/2 text-end">
+                      <h1 className="text-2xl font-bold">
+                        {currentQuestion + 1} / {questions.content.questions.length}
+                      </h1>
+                    </div>
+                  </div>
+                  <h1 className="text-2xl font-bold" dangerouslySetInnerHTML={{ __html: quizContent.content.questions[currentQuestion].content }}></h1>
+                  <div className="flex flex-col mt-6">
+                    <button 
+                      className="bg-blue-500 text-white mr-2 font-bold py-2 px-4 rounded hover:bg-blue-700" 
+                      onClick={() => {
+                        setShowEditAModal(true);
+                      }}
+                    >
+                      <i className="fas fa-edit"></i>
+                    </button>
+                    {quizContent.content.questions[currentQuestion].options.map((answer, index) => (
+                      <div className="flex flex-row mt-4">
+                        <div className="flex w-1/6 ">
+                          <div className="">
+                            <p className="text-xl font-bold">Opsi {index + 1}</p>
+                          </div>
+                        </div>
+                        <div className="w-5/6" style={{paddingTop: "4px"}}>
+                          <label htmlFor={`answer${index}`}>{answer.content}</label>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
+
+                <div className="flex flex-row mt-12 mb-4">
+                  <div className="w-1/2">
+                    <button 
+                    className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
+                    onClick={() => setShowAddQuestionModal(true)}
+                    >
+                      Add Question
+                    </button>
+                  </div>
+                  <div className="w-1/2 text-end">
+                    <button 
+                    className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
+                    onClick={() => {
+                      setShowDeleteQuestionModal(true);
+                      setDeleteMode(true);
+                    }}
+                    >
+                      Delete Question
+                    </button>
+                  </div>
+                </div>
+
+                <div className="flex flex-row mt-12 mb-10">
+                  {!isFirstQuestion && (
+                    <div className="w-1/2">
+                      <button
+                        className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
+                        onClick={handlePrevClick}
+                      >
+                        Prev
+                      </button>
+                    </div>
+                  )}
+                  <div className="w-1/2 text-end">
+                    <button
+                      className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
+                      onClick={handleNextClick}
+                    >
+                      {isLastQuestion ? "Finish" : "Next"}
+                    </button>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <div className="flex flex-col justify-center items-center mt-6">
+                <p className="text-2xl font-bold">There are no questions in this quiz yet.</p>
+                <button 
+                  className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 mt-4" 
+                  onClick={() => {
+                    setShowAddQuestionModal(true);
+                  }}
+                >
+                  Add Question
+                </button>
               </div>
-            </>
-          ) : (
-            <div className="flex flex-col justify-center items-center mt-6">
-              <p className="text-2xl font-bold">There are no questions in this quiz yet.</p>
-              <button 
-                className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 mt-4" 
-                onClick={() => {
-                  setShowAddQuestionModal(true);
-                }}
-              >
-                Add Question
-              </button>
-            </div>
-          )}
-        </div>
-        </div>
-        <div className="flex flex-row mt-12 mb-10">
-          {!isFirstQuestion && (
-            <div className="w-1/2">
-              <button
-                className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
-                onClick={handlePrevClick}
-              >
-                Prev
-              </button>
-            </div>
-          )}
-          <div className="w-1/2 text-end">
-            <button
-              className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
-              onClick={handleNextClick}
-            >
-              {isLastQuestion ? "Finish" : "Next"}
-            </button>
+            )}
           </div>
-        </div>
       </div>
       {
         showModal && (
@@ -331,6 +325,25 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, course
                 <button
                   className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 mt-4 mr-4"
                   onClick={handleCloseModalClick}
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        )
+      }
+      {
+        showDeleteModal && (
+          <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
+            <div className="bg-white w-1/2 h-1/2 rounded-md flex flex-col justify-center items-center">
+              <img src="../../prize.png" alt="prize" className="w-40 h-40 mb-12" />
+              <h1 className="text-2xl font-bold">Horay</h1>
+              <h1 className="text-2xl font-bold mt-4">You have deleted the question</h1>
+              <div className="flex flex-row mt-12 justify-between">
+                <button
+                  className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 mt-4 mr-4"
+                  onClick={handleCloseDeleteModalClick}
                 >
                   Close
                 </button>
@@ -419,7 +432,6 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, course
                 className="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-700 mt-4 mr-4"
                 onClick={() => {
                   setShowEditAModal(false);
-                  
                 }}
               >
                 Save
@@ -465,61 +477,86 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, course
         </div>
       )}
       {showDeleteQuestionModal && (
-      <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
-        <div className="bg-white w-1/2 h-1/2 rounded-md flex flex-col justify-center items-center">
-          <h1 className="text-2xl font-bold">Delete Question</h1>
-          <p className="text-lg font-bold mt-4">
-            Are you sure you want to delete this question?
-          </p>
-          <div className="flex flex-col mt-2">
-            {questions.content.questions.map((question, index) => (
-              <div key={index} className="flex flex-row items-center mt-2">
-                <p className="text-lg font-bold mr-2">
-                  {index + 1}. {question.content}
-                </p>
-                <button
-                  className="bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-700"
-                  onClick={() => {
-                    const updatedQuestions = [...questions.content.questions];
-                    updatedQuestions.splice(index, 1);
-                    setQuestions({
-                      ...questions,
-                      content: {
-                        ...questions.content,
-                        questions: updatedQuestions,
-                      },
-                    });
-                    setCurrentQuestion(0);
-                  }}
-                >
-                  Delete
-                </button>
-              </div>
-            ))}
-          </div>
-          <div className="flex flex-row mt-2 justify-between">
-            <button
-              className="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-700 mt-4 mr-4"
-              onClick={() => {
-                setShowDeleteQuestionModal(false);
-              }}
-            >
-              Cancel
-            </button>
-            <button
-              className="bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-700 mt-4"
-              onClick={() => {
-                // save changes to questions
-                setCurrentQuestion(0);
-                handleFinishClick();
-                setShowDeleteQuestionModal(false);
-              }}
-            >
-              Save
-            </button>
+        <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white w-1/2 h-1/2 rounded-md flex flex-col justify-center items-center">
+            <h1 className="text-2xl font-bold mb-4">Delete Question</h1>
+            <p className="text-lg font-bold mb-4">
+              Are you sure you want to delete this question?
+            </p>
+            <div className="flex flex-col pl-6 pr-6 pt-6 overflow-y-auto">
+              {questions.content.questions.map((question, index) => (
+                <div key={index} className="flex items-center mb-2">
+                  <p className="text-lg font-bold mr-2" dangerouslySetInnerHTML={{ __html: `Question-${index + 1}:${question.content}` }}>
+                  </p>
+                  <button
+                    className="bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-700"
+                    onClick={() => {
+                      const updatedQuestions = [...questions.content.questions];
+                      const theFirstQuestion = index === 0;
+                      const theLastQuestion = index === updatedQuestions.length - 1;
+                      const theOnlyQuestion = updatedQuestions.length === 1;
+
+                      updatedQuestions.splice(index, 1);
+                      setQuestions({
+                        ...questions,
+                        content: {
+                          ...questions.content,
+                          questions: updatedQuestions,
+                        },
+                      });
+                      if (theFirstQuestion && !theOnlyQuestion) {
+                        setCurrentQuestion(0);
+                      } else if (theLastQuestion && !theOnlyQuestion) {
+                        setCurrentQuestion(updatedQuestions.length - 1);
+                      } else if (theOnlyQuestion) {
+                        
+                      } else {
+                        setCurrentQuestion(currentQuestion - 1);
+                      }
+                    }}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              ))}
+            </div>
+            <div className="flex justify-end mt-4">
+              <button
+                className="bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-700 mr-2"
+                onClick={() => {
+                  setCurrentQuestion(0);
+                  handleFinishClick();
+                  setDeleteMode(false);
+                  setShowDeleteQuestionModal(false);
+                }}
+              >
+                Save
+              </button>
+              <button
+                className="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-700"
+                onClick={() => {
+                  setShowDeleteQuestionModal(false);
+                  setDeleteMode(false);
+                }}
+              >
+                Cancel
+              </button>
+            </div>
           </div>
         </div>
-      </div>
       )}
       {showAddQuestionModal && (
         <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
@@ -594,8 +631,6 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, course
           </div>
         </div>
       )}
-
-
     </div>
   );
 };
