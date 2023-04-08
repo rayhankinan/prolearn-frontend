@@ -50,18 +50,11 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, course
   const getQuizIndex = (quizId: number) => {
     return quizContent.content.questions.findIndex((quiz) => quizContent.id === quizId);
   };
-
-  const handleCorrectAnswerChange = (event: React.ChangeEvent<HTMLSelectElement>, index: number) => {
-    const newQuizContent = { ...quizContent };
-    newQuizContent.content.questions[currentQuestion].options[index].isCorrect = event.target.value === "true";
-    setQuizContent(newQuizContent);
-
-  };
   
   const handleAddQuestionClick = () => {
     setShowAddQuestionModal(true);
   };
-
+  
   const handleQuizTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setQuizTitle(event.target.value);
   };
@@ -69,10 +62,16 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, course
   const handleQuestionChange = (value: string) => {
     setNewQuestion(value);
   };
-
+  
   const handleAnswerChange = (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
     const newQuizContent = { ...quizContent };
     newQuizContent.content.questions[currentQuestion].options[index].content = event.target.value;
+    setQuizContent(newQuizContent);
+  };
+  
+  const handleCorrectAnswerChange = (event: React.ChangeEvent<HTMLSelectElement>, index: number) => {
+    const newQuizContent = { ...quizContent };
+    newQuizContent.content.questions[currentQuestion].options[index].isCorrect = event.target.value === "true";
     setQuizContent(newQuizContent);
   };
 
@@ -100,15 +99,6 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, course
       setNewAnswerD({ content: newAnswerD.content, isCorrect: true });
     }
   }
-
-  // const handleSaveTitleClick = async () => {
-  //   try {
-  //     await quizService.updateTitle(idQuiz, quizTitle);
-  //     setShowEditTModal(false);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
 
   const handleNextClick = () => {
     // setCurrentQuestion((prev) => prev + 1);
@@ -181,17 +171,13 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, course
   const isLastQuestion = currentQuestion === questions.content.questions.length - 1;
   const isFirstQuestion = currentQuestion === 0;
 
-  // console.log(questions);
-  // console.log(currentQuestion);
-  // console.log(courseId);
-  // console.log(materialId);
-  // console.log(name);
+  console.log(questions);
 
   return (
     <div className="bg-gray-100 w-full h-full p-6 rounded-md">
       <div className="flex flex-col font-sans">
           <div className="flex flex-col">
-            {quizContent.content.questions.length > 0 && currentQuestion < quizContent.content.questions.length ? (
+            {questions.content.questions.length > 0 && currentQuestion <= questions.content.questions.length ? (
               <>
                 <div className="flex flex-row w-full">
                   <div className="w-2/3">
@@ -231,7 +217,7 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, course
                       </h1>
                     </div>
                   </div>
-                  <h1 className="text-2xl font-bold" dangerouslySetInnerHTML={{ __html: quizContent.content.questions[currentQuestion].content }}></h1>
+                  <h1 className="text-2xl font-bold" dangerouslySetInnerHTML={{ __html: questions.content.questions[currentQuestion].content }}></h1>
                   <div className="flex flex-col mt-6">
                     <button 
                       className="bg-blue-500 text-white mr-2 font-bold py-2 px-4 rounded hover:bg-blue-700" 
@@ -241,7 +227,7 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, course
                     >
                       <i className="fas fa-edit"></i>
                     </button>
-                    {quizContent.content.questions[currentQuestion].options.map((answer, index) => (
+                    {questions.content.questions[currentQuestion].options.map((answer, index) => (
                       <div className="flex flex-row mt-4">
                         <div className="flex w-1/6 ">
                           <div className="">
@@ -267,7 +253,7 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, course
                   </div>
                   <div className="w-1/2 text-end">
                     <button 
-                    className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
+                    className="bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
                     onClick={() => {
                       setShowDeleteQuestionModal(true);
                       setDeleteMode(true);
@@ -357,7 +343,7 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, course
           <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
             <div className="bg-white w-1/2 h-1/2 rounded-md flex flex-col justify-center items-center">
               <h1 className="text-2xl font-bold">Change your Question</h1>
-              <div style={{overflow: "auto", height: "350px"}}>
+              <div style={{overflow: "auto", height: "auto"}}>
                 <DynamicReactQuill 
                   placeholder="Write your question here"
                   value={newQuestion}
@@ -393,7 +379,7 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, course
               <div className="flex flex-row mt-4" key={index}>
                 <div className="flex w-3/12 ">
                   <div className="">
-                    <p className="text-l font-bold">Opsi {index + 1}</p>
+                    <p className="text-l font-bold">Option {index + 1}</p>
                   </div>
                 </div>
                 <div className="w-6/12" style={{ paddingTop: "4px" }}>
@@ -402,7 +388,7 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, course
                     className="border-2 border-gray-300 p-2 rounded-md w-full mb-4"
                     placeholder={`Enter New Answer ${index + 1}`}
                     defaultValue={
-                      quizContent.content.questions[currentQuestion].options[index]
+                      questions.content.questions[currentQuestion].options[index]
                         .content
                     }
                     onChange={(event) =>
@@ -413,16 +399,15 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, course
                 <div className="flex w-3/12">
                   <select
                     className="border-2 border-gray-300 p-2 rounded-md w-full mb-4"
-                    value={
-                      quizContent.content.questions[currentQuestion].options[index]
-                        .isCorrect
+                    defaultValue={
+                      questions.content.questions[currentQuestion].options[index].isCorrect ? "true" : "false"
                     }
                     onChange={(event) =>
                       handleCorrectAnswerChange(event, index)
                     }
                   >
-                    <option value={true}>Correct</option>
-                    <option value={false}>Incorrect</option>
+                    <option value="true">Correct</option>
+                    <option value="false">Incorrect</option>
                   </select>
                 </div>
               </div>
@@ -434,13 +419,7 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, course
                   setShowEditAModal(false);
                 }}
               >
-                Save
-              </button>
-              <button
-                className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 mt-4 ml-4"
-                onClick={() => setShowEditAModal(false)}
-              >
-                Cancel
+                Close
               </button>
             </div>
           </div>
@@ -497,6 +476,7 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, course
                       const theOnlyQuestion = updatedQuestions.length === 1;
 
                       updatedQuestions.splice(index, 1);
+                      console.log(updatedQuestions);
                       setQuestions({
                         ...questions,
                         content: {
@@ -504,14 +484,16 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, course
                           questions: updatedQuestions,
                         },
                       });
-                      if (theFirstQuestion && !theOnlyQuestion) {
-                        setCurrentQuestion(0);
-                      } else if (theLastQuestion && !theOnlyQuestion) {
-                        setCurrentQuestion(updatedQuestions.length - 1);
-                      } else if (theOnlyQuestion) {
-                        
-                      } else {
-                        setCurrentQuestion(currentQuestion - 1);
+                      if (currentQuestion === index) {
+                        if (theFirstQuestion && !theOnlyQuestion) {
+                          setCurrentQuestion(0);
+                        } else if (theLastQuestion && !theOnlyQuestion) {
+                          setCurrentQuestion(updatedQuestions.length - 1);
+                        } else if (theOnlyQuestion) {
+                          
+                        } else {
+                          setCurrentQuestion(currentQuestion - 1);
+                        }
                       }
                     }}
                   >
@@ -535,24 +517,13 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, course
             </div>
             <div className="flex justify-end mt-4">
               <button
-                className="bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-700 mr-2"
-                onClick={() => {
-                  setCurrentQuestion(0);
-                  handleFinishClick();
-                  setDeleteMode(false);
-                  setShowDeleteQuestionModal(false);
-                }}
-              >
-                Save
-              </button>
-              <button
                 className="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-700"
                 onClick={() => {
                   setShowDeleteQuestionModal(false);
                   setDeleteMode(false);
                 }}
               >
-                Cancel
+                Close
               </button>
             </div>
           </div>
@@ -564,7 +535,7 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, course
             <h1 className="text-2xl font-bold p-4 border-b">Add Question</h1>
             <div className="p-4">
               <h2 className="mb-2">Question:</h2>
-              <div style={{overflow: "auto", height: "350px"}}>
+              <div style={{overflow: "auto", height: "auto"}}>
                 <DynamicReactQuill 
                   placeholder="Write your question here"
                   value={newQuestion}
@@ -596,7 +567,8 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, course
                 onChange={handleAnswerChangeD}
               />
               <h2 className="mb-2">Correct Answer:</h2>
-              <select className="border-gray-400 border-2 p-2 rounded-md w-full mb-4" onChange={handleNewCorrectAnswer}>
+              <select className="border-gray-400 border-2 p-2 rounded-md w-full mb-4" defaultValue={""} onChange={handleNewCorrectAnswer}>
+                <option value="" disabled>Choose Answer</option>
                 <option value="A">A</option>
                 <option value="B">B</option>
                 <option value="C">C</option>
