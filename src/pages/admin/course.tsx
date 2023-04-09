@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
-import Card from "@mui/material/Card";
 import { Pagination } from "@mui/material";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
 import CssBaseline from "@mui/material/CssBaseline";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -43,8 +39,8 @@ export default function Album() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [showAll, setShowAll] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [file , setFile] = useState<File | null>(null);
-  
+  const [file, setFile] = useState<File | null>(null);
+
   useEffect(() => {
     CourseService.getAll({
       page: page,
@@ -134,7 +130,7 @@ export default function Album() {
   const handleEdit = (courseId?: number) => {
     if (courseId) {
       setSelectedId(courseId);
-    
+
       router.push(`/admin/course/${courseId}/description`);
     }
   };
@@ -247,8 +243,8 @@ export default function Album() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <main>
-        <Grid 
-          sx={{ 
+        <Grid
+          sx={{
             width: "70%",
             margin: "0 auto",
             marginTop: "30px",
@@ -340,12 +336,16 @@ export default function Album() {
               sx={{ alignItems: "center", marginTop: 0 }}
             >
               {courses.map((card) => (
-                <CourseCard key={card.id} course={card} handleEdit={handleEdit} handleDelete={handleDelete} />
+                <CourseCard
+                  key={card.id}
+                  course={card}
+                  handleEdit={handleEdit}
+                  handleDelete={handleDelete}
+                />
               ))}
               <Grid item>
                 <Plus handlePlusClick={handlePlusClick} />
               </Grid>
-
             </Grid>
           </Box>
         </Container>

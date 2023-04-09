@@ -21,12 +21,12 @@ interface Quiz {
             content: string;
             isCorrect: boolean;
           }
-        ],
+        ];
         content: string;
       }
-    ]
+    ];
     description: string;
-  }
+  };
 }
 
 export default Quiz;

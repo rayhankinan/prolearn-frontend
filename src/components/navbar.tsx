@@ -1,9 +1,8 @@
 import React from "react";
 import { AuthContext } from "@/contexts/AuthContext";
 
-
-const Navbar = ({isLoggedIn} : {isLoggedIn: boolean}) => {
-  const {setIsLoggedIn} = React.useContext(AuthContext);
+const Navbar = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
+  const { setIsLoggedIn } = React.useContext(AuthContext);
   return (
     <nav className="flex w-full items-center justify-between flex-wrap bg-gray-300 p-6">
       <div className="flex items-center flex-shrink-0 mr-6">

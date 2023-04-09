@@ -1,8 +1,17 @@
 import { useState, useEffect } from "react";
 import Course from "@/interfaces/course-interface";
-import { Grid, Card, CardMedia, CardContent, Button, Typography, Box, CardActions, Skeleton} from "@mui/material";
+import {
+  Grid,
+  Card,
+  CardMedia,
+  CardContent,
+  Button,
+  Typography,
+  Box,
+  CardActions,
+  Skeleton,
+} from "@mui/material";
 import FileService from "@/services/file-service";
-
 
 interface CourseCardProps {
   course: Course;
@@ -10,24 +19,18 @@ interface CourseCardProps {
   handleDelete: (id: number) => void;
 }
 
-const CourseCard= ({
-  course,
-  handleEdit,
-  handleDelete,
-} : CourseCardProps) => {
-
+const CourseCard = ({ course, handleEdit, handleDelete }: CourseCardProps) => {
   const [file, setFile] = useState<File | null>(null);
 
   useEffect(() => {
-    if (course.__thumbnail__){
-      FileService.getFile(course.__thumbnail__.id)
-      .then((response) => {
+    if (course.__thumbnail__) {
+      FileService.getFile(course.__thumbnail__.id).then((response) => {
         const selectedImage = new File([response.data], "image.png");
         setTimeout(() => {
           setFile(selectedImage);
         }, 5000);
         //setFile(selectedImage);
-      })
+      });
     }
   }, []);
   return (
@@ -39,20 +42,18 @@ const CourseCard= ({
         }}
       >
         {file && (
-        <CardMedia
-          component="img"
-          image={
-            course.__thumbnail__
-              ? `/api/file/${course.__thumbnail__.id}`
-              : "https://source.unsplash.com/random"
-          }
-          alt="random"
-          sx={{ height: "300px", objectFit: "cover" }}
-        />
+          <CardMedia
+            component="img"
+            image={
+              course.__thumbnail__
+                ? `/api/file/${course.__thumbnail__.id}`
+                : "https://source.unsplash.com/random"
+            }
+            alt="random"
+            sx={{ height: "300px", objectFit: "cover" }}
+          />
         )}
-        {!file && (
-          <Skeleton variant="rectangular" sx={{ height: "300px" }} />
-        )}
+        {!file && <Skeleton variant="rectangular" sx={{ height: "300px" }} />}
         <CardContent sx={{ flexGrow: 1 }}>
           <Typography
             gutterBottom
@@ -109,7 +110,6 @@ const CourseCard= ({
       </Card>
     </Grid>
   );
-}
+};
 
 export default CourseCard;
-            

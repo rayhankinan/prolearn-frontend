@@ -24,7 +24,7 @@ type ModalProps = {
   open: boolean;
   onClose: () => void;
   categories: Category[];
-  course : Course;
+  course: Course;
 };
 
 export const EditCourseModal = ({
@@ -43,36 +43,34 @@ export const EditCourseModal = ({
   const [imgNameError, setImgNameError] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState<String>("");
-  const [courseCategory, setCourseCategory] = useState<Category[]>(course.__categories__! as unknown as Category[]);
+  const [courseCategory, setCourseCategory] = useState<Category[]>(
+    course.__categories__! as unknown as Category[]
+  );
   const handleCloseModal = () => {
     setModalOpen(false);
   };
 
   useEffect(() => {
-    if(course.__thumbnail__ == null) return;
-    FileService
-      .getFile(course.__thumbnail__.id)
+    if (course.__thumbnail__ == null) return;
+    FileService.getFile(course.__thumbnail__.id)
       .then((response) => {
-
-        const selectedImage = new File([response.data] , "image.png");
+        const selectedImage = new File([response.data], "image.png");
         setImage(selectedImage);
       })
       .catch((error) => {
         console.log(error);
-        setImage(null)
+        setImage(null);
       });
   }, []);
 
   useEffect(() => {
-    if(courseCategory == null) return;
+    if (courseCategory == null) return;
     const selected = categories.filter((category) =>
-
       //loop the course.__category__ and check if the id is equal to the category.id
       courseCategory!.some((categories) => categories.id === category.id)
-
     );
     setSelectedCategories(selected);
-    console.log(selected)
+    console.log(selected);
   }, []);
 
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -116,7 +114,6 @@ export const EditCourseModal = ({
       __categories__: selectedCategories.map((category) => category.id),
       status: "active",
     };
-
 
     setSelectedCategories([]);
 

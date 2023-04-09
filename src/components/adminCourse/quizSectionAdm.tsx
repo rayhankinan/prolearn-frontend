@@ -17,11 +17,16 @@ interface QuizSectionProps {
 }
 
 type options = {
-  content: string,
-  isCorrect: boolean
-}
+  content: string;
+  isCorrect: boolean;
+};
 
-const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, courseId, materialId }) => {
+const QuizSectionAdm: React.FC<QuizSectionProps> = ({
+  quizContent,
+  title,
+  courseId,
+  materialId,
+}) => {
   const [name, setName] = useState(title || "");
   const [questions, setQuestions] = useState<Quiz>(quizContent);
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -31,47 +36,64 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, course
   const [showEditTModal, setShowEditTModal] = useState(false);
   const [showAddQuestionModal, setShowAddQuestionModal] = useState(false);
   const [showDeleteQuestionModal, setShowDeleteQuestionModal] = useState(false);
-  const [showDeleteModal,setShowDeleteModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [option, setOption] = useState(0);
   const [newQuestion, setNewQuestion] = useState<string>("");
   const [newAnswer, setNewAnswer] = useState("");
-  const [newAnswerA, setNewAnswerA] = useState<options>({ content: "", isCorrect: false });
-  const [newAnswerB, setNewAnswerB] = useState<options>({ content: "", isCorrect: false });
-  const [newAnswerC, setNewAnswerC] = useState<options>({ content: "", isCorrect: false });
-  const [newAnswerD, setNewAnswerD] = useState<options>({ content: "", isCorrect: false });
-  const [quizTitle, setQuizTitle] = useState<string>('');
+  const [newAnswerA, setNewAnswerA] = useState<options>({
+    content: "",
+    isCorrect: false,
+  });
+  const [newAnswerB, setNewAnswerB] = useState<options>({
+    content: "",
+    isCorrect: false,
+  });
+  const [newAnswerC, setNewAnswerC] = useState<options>({
+    content: "",
+    isCorrect: false,
+  });
+  const [newAnswerD, setNewAnswerD] = useState<options>({
+    content: "",
+    isCorrect: false,
+  });
+  const [quizTitle, setQuizTitle] = useState<string>("");
   const [deleteMode, setDeleteMode] = useState(false);
-  const [idQuiz, setIdQuiz] = useState<number>(0);
 
   const setQuizContent = (content: any) => {
     quizContent = content;
-  }
-
-  const getQuizIndex = (quizId: number) => {
-    return quizContent.content.questions.findIndex((quiz) => quizContent.id === quizId);
   };
-  
+
   const handleAddQuestionClick = () => {
     setShowAddQuestionModal(true);
   };
-  
-  const handleQuizTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+
+  const handleQuizTitleChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setQuizTitle(event.target.value);
   };
-  
+
   const handleQuestionChange = (value: string) => {
     setNewQuestion(value);
   };
-  
-  const handleAnswerChange = (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
+
+  const handleAnswerChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    index: number
+  ) => {
     const newQuizContent = { ...quizContent };
-    newQuizContent.content.questions[currentQuestion].options[index].content = event.target.value;
+    newQuizContent.content.questions[currentQuestion].options[index].content =
+      event.target.value;
     setQuizContent(newQuizContent);
   };
-  
-  const handleCorrectAnswerChange = (event: React.ChangeEvent<HTMLSelectElement>, index: number) => {
+
+  const handleCorrectAnswerChange = (
+    event: React.ChangeEvent<HTMLSelectElement>,
+    index: number
+  ) => {
     const newQuizContent = { ...quizContent };
-    newQuizContent.content.questions[currentQuestion].options[index].isCorrect = event.target.value === "true";
+    newQuizContent.content.questions[currentQuestion].options[index].isCorrect =
+      event.target.value === "true";
     setQuizContent(newQuizContent);
   };
 
@@ -98,7 +120,7 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, course
     } else if ("D" === event.target.value) {
       setNewAnswerD({ content: newAnswerD.content, isCorrect: true });
     }
-  }
+  };
 
   const handleNextClick = () => {
     // setCurrentQuestion((prev) => prev + 1);
@@ -124,34 +146,35 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, course
   const handlePrevClick = () => {
     setCurrentQuestion((prev) => prev - 1);
   };
-  
+
   const handleFinishClick = () => {
-    const html = document.querySelector('.ql-editor')?.innerHTML;
+    const html = document.querySelector(".ql-editor")?.innerHTML;
 
     const formData = new FormData();
 
-    formData.append('courseId', courseId.toString());
-    formData.append('title', name);
-    formData.append('duration', '0');
-    formData.append('objective', 'none');
-    formData.append('type', 'quiz');
+    formData.append("courseId", courseId.toString());
+    formData.append("title", name);
+    formData.append("duration", "0");
+    formData.append("objective", "none");
+    formData.append("type", "quiz");
 
     if (html) {
-      const file = new File([html], 'test.html', { type: 'text/html' });
-      formData.append('file', file);
+      const file = new File([html], "test.html", { type: "text/html" });
+      formData.append("file", file);
     }
 
-    formData.append('quizContent', JSON.stringify(questions.content));
+    formData.append("quizContent", JSON.stringify(questions.content));
 
-    sectionService.update(materialId.toString(), formData)
-    .then((res) => {
-      console.log(res);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+    sectionService
+      .update(materialId.toString(), formData)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
 
-    if(deleteMode === true) {
+    if (deleteMode === true) {
       setShowDeleteModal(true);
     } else {
       setShowModal(true);
@@ -168,7 +191,8 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, course
     window.location.reload();
   };
 
-  const isLastQuestion = currentQuestion === questions.content.questions.length - 1;
+  const isLastQuestion =
+    currentQuestion === questions.content.questions.length - 1;
   const isFirstQuestion = currentQuestion === 0;
 
   console.log(questions);
@@ -176,201 +200,230 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, course
   return (
     <div className="bg-gray-100 w-full h-full p-6 rounded-md">
       <div className="flex flex-col font-sans">
-          <div className="flex flex-col">
-            {questions.content.questions.length > 0 && currentQuestion <= questions.content.questions.length ? (
-              <>
-                <div className="flex flex-row w-full">
-                  <div className="w-2/3">
-                    <div className="flex flex-col">
-                      <div className="flex flex-row">
-                        <h1 className="text-4xl font-bold">{questions.content.title}</h1>
-                        <button 
+        <div className="flex flex-col">
+          {questions.content.questions.length > 0 &&
+          currentQuestion <= questions.content.questions.length ? (
+            <>
+              <div className="flex flex-row w-full">
+                <div className="w-2/3">
+                  <div className="flex flex-col">
+                    <div className="flex flex-row">
+                      <h1 className="text-4xl font-bold">
+                        {questions.content.title}
+                      </h1>
+                      <button
                         className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 ml-6 flex justify-center"
                         onClick={() => handleEditTitleClick()}
-
-                        >
-                          <i className="fas fa-edit" style={{paddingTop: "3px"}}></i>
-                        </button>
-                      </div>
-                      <h1 className="mt-6">Answer The Question Below</h1>
+                      >
+                        <i
+                          className="fas fa-edit"
+                          style={{ paddingTop: "3px" }}
+                        ></i>
+                      </button>
                     </div>
-                  </div>
-                  <div className="w-1/3 text-end">
-                    <h2 className="text-2xl">Timer : 00:00:00</h2>
+                    <h1 className="mt-6">Answer The Question Below</h1>
                   </div>
                 </div>
+                <div className="w-1/3 text-end">
+                  <h2 className="text-2xl">Timer : 00:00:00</h2>
+                </div>
+              </div>
 
-                <div className="flex flex-col mt-6">
-                  <div className="flex flex-row mb-6">
-                    <div className="w-1/2 flex flex-row">
-                      <h1 className="text-2xl font-bold">Question {currentQuestion + 1}</h1>
-                      <button 
+              <div className="flex flex-col mt-6">
+                <div className="flex flex-row mb-6">
+                  <div className="w-1/2 flex flex-row">
+                    <h1 className="text-2xl font-bold">
+                      Question {currentQuestion + 1}
+                    </h1>
+                    <button
                       className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 ml-6 flex justify-center"
                       onClick={() => setShowEditQModal(true)}
-                      >
-                        <i className="fas fa-edit"></i>
-                        </button>
-                    </div>
-                    <div className="w-1/2 text-end">
-                      <h1 className="text-2xl font-bold">
-                        {currentQuestion + 1} / {questions.content.questions.length}
-                      </h1>
-                    </div>
-                  </div>
-                  <h1 className="text-2xl font-bold" dangerouslySetInnerHTML={{ __html: questions.content.questions[currentQuestion].content }}></h1>
-                  <div className="flex flex-col mt-6">
-                    <button 
-                      className="bg-blue-500 text-white mr-2 font-bold py-2 px-4 rounded hover:bg-blue-700" 
-                      onClick={() => {
-                        setShowEditAModal(true);
-                      }}
                     >
                       <i className="fas fa-edit"></i>
                     </button>
-                    {questions.content.questions[currentQuestion].options.map((answer, index) => (
+                  </div>
+                  <div className="w-1/2 text-end">
+                    <h1 className="text-2xl font-bold">
+                      {currentQuestion + 1} /{" "}
+                      {questions.content.questions.length}
+                    </h1>
+                  </div>
+                </div>
+                <h1
+                  className="text-2xl font-bold"
+                  dangerouslySetInnerHTML={{
+                    __html:
+                      questions.content.questions[currentQuestion].content,
+                  }}
+                ></h1>
+                <div className="flex flex-col mt-6">
+                  <button
+                    className="bg-blue-500 text-white mr-2 font-bold py-2 px-4 rounded hover:bg-blue-700"
+                    onClick={() => {
+                      setShowEditAModal(true);
+                    }}
+                  >
+                    <i className="fas fa-edit"></i>
+                  </button>
+                  {questions.content.questions[currentQuestion].options.map(
+                    (answer, index) => (
                       <div className="flex flex-row mt-4">
                         <div className="flex w-1/6 ">
                           <div className="">
-                            <p className="text-xl font-bold">Opsi {index + 1}</p>
+                            <p className="text-xl font-bold">
+                              Opsi {index + 1}
+                            </p>
                           </div>
                         </div>
-                        <div className="w-5/6" style={{paddingTop: "4px"}}>
-                          <label htmlFor={`answer${index}`}>{answer.content}</label>
+                        <div className="w-5/6" style={{ paddingTop: "4px" }}>
+                          <label htmlFor={`answer${index}`}>
+                            {answer.content}
+                          </label>
                         </div>
                       </div>
-                    ))}
-                  </div>
+                    )
+                  )}
                 </div>
+              </div>
 
-                <div className="flex flex-row mt-12 mb-4">
-                  <div className="w-1/2">
-                    <button 
+              <div className="flex flex-row mt-12 mb-4">
+                <div className="w-1/2">
+                  <button
                     className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
                     onClick={() => setShowAddQuestionModal(true)}
-                    >
-                      Add Question
-                    </button>
-                  </div>
-                  <div className="w-1/2 text-end">
-                    <button 
+                  >
+                    Add Question
+                  </button>
+                </div>
+                <div className="w-1/2 text-end">
+                  <button
                     className="bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
                     onClick={() => {
                       setShowDeleteQuestionModal(true);
                       setDeleteMode(true);
                     }}
-                    >
-                      Delete Question
-                    </button>
-                  </div>
+                  >
+                    Delete Question
+                  </button>
                 </div>
+              </div>
 
-                <div className="flex flex-row mt-12 mb-10">
-                  {!isFirstQuestion && (
-                    <div className="w-1/2">
-                      <button
-                        className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
-                        onClick={handlePrevClick}
-                      >
-                        Prev
-                      </button>
-                    </div>
-                  )}
-                  <div className="w-1/2 text-end">
+              <div className="flex flex-row mt-12 mb-10">
+                {!isFirstQuestion && (
+                  <div className="w-1/2">
                     <button
                       className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
-                      onClick={handleNextClick}
+                      onClick={handlePrevClick}
                     >
-                      {isLastQuestion ? "Finish" : "Next"}
+                      Prev
                     </button>
                   </div>
+                )}
+                <div className="w-1/2 text-end">
+                  <button
+                    className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
+                    onClick={handleNextClick}
+                  >
+                    {isLastQuestion ? "Finish" : "Next"}
+                  </button>
                 </div>
-              </>
-            ) : (
-              <div className="flex flex-col justify-center items-center mt-6">
-                <p className="text-2xl font-bold">There are no questions in this quiz yet.</p>
-                <button 
-                  className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 mt-4" 
-                  onClick={() => {
-                    setShowAddQuestionModal(true);
-                  }}
-                >
-                  Add Question
-                </button>
               </div>
-            )}
-          </div>
+            </>
+          ) : (
+            <div className="flex flex-col justify-center items-center mt-6">
+              <p className="text-2xl font-bold">
+                There are no questions in this quiz yet.
+              </p>
+              <button
+                className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 mt-4"
+                onClick={() => {
+                  setShowAddQuestionModal(true);
+                }}
+              >
+                Add Question
+              </button>
+            </div>
+          )}
+        </div>
       </div>
-      {
-        showModal && (
-          <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
-            <div className="bg-white w-1/2 h-1/2 rounded-md flex flex-col justify-center items-center">
-              <img src="../../prize.png" alt="prize" className="w-40 h-40 mb-12" />
-              <h1 className="text-2xl font-bold">Horay</h1>
-              <h1 className="text-2xl font-bold mt-4">You have finished editing the quiz</h1>
-              <div className="flex flex-row mt-12 justify-between">
-                <button
-                  className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 mt-4 mr-4"
-                  onClick={handleCloseModalClick}
-                >
-                  Close
-                </button>
-              </div>
+      {showModal && (
+        <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white w-1/2 h-1/2 rounded-md flex flex-col justify-center items-center">
+            <img
+              src="../../prize.png"
+              alt="prize"
+              className="w-40 h-40 mb-12"
+            />
+            <h1 className="text-2xl font-bold">Horay</h1>
+            <h1 className="text-2xl font-bold mt-4">
+              You have finished editing the quiz
+            </h1>
+            <div className="flex flex-row mt-12 justify-between">
+              <button
+                className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 mt-4 mr-4"
+                onClick={handleCloseModalClick}
+              >
+                Close
+              </button>
             </div>
           </div>
-        )
-      }
-      {
-        showDeleteModal && (
-          <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
-            <div className="bg-white w-1/2 h-1/2 rounded-md flex flex-col justify-center items-center">
-              <img src="../../prize.png" alt="prize" className="w-40 h-40 mb-12" />
-              <h1 className="text-2xl font-bold">Horay</h1>
-              <h1 className="text-2xl font-bold mt-4">You have deleted the question</h1>
-              <div className="flex flex-row mt-12 justify-between">
-                <button
-                  className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 mt-4 mr-4"
-                  onClick={handleCloseDeleteModalClick}
-                >
-                  Close
-                </button>
-              </div>
+        </div>
+      )}
+      {showDeleteModal && (
+        <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white w-1/2 h-1/2 rounded-md flex flex-col justify-center items-center">
+            <img
+              src="../../prize.png"
+              alt="prize"
+              className="w-40 h-40 mb-12"
+            />
+            <h1 className="text-2xl font-bold">Horay</h1>
+            <h1 className="text-2xl font-bold mt-4">
+              You have deleted the question
+            </h1>
+            <div className="flex flex-row mt-12 justify-between">
+              <button
+                className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 mt-4 mr-4"
+                onClick={handleCloseDeleteModalClick}
+              >
+                Close
+              </button>
             </div>
           </div>
-        )
-      }
-      {
-        showEditQModal && (
-          <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
-            <div className="bg-white w-1/2 h-1/2 rounded-md flex flex-col justify-center items-center">
-              <h1 className="text-2xl font-bold">Change your Question</h1>
-              <div style={{overflow: "auto", height: "auto"}}>
-                <DynamicReactQuill 
-                  placeholder="Write your question here"
-                  value={newQuestion}
-                  onChange={handleQuestionChange}
-                />
-              </div>
-              <div className="flex flex-row mt-2 justify-between">
-                <button
-                  className="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-700 mt-4 mr-4"
-                  onClick={() => {
-                    setShowEditQModal(false);
-                    questions.content.questions[currentQuestion].content = newQuestion;
-                  }}
-                >
-                  Save
-                </button>
-                <button
-                  className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 mt-4 ml-4"
-                  onClick={() => setShowEditQModal(false)}
-                >
-                  Cancel
-                </button>
-              </div>
+        </div>
+      )}
+      {showEditQModal && (
+        <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white w-1/2 h-1/2 rounded-md flex flex-col justify-center items-center">
+            <h1 className="text-2xl font-bold">Change your Question</h1>
+            <div style={{ overflow: "auto", height: "auto" }}>
+              <DynamicReactQuill
+                placeholder="Write your question here"
+                value={newQuestion}
+                onChange={handleQuestionChange}
+              />
+            </div>
+            <div className="flex flex-row mt-2 justify-between">
+              <button
+                className="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-700 mt-4 mr-4"
+                onClick={() => {
+                  setShowEditQModal(false);
+                  questions.content.questions[currentQuestion].content =
+                    newQuestion;
+                }}
+              >
+                Save
+              </button>
+              <button
+                className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 mt-4 ml-4"
+                onClick={() => setShowEditQModal(false)}
+              >
+                Cancel
+              </button>
             </div>
           </div>
-        )
-      }
+        </div>
+      )}
       {showEditAModal && (
         <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
           <div className="bg-white w-1/2 h-1/2 rounded-md flex flex-col justify-center items-center">
@@ -388,19 +441,22 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, course
                     className="border-2 border-gray-300 p-2 rounded-md w-full mb-4"
                     placeholder={`Enter New Answer ${index + 1}`}
                     defaultValue={
-                      questions.content.questions[currentQuestion].options[index]
-                        .content
+                      questions.content.questions[currentQuestion].options[
+                        index
+                      ].content
                     }
-                    onChange={(event) =>
-                      handleAnswerChange(event, index)
-                    }
+                    onChange={(event) => handleAnswerChange(event, index)}
                   />
                 </div>
                 <div className="flex w-3/12">
                   <select
                     className="border-2 border-gray-300 p-2 rounded-md w-full mb-4"
                     defaultValue={
-                      questions.content.questions[currentQuestion].options[index].isCorrect ? "true" : "false"
+                      questions.content.questions[currentQuestion].options[
+                        index
+                      ].isCorrect
+                        ? "true"
+                        : "false"
                     }
                     onChange={(event) =>
                       handleCorrectAnswerChange(event, index)
@@ -465,18 +521,22 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, course
             <div className="flex flex-col pl-6 pr-6 pt-6 overflow-y-auto">
               {questions.content.questions.map((question, index) => (
                 <div key={index} className="flex items-center mb-2">
-                  <p className="text-lg font-bold mr-2" dangerouslySetInnerHTML={{ __html: `Question-${index + 1}:${question.content}` }}>
-                  </p>
+                  <p
+                    className="text-lg font-bold mr-2"
+                    dangerouslySetInnerHTML={{
+                      __html: `Question-${index + 1}:${question.content}`,
+                    }}
+                  ></p>
                   <button
                     className="bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-700"
                     onClick={() => {
-                      const updatedQuestions = [...questions.content.questions];
+                      const updatedQuestions = questions.content.questions;
                       const theFirstQuestion = index === 0;
-                      const theLastQuestion = index === updatedQuestions.length - 1;
+                      const theLastQuestion =
+                        index === updatedQuestions.length - 1;
                       const theOnlyQuestion = updatedQuestions.length === 1;
 
                       updatedQuestions.splice(index, 1);
-                      console.log(updatedQuestions);
                       setQuestions({
                         ...questions,
                         content: {
@@ -490,7 +550,7 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, course
                         } else if (theLastQuestion && !theOnlyQuestion) {
                           setCurrentQuestion(updatedQuestions.length - 1);
                         } else if (theOnlyQuestion) {
-                          
+                          /* DO NOTHING */
                         } else {
                           setCurrentQuestion(currentQuestion - 1);
                         }
@@ -535,8 +595,8 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, course
             <h1 className="text-2xl font-bold p-4 border-b">Add Question</h1>
             <div className="p-4">
               <h2 className="mb-2">Question:</h2>
-              <div style={{overflow: "auto", height: "auto"}}>
-                <DynamicReactQuill 
+              <div style={{ overflow: "auto", height: "auto" }}>
+                <DynamicReactQuill
                   placeholder="Write your question here"
                   value={newQuestion}
                   onChange={handleQuestionChange}
@@ -567,8 +627,14 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, course
                 onChange={handleAnswerChangeD}
               />
               <h2 className="mb-2">Correct Answer:</h2>
-              <select className="border-gray-400 border-2 p-2 rounded-md w-full mb-4" defaultValue={""} onChange={handleNewCorrectAnswer}>
-                <option value="" disabled>Choose Answer</option>
+              <select
+                className="border-gray-400 border-2 p-2 rounded-md w-full mb-4"
+                defaultValue={""}
+                onChange={handleNewCorrectAnswer}
+              >
+                <option value="" disabled>
+                  Choose Answer
+                </option>
                 <option value="A">A</option>
                 <option value="B">B</option>
                 <option value="C">C</option>
@@ -581,12 +647,7 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, course
                     setShowAddQuestionModal(false);
                     questions.content.questions.push({
                       content: newQuestion,
-                      options: [
-                        newAnswerA,
-                        newAnswerB,
-                        newAnswerC,
-                        newAnswerD,
-                      ],
+                      options: [newAnswerA, newAnswerB, newAnswerC, newAnswerD],
                     });
                   }}
                 >
@@ -606,6 +667,5 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({ quizContent, title, course
     </div>
   );
 };
-
 
 export default QuizSectionAdm;

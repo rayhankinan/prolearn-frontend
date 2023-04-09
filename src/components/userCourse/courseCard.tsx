@@ -13,7 +13,6 @@ interface CourseCardProps {
 }
 
 const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
-
   const [file, setFile] = useState<File | null>(null);
 
   useEffect(() => {
@@ -93,7 +92,12 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
               className="absolute top-0 left-0 w-full h-full 
               object-contain rounded object-center py-3 px-3 bg-zinc-100"
             >
-              <Skeleton className = "absolute inset-0 m-auto w-full h-full" variant="rectangular" width={210} height={118} />
+              <Skeleton
+                className="absolute inset-0 m-auto w-full h-full"
+                variant="rectangular"
+                width={210}
+                height={118}
+              />
             </div>
           )}
         </div>

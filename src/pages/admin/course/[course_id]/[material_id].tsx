@@ -17,7 +17,6 @@ import Quiz from "@/interfaces/quiz-interface";
 import sectionService from "@/services/section-service";
 import fileService from "@/services/file-service";
 import { EditCourseModal } from "@/components/adminCourse/editCourseModal";
-import { HtmlProps } from "next/dist/shared/lib/html-context";
 import QuizSectionAdm from "@/components/adminCourse/quizSectionAdm";
 
 const theme = createTheme();
@@ -40,7 +39,6 @@ export default function CourseDetailAdmin() {
       setMaterialId(router.query.material_id!.toString());
       //set material id int with material id converted to int
       setMaterialIdInt(parseInt(router.query.material_id!.toString()));
-      
     }
   }, [router.isReady]);
 
@@ -51,19 +49,17 @@ export default function CourseDetailAdmin() {
   const [course, setCourse] = useState<Course | null>(null);
   const [category, setCategory] = useState<Category[] | null>(null);
 
-
   useEffect(() => {
-    if(course_id === "" || material_idInt === -1) return;
+    if (course_id === "" || material_idInt === -1) return;
     sectionService
       .getSectionByCourse(course_id)
       .then((response) => {
         console.log(response.data.data);
         setSection(response.data.data);
         //find material with material id
-        const material = response.data.data.find((material : Section) => {
+        const material = response.data.data.find((material: Section) => {
           return material.id === material_idInt;
-        }
-        );
+        });
         setTitle(material.title);
         setFileId(material.__file__.id);
         if (material.__quiz__ !== null) {
@@ -72,37 +68,38 @@ export default function CourseDetailAdmin() {
       })
       .catch((error) => console.log(error));
 
-      CourseService.getById(parseInt(course_id))
-        .then((response) => {
-          console.log(response.data.data);
-          setCourse(response.data.data);
-        })
-        .catch((error) => console.log(error));
+    CourseService.getById(parseInt(course_id))
+      .then((response) => {
+        console.log(response.data.data);
+        setCourse(response.data.data);
+      })
+      .catch((error) => console.log(error));
   }, [course_id, material_idInt]);
 
   useEffect(() => {
     if (course_id === "" || material_idInt === -1) return;
-    fileService.getFile(file_id).then((response) => {
-      setFile(response.data);
-      // console.log(file);
-      //convert file to string
-      const reader = new FileReader();
-      reader.readAsBinaryString(response.data);
-      reader.onloadend = () => {
-        setFileString(reader.result as string);
-      };
-    })
-    .catch((error) => console.log(error));
-    
+    fileService
+      .getFile(file_id)
+      .then((response) => {
+        setFile(response.data);
+        // console.log(file);
+        //convert file to string
+        const reader = new FileReader();
+        reader.readAsBinaryString(response.data);
+        reader.onloadend = () => {
+          setFileString(reader.result as string);
+        };
+      })
+      .catch((error) => console.log(error));
   }, [file_id]);
 
   useEffect(() => {
-      CategoryService.getAll()
-        .then((response) => {
-          console.log(response.data.data);
-          setCategory(response.data.data);
-        })
-        .catch((error) => console.log(error));
+    CategoryService.getAll()
+      .then((response) => {
+        console.log(response.data.data);
+        setCategory(response.data.data);
+      })
+      .catch((error) => console.log(error));
   }, []);
 
   const [selectedSection, setSelectedSection] = useState<Section | null>(null);
@@ -256,7 +253,16 @@ export default function CourseDetailAdmin() {
                 )}
                 {/* {file
                   ? <div dangerouslySetInnerHTML={{__html : file!.toString()}}></div> : <div>loading ... </div>} */}
-                {quizContent ? <QuizSectionAdm quizContent={quizContent} title={title} courseId={course_id} materialId={material_idInt} /> : <></>}
+                {quizContent ? (
+                  <QuizSectionAdm
+                    quizContent={quizContent}
+                    title={title}
+                    courseId={course_id}
+                    materialId={material_idInt}
+                  />
+                ) : (
+                  <></>
+                )}
               </Grid>
             </Grid>
           </Grid>

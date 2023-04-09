@@ -9,8 +9,10 @@ const ModalSuccess = ({ open, onClose }: ModalSuccessProps) => {
   return (
     <div>
       <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto">
-        <div className="relative top-80 mx-auto my-auto p-5 border w-96 shadow-lg
-        rounded-md bg-white">
+        <div
+          className="relative top-80 mx-auto my-auto p-5 border w-96 shadow-lg
+        rounded-md bg-white"
+        >
           <div className="mt-3 text-center">
             <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
               <svg
