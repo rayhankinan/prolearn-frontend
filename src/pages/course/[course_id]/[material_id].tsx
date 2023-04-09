@@ -16,6 +16,7 @@ import Category from "@/interfaces/category-interface";
 import Quiz from "@/interfaces/quiz-interface";
 import CourseService from "@/services/course-service";
 import SectionService from "@/services/section-service";
+import QuizService from "@/services/quiz-service";
 import fileService from "@/services/file-service";
 import CategoryService from "@/services/category-service";
 import QuizSection from "@/components/userCourse/quizSection";
@@ -32,6 +33,7 @@ export default function UserCourseDetail() {
     const [material_idInt, setMaterialIdInt] = useState(-1);
     const [file, setFile] = useState<Blob | null>(null);
     const [fileString, setFileString] = useState(" ");
+    const [score, setScore] = useState("");
     const [quizId, setQuizId] = useState(1);
     const [quizContent, setQuizContent] = useState<Quiz | null>(null);
 
@@ -67,29 +69,28 @@ export default function UserCourseDetail() {
           })
           .catch((error) => console.log(error));
     
-          CourseService.getById(parseInt(course_id))
+        CourseService.getById(parseInt(course_id))
             .then((response) => {
               console.log(response.data.data);
               setCourse(response.data.data);
             })
             .catch((error) => console.log(error));
-      }, [course_id, material_idInt]);
-    
-    useEffect(() => {
-        if (course_id === "" || material_idInt === -1) return;
-        fileService.getFile(file_id).then((response) => {
-            setFile(response.data);
-            console.log(file);
-            //convert file to string
-            const reader = new FileReader();
-            reader.readAsBinaryString(response.data);
-            reader.onload = () => {
-                setFileString(reader.result as string);
-            }
-        })
-        .catch((error) => console.log(error));
+        }, [course_id, material_idInt]);
         
-    }, [file_id]);
+        useEffect(() => {
+            if (course_id === "" || material_idInt === -1) return;
+            fileService.getFile(file_id).then((response) => {
+                setFile(response.data);
+                console.log(file);
+                //convert file to string
+                const reader = new FileReader();
+                reader.readAsBinaryString(response.data);
+                reader.onload = () => {
+                    setFileString(reader.result as string);
+                }
+            })
+            .catch((error) => console.log(error));
+        }, [file_id]);
 
     const [category, setCategory] = useState<Category[] | null>(null);
     useEffect(() => {
@@ -101,9 +102,18 @@ export default function UserCourseDetail() {
           .catch((error) => console.log(error));
     }, []);
 
-    // console.log(file);
-    
-    // console.log(quizContent);
+    useEffect(() => {
+        if (quizContent === null) return;
+        QuizService.viewHistory(quizContent.id)
+            .then((response) => {
+                console.log(response.data.data);
+                setScore((response.data.data.correct_answer).toString());
+            })
+            .catch((error) => {
+                console.log(error);
+                setScore("-");
+            });
+    }, [quizContent]);
     
     const [selectedSection, setSelectedSection] = useState<Section | null>(null);
 
@@ -167,12 +177,16 @@ export default function UserCourseDetail() {
                               <div>loading ... </div>
                             )}
                                 {/* {/* <QuizSection /> */}
-                            {quizContent && !quizStarted &&
-                                <div className="flex flex-col md:flex-row justify-between items-center bg-gray-200 p-4 rounded-lg shadow-md">
-                                <div className="font-bold text-lg mb-2 md:mb-0 md:mr-2">Grade: 0</div>
+                            {quizContent && !quizStarted && quizContent.content.questions.length > 0 &&
+                              <div className="flex flex-col md:flex-row justify-between items-center bg-gray-200 p-4 rounded-lg shadow-md">
+                                <div className="font-bold text-lg mb-2 md:mb-0 md:mr-2">Previous Grade: {score}/{quizContent.content.questions.length}</div>
                                 <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => handleStartQuiz()}>Start Quiz</button>
                               </div>                              
-                              
+                            }
+                            {quizContent && !quizStarted && quizContent.content.questions.length <= 0 &&
+                              <div className="flex flex-col md:flex-row justify-between items-center bg-gray-200 p-4 rounded-lg shadow-md">
+                                <div className="font-bold text-lg mb-2 md:mb-0 md:mr-2">Quiz's questions are not available</div>
+                              </div>                              
                             }
                             {quizContent && quizStarted ? <QuizSection quizContent={quizContent} /> : <div></div>}
                             </Grid>

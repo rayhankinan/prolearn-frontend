@@ -36,12 +36,11 @@ const QuizSection: React.FC<QuizSectionProps> = ({ quizContent }) => {
   
   const handleFinishClick = () => {
     const sendQuizReq = {
-      quizId: quizContent.id,
       answer: listOfAnswers,
     }
 
     console.log(sendQuizReq);
-    quizService.submitQuiz(sendQuizReq)
+    quizService.submitQuiz(quizContent.id, sendQuizReq)
       .then((response) => {
         console.log(response.data);
         setNumCorrectAnswers(response.data.correct_answer);
@@ -54,6 +53,7 @@ const QuizSection: React.FC<QuizSectionProps> = ({ quizContent }) => {
 
   const handleCloseModalClick = () => {
     setShowModal(false);
+    window.location.reload();
   };
 
   console.log(quizContent.content.questions.length);
@@ -139,12 +139,6 @@ const QuizSection: React.FC<QuizSectionProps> = ({ quizContent }) => {
                   onClick={handleCloseModalClick}
                 >
                   Close
-                </button>
-                <button
-                  className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 mt-4 ml-4"
-                  // onClick={handleCloseModalClick}
-                >
-                  Next
                 </button>
               </div>
             </div>
