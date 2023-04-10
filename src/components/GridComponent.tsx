@@ -1,14 +1,14 @@
-import React, { ChangeEvent, useState, useEffect } from 'react';
-import { Grid, TextField } from '@material-ui/core';
-import Material from '@/interfaces/material-interface';
-import Section from '@/interfaces/section-interface';
-import dynamic from 'next/dynamic';
-import SectionService from '@/services/section-service';
-import FileService from '@/services/file-service';
-import { useRouter } from 'next/router';
-import 'react-quill/dist/quill.snow.css';
+import React, { ChangeEvent, useState, useEffect } from "react";
+import { Grid, TextField } from "@material-ui/core";
+import Section from "@/interfaces/section-interface";
+import dynamic from "next/dynamic";
+import SectionService from "@/services/section-service";
+import FileService from "@/services/file-service";
+import { useRouter } from "next/router";
 
-const DynamicReactQuill = dynamic(() => import('react-quill'), {
+import "react-quill/dist/quill.snow.css";
+
+const DynamicReactQuill = dynamic(() => import("react-quill"), {
   ssr: false,
 });
 
@@ -33,86 +33,78 @@ const GridComponent = ({ section }: GridComponentProps = {}) => {
   }, [router.isReady]);
 
   useEffect(() => {
-    if(file_id != null) {
-      FileService
-      .getFile(file_id)
-      .then((response) => {
-        //file as string
-        const reader = new FileReader();
-        reader.readAsBinaryString(response.data);
-        reader.onloadend = () => {
-          setBody(reader.result as string);
-        };
-      })
-      .catch((error) => console.log(error));
+    if (file_id != null) {
+      FileService.getFile(file_id)
+        .then((response) => {
+          //file as string
+          const reader = new FileReader();
+          reader.readAsBinaryString(response.data);
+          reader.onloadend = () => {
+            setBody(reader.result as string);
+          };
+        })
+        .catch((error) => console.log(error));
     }
   }, [file_id]);
 
-  const handleNameChange = (event : ChangeEvent<HTMLInputElement>) => {
+  const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value);
   };
 
-  const handleBodyChange = (
-    value: string| null
-  ) => {
-    if(value != null)
-    {
-        setBody(value);
+  const handleBodyChange = (value: string | null) => {
+    if (value != null) {
+      setBody(value);
     }
   };
 
-  const handleDurationChange = (event : ChangeEvent<HTMLInputElement>) => {
+  const handleDurationChange = (event: ChangeEvent<HTMLInputElement>) => {
     setDuration(parseInt(event.target.value));
   };
 
-  const handleObjectiveChange = (event : ChangeEvent<HTMLInputElement>) => {
+  const handleObjectiveChange = (event: ChangeEvent<HTMLInputElement>) => {
     setObjective(event.target.value);
   };
 
   const handleSave = () => {
     //update
-    if(section != null){
-      if(section.id != null && file_id != null)
-      {
-        const html = document.querySelector('.ql-editor')?.innerHTML;
+    if (section != null) {
+      if (section.id != null && file_id != null) {
+        const html = document.querySelector(".ql-editor")?.innerHTML;
         const formData = new FormData();
-        formData.append('courseId', course_id)
-        formData.append('title', name);
-        formData.append('duration', duration.toString());
-        formData.append('objective', objective);
-        formData.append('type', 'material');
-        if(html)
-        {
-          const file = new File([html], 'test.html', {type: 'text/html'});
-          formData.append('file', file);
+        formData.append("courseId", course_id);
+        formData.append("title", name);
+        formData.append("duration", duration.toString());
+        formData.append("objective", objective);
+        formData.append("type", "material");
+        if (html) {
+          const file = new File([html], "test.html", { type: "text/html" });
+          formData.append("file", file);
         }
         SectionService.update(section.id.toString(), formData)
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+          .then((res) => {
+            console.log(res);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
       }
     }
   };
 
   const handleDelete = () => {
-    console.log("DELETING")
-    if(section != null)
-    {
-      if(section.id != null && file_id != null)
-      {
+    console.log("DELETING");
+    if (section != null) {
+      if (section.id != null && file_id != null) {
         SectionService.delete(section.id)
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+          .then((res) => {
+            console.log(res);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
       }
     }
-  }
+  };
 
   return (
     <Grid container spacing={3}>
@@ -215,7 +207,7 @@ GridComponent.formats = [
   "link",
   "image",
   "video",
-  "code-block"
-]
+  "code-block",
+];
 
 export default GridComponent;

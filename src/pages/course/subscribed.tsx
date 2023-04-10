@@ -4,7 +4,7 @@ import Sidebar from "@/components/userCourse/courseSidebar";
 import SubscribedCards from "@/components/userCourse/subscribedCards";
 import Course from "@/interfaces/course-interface";
 import CourseService from "@/services/course-service";
-import Navbar from "../../components/navbar";
+import Navbar from "@/components/navbar";
 import SearchBar from "@/components/adminCourse/search";
 import { Grid } from "@mui/material";
 import { Pagination } from "@mui/material";
@@ -66,7 +66,7 @@ export default function Courses() {
 
   return (
     <>
-      <Navbar isLoggedIn = {isLoggedIn}/>
+      <Navbar isLoggedIn={isLoggedIn} />
       <div className="container mx-auto justify-center custom-Montserrat ">
         <Hero
           title="Courses"

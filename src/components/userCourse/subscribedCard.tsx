@@ -24,7 +24,7 @@ const SubcribedCard: React.FC<SubcribedCardProps> = ({ course }) => {
         .getFile(course.__thumbnail__.id)
         .then((response) => {
           const selectedImage = new File([response.data], "image.png");
-          
+
           setFile(selectedImage);
         })
         .catch((error) => {
@@ -82,7 +82,12 @@ const SubcribedCard: React.FC<SubcribedCardProps> = ({ course }) => {
               className="absolute top-0 left-0 w-full h-full 
               object-contain rounded object-center py-3 px-3 bg-zinc-100"
             >
-              <Skeleton className = "absolute inset-0 m-auto w-full h-full"variant="rectangular" width={210} height={118} />
+              <Skeleton
+                className="absolute inset-0 m-auto w-full h-full"
+                variant="rectangular"
+                width={210}
+                height={118}
+              />
             </div>
           )}
         </div>

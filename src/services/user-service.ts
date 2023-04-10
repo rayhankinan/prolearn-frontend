@@ -1,26 +1,23 @@
 import http from "../http-common";
 
 class UserService {
-    logIn(data: any) {
-        return http.post<any>('/user/login', data)
-        .then(response => {
-            return response.data;
-        })
-    }
+  async logIn(data: any) {
+    const response = await http.post<any>("/user/login", data);
 
-    register(data: any) {
-        return http.post<any>('/user/register', data)
-        .then(response => {
-            return response.data;
-        })
-    }
+    return response.data;
+  }
 
-    subscribe(id: number) {
-        return http.post<any>(`/user/subscribe/${id}`)
-        .then(response => {
-            return response.data;
-        })
-    }
+  async register(data: any) {
+    const response = await http.post<any>("/user/register", data);
+
+    return response.data;
+  }
+
+  async subscribe(id: number) {
+    const response = await http.post<any>(`/user/subscribe/${id}`);
+
+    return response.data;
+  }
 }
 
 export default new UserService();

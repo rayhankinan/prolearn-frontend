@@ -21,14 +21,13 @@ const theme = createTheme();
 export default function CourseDetailAdmin() {
   const router = useRouter();
   const [course_id, setCourseId] = useState("");
-  
+
   useEffect(() => {
     if (router.isReady) {
       setCourseId(router.query.course_id!.toString());
     }
   }, [router.isReady]);
   const material_idInt = -1;
-
 
   const [showModal, setShowModal] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
@@ -39,16 +38,14 @@ export default function CourseDetailAdmin() {
 
   useEffect(() => {
     if (course_id === "") return;
-    SectionService
-      .getSectionByCourse(course_id)
+    SectionService.getSectionByCourse(course_id)
       .then((response) => {
         console.log(response.data.data);
         setSection(response.data.data);
       })
       .catch((error) => console.log(error));
-    
-    CourseService
-      .getById(parseInt(course_id))
+
+    CourseService.getById(parseInt(course_id))
       .then((response) => {
         console.log(response.data.data);
         setCourse(response.data.data);
@@ -65,9 +62,7 @@ export default function CourseDetailAdmin() {
       .catch((error) => console.log(error));
   }, []);
 
-  const [selectedSection, setSelectedSection] = useState<Section | null>(
-    null
-  );
+  const [selectedSection, setSelectedSection] = useState<Section | null>(null);
   const [showEditButton, setShowEditButton] = useState(false);
 
   const handleAddMaterial = () => {
@@ -195,9 +190,7 @@ export default function CourseDetailAdmin() {
             </Grid>
             <Grid item xs={9} sx={{ paddingLeft: "20px" }}>
               <Grid item>
-                <Box>
-
-                </Box>
+                <Box></Box>
               </Grid>
             </Grid>
           </Grid>
@@ -205,12 +198,12 @@ export default function CourseDetailAdmin() {
       </main>
 
       {showEditModal && (
-      <EditCourseModal
-        open={showEditModal}
-        onClose={() => setShowEditModal(false)}
-        categories={category!}
-        course={course!}
-      />
+        <EditCourseModal
+          open={showEditModal}
+          onClose={() => setShowEditModal(false)}
+          categories={category!}
+          course={course!}
+        />
       )}
 
       {selectedSection && (

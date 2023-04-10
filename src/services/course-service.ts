@@ -1,31 +1,33 @@
 import http from "../http-common";
 
 class CourseService {
-    getAll(params?: any) {
-        return http.get("/course", { params });
-    }
+  async getAll(params?: any) {
+    return await http.get("/course", { params });
+  }
 
-    getAllForVisitor(params?: any) {
-        return http.get("/course/visitor", { params });
-    }
+  async getAllForVisitor(params?: any) {
+    return await http.get("/course/visitor", { params });
+  }
 
-    getById(id: number) {
-        return http.get(`/course/${id}`);
-    }
+  async getById(id: number) {
+    return await http.get(`/course/${id}`);
+  }
 
-    create(data: FormData) {
-        return http.post("/course", data)
-            .then(response => response.data);
-    }
+  async create(data: FormData) {
+    const response = await http.post("/course", data);
 
-    update(id: number, data: any) {
-        return http.put(`/course/${id}`, data)
-            .then(response => response.data);
-    }
+    return response.data;
+  }
 
-    delete(id: number) {
-        return http.delete(`/course/${id}`);
-    }
+  async update(id: number, data: any) {
+    const response = await http.put(`/course/${id}`, data);
+
+    return response.data;
+  }
+
+  async delete(id: number) {
+    return await http.delete(`/course/${id}`);
+  }
 }
 
 export default new CourseService();

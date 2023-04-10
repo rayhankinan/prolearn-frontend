@@ -1,27 +1,27 @@
 import http from "../http-common";
+
 class CategoryService {
-    getAll() {
-        return http.get("/category/all");
-    }
+  async getAll() {
+    return await http.get("/category/all");
+  }
 
-    getByTitle(title: string) {
-        return http.get(`/category?title=${title}`);
-    }
+  async getByTitle(title: string) {
+    return await http.get(`/category?title=${title}`);
+  }
 
-    create(data: any) {
-        return http.post("/category", data)
-        .then(response => {
-            return response.data;
-        })
-    }
+  async create(data: any) {
+    const response = await http.post("/category", data);
 
-    delete(id: any) {
-        return http.delete(`/category/:${id}`);
-    }
+    return response.data;
+  }
 
-    update(id: any) {
-        return http.put(`/category/:${id}`);
-    }
+  async delete(id: any) {
+    return await http.delete(`/category/:${id}`);
+  }
+
+  async update(id: any) {
+    return await http.put(`/category/:${id}`);
+  }
 }
 
 export default new CategoryService();

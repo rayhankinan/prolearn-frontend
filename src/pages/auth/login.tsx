@@ -1,4 +1,4 @@
-import React, { useState, useContext} from "react";
+import React, { useState, useContext } from "react";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import Grid from "@mui/material/Grid";
@@ -13,11 +13,10 @@ import { InputAdornment } from "@material-ui/core";
 import userService from "@/services/user-service";
 import { PersonOutlined } from "@mui/icons-material";
 import { useRouter } from "next/router";
-import ModalFailed from "../user/modalFailed";
-import ModalSuccess from "../user/modalSucess";
+import ModalFailed from "@/pages/user/modalFailed";
+import ModalSuccess from "@/pages/user/modalSucess";
 import { AuthContext } from "@/contexts/AuthContext";
 import Image from "next/image";
-
 
 // create login page
 const theme = createTheme();
@@ -81,7 +80,7 @@ export default function Login() {
       .logIn(dataUser)
       .then((response) => {
         setIsLoggedIn(true);
-        
+
         localStorage.setItem("token", response.data);
         if (response.role === "admin") {
           router.push("/admin/course");

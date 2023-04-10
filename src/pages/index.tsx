@@ -57,22 +57,29 @@ export default function CourseLanding() {
   return (
     <div>
       {/* <Login_navbar />1 */}
-      <Navbar isLoggedIn = {isLoggedIn} />
+      <Navbar isLoggedIn={isLoggedIn} />
       <div className="flex flex-row justify-between">
         <div className="flex flex-col justify-center">
           <h1 className="font-sans text-6xl font-bold ml-24">
             {" "}
             Learn Everywhere Like a Professional
           </h1>
-          <p className="font-sans text-2xl ml-24 mt-10 border-l-2 border-gray-400 p-4">A learning system based on formalised teaching with the help of resources.</p>
+          <p className="font-sans text-2xl ml-24 mt-10 border-l-2 border-gray-400 p-4">
+            A learning system based on formalised teaching with the help of
+            resources.
+          </p>
           <div className="flex flex-row justify-start ml-14 mt-10">
-            <a href="/auth/register" className="inline-block w-auto h-16 text-xl px-4 py-5 
+            <a
+              href="/auth/register"
+              className="inline-block w-auto h-16 text-xl px-4 py-5 
               leading-none border border-gray-300 shadow-xl text-black bg-white mt-4 lg:mt-0
               mr-12 ml-10 hover:transition ease-in-out hover:scale-110 duration-300"
             >
               Get Started
             </a>
-            <a href="#" className="inline-block w-auto h-16 text-xl px-4 py-5 leading-none 
+            <a
+              href="#"
+              className="inline-block w-auto h-16 text-xl px-4 py-5 leading-none 
               border border-gray-300 shadow-xl text-black bg-gray-400 mt-4 lg:mt-0 mr-5
               hover:transition ease-in-out hover:scale-110 duration-300"
             >
@@ -124,7 +131,8 @@ export default function CourseLanding() {
           <ul className="flex w-full justify-center ">
             {categories.map((category) => (
               <li key={category.title} className="flex-1 mr-2">
-                <a className="text-center block py-2 px-4 hover:bg-gray-400 rounded-xl text-gray-800
+                <a
+                  className="text-center block py-2 px-4 hover:bg-gray-400 rounded-xl text-gray-800
                   transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300"
                   onClick={() => handleCategoryClicked(category.id)}
                 >
@@ -136,7 +144,9 @@ export default function CourseLanding() {
         </div>
         <div className="grid grid-cols-4 ml-10 mr-10">
           {courses.map((course) => (
-            <div key={course.id} className="flex flex-wrap mx-1 lg:mx-10 rounded-xl border 
+            <div
+              key={course.id}
+              className="flex flex-wrap mx-1 lg:mx-10 rounded-xl border 
               hover:border-gray-400 overflow-hidden shadow-xl ml-20 mt-20 mr-20 transition ease-in-out 
               delay-150 hover:-translate-y-1 hover:scale-110 duration-300"
             >
@@ -159,7 +169,8 @@ export default function CourseLanding() {
               </div>
             </div>
           ))}
-          <div className="flex flex-wrap mx-1 lg:mx-10 rounded-xl overflow-hidden shadow-lg ml-20 
+          <div
+            className="flex flex-wrap mx-1 lg:mx-10 rounded-xl overflow-hidden shadow-lg ml-20 
             mt-20 mr-20 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300"
           >
             <div className="w-full h-full flex flex-col bg-gray-600 justify-center text-center">

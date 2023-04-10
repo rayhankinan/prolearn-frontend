@@ -95,10 +95,10 @@ export default function Courses() {
     setPage(value);
   };
 
-  console.log(isLoggedIn)
+  console.log(isLoggedIn);
   return (
     <>
-      <Navbar isLoggedIn = {isLoggedIn}/>
+      <Navbar isLoggedIn={isLoggedIn} />
       <div className="container mx-auto justify-center custom-Poppins ">
         <Hero
           title="Courses"
@@ -127,7 +127,10 @@ export default function Courses() {
           <div className="flex justify-center">
             <SearchBar searchTerm={search} setSearchTerm={setSearch} />
           </div>
-          <CourseCards courses={courses} subscribedCourses={subscribedCourses} />
+          <CourseCards
+            courses={courses}
+            subscribedCourses={subscribedCourses}
+          />
           <Grid container direction="row" justifyContent="center" marginTop={2}>
             <Pagination
               count={count}

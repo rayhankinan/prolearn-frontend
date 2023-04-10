@@ -3,13 +3,12 @@ import { Grid, TextField } from "@material-ui/core";
 import Section from "@/interfaces/section-interface";
 import dynamic from "next/dynamic";
 import SectionService from "@/services/section-service";
-import "react-quill/dist/quill.snow.css";
-
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
-import { Button } from "@mui/material";
+
+import "react-quill/dist/quill.snow.css";
 
 const DynamicReactQuill = dynamic(() => import("react-quill"), {
   ssr: false,
@@ -22,18 +21,18 @@ type questionAndOptions = {
     { content: string; isCorrect: boolean },
     { content: string; isCorrect: boolean },
     { content: string; isCorrect: boolean }
-  ]
-}
+  ];
+};
 
 interface AddSectionModalProps {
   material?: Section;
   courseId: string;
 }
 
-const AddSectionModal = ({ 
-  material, courseId }: AddSectionModalProps) => {
-
-  const [questionAnswerList, setQuestionAnswerList] = useState<questionAndOptions[]>([]);
+const AddSectionModal = ({ material, courseId }: AddSectionModalProps) => {
+  const [questionAnswerList, setQuestionAnswerList] = useState<
+    questionAndOptions[]
+  >([]);
   const [name, setName] = useState(material?.title || "");
   const [body, setBody] = useState(" ");
   const [duration, setDuration] = useState(material?.duration || 0);
@@ -78,12 +77,12 @@ const AddSectionModal = ({
 
       for (let i = currentCount; i < newCount; i++) {
         newList[i] = {
-          content: '',
+          content: "",
           options: [
-            { content: '', isCorrect: false },
-            { content: '', isCorrect: false },
-            { content: '', isCorrect: false },
-            { content: '', isCorrect: false },
+            { content: "", isCorrect: false },
+            { content: "", isCorrect: false },
+            { content: "", isCorrect: false },
+            { content: "", isCorrect: false },
           ],
         };
       }
@@ -94,7 +93,7 @@ const AddSectionModal = ({
 
   const handleNumberChange = (event: any) => {
     setNumber(event.target.value);
-  }
+  };
 
   const handleQuestionChange = (index: number, value: string) => {
     setQuestionAnswerList((prev) => {
@@ -104,12 +103,15 @@ const AddSectionModal = ({
     });
   };
 
-
   const handleAddQuestion = () => {
     questionAnswerList[number - 1].content = question;
-  }
+  };
 
-  const handleAnswerChange = (questionIndex: number, optionIndex: number, value: string) => {
+  const handleAnswerChange = (
+    questionIndex: number,
+    optionIndex: number,
+    value: string
+  ) => {
     setQuestionAnswerList((prev) => {
       const newList = [...prev];
       newList[questionIndex].options[optionIndex].content = value;
@@ -119,13 +121,15 @@ const AddSectionModal = ({
 
   const handleAddAnswer = (questionIndex: number) => {
     const question = questionAnswerList[questionIndex];
-    const emptyOption = question.options.find(option => option.content === "");
+    const emptyOption = question.options.find(
+      (option) => option.content === ""
+    );
     if (emptyOption) {
       emptyOption.content = answer;
     } else {
       console.log("Full");
     }
-  }
+  };
 
   const handleTrueAnswerChange = (index: number, value: string) => {
     setQuestionAnswerList((prev) => {
@@ -136,17 +140,18 @@ const AddSectionModal = ({
       return newList;
     });
     setTrueAnswer((prev) => {
-      const newTrueAnswer = [...prev];
+      const newTrueAnswer = prev.split("");
       newTrueAnswer[index] = value;
-      return newTrueAnswer;
+
+      return newTrueAnswer.join("");
     });
   };
 
   const handleSave = () => {
     const html = document.querySelector(".ql-editor")?.innerHTML;
-  
+
     const formData = new FormData();
-    
+
     formData.append("courseId", courseId);
     formData.append("title", name);
     formData.append("duration", duration.toString());
@@ -156,7 +161,7 @@ const AddSectionModal = ({
       const file = new Blob([html], { type: "text/html" });
       formData.append("file", file, "test.html");
     }
-  
+
     if (quiz !== "") {
       const quizContent = {
         title: quiz,
@@ -165,7 +170,7 @@ const AddSectionModal = ({
       };
       formData.append("quizContent", JSON.stringify(quizContent));
     }
-  
+
     console.log(formData);
     SectionService.create(formData)
       .then((res) => {
@@ -177,13 +182,13 @@ const AddSectionModal = ({
         console.log(err);
       });
   };
-  
+
   console.log(questionAnswerList);
   console.log(number);
   console.log(answer);
 
   return (
-    <Grid container spacing={3} style={{height: "600px", overflow: "auto"}}>
+    <Grid container spacing={3} style={{ height: "600px", overflow: "auto" }}>
       <Grid item xs={3} style={{ marginTop: "16px" }}>
         <label>Material Name</label>
       </Grid>
@@ -199,14 +204,13 @@ const AddSectionModal = ({
         <label>Material Text</label>
       </Grid>
       <Grid item xs={9}>
-        <div style={{overflow: "auto", maxHeight : "350px" }}>
+        <div style={{ overflow: "auto", maxHeight: "350px" }}>
           <DynamicReactQuill
             placeholder="Write something amazing"
             modules={AddSectionModal.modules}
             formats={AddSectionModal.formats}
             onChange={handleBodyChange}
             value={body}
-            
           />
         </div>
       </Grid>
@@ -257,38 +261,41 @@ const AddSectionModal = ({
         />
       </Grid>
       {/* Create Dropdown for question */}
-        {countQuestion > 0 && Array.from(Array(Math.max(0, countQuestion)), (e, i) => {
-        const questionAnswer = questionAnswerList[i] || {options: []};
-        return (
-          <React.Fragment key={i}>
-            <Grid item xs={3} style={{ marginTop: "16px" }}>
-              <label>Question {i+1}</label>
-            </Grid>
-            <Grid item xs={9}>
-              <div style={{overflow: "auto", maxHeight : "350px" }}>
-                <DynamicReactQuill
-                  placeholder="Write something amazing"
-                  modules={AddSectionModal.modules}
-                  formats={AddSectionModal.formats}
-                  onChange={(content) => handleQuestionChange(i, content)}
-                  value={questionAnswer.content}
-                />
-              </div>
-            </Grid>
-            {[...Array(4)].map((_, j) => (
-              <React.Fragment key={j}>
-                <Grid item xs={3} style={{ marginTop: "16px" }}>
-                  <label>Answer {j+1}</label>
-                </Grid>
-                <Grid item xs={7}>
-                  <TextField
-                    variant="outlined"
-                    fullWidth
-                    value={questionAnswer.options[j]?.content || ""}
-                    onChange={(event) => handleAnswerChange(i, j, event.target.value)}
+      {countQuestion > 0 &&
+        Array.from(Array(Math.max(0, countQuestion)), (e, i) => {
+          const questionAnswer = questionAnswerList[i] || { options: [] };
+          return (
+            <React.Fragment key={i}>
+              <Grid item xs={3} style={{ marginTop: "16px" }}>
+                <label>Question {i + 1}</label>
+              </Grid>
+              <Grid item xs={9}>
+                <div style={{ overflow: "auto", maxHeight: "350px" }}>
+                  <DynamicReactQuill
+                    placeholder="Write something amazing"
+                    modules={AddSectionModal.modules}
+                    formats={AddSectionModal.formats}
+                    onChange={(content) => handleQuestionChange(i, content)}
+                    value={questionAnswer.content}
                   />
-                </Grid>
-                {/* <Grid item xs={2} style={{ display: "flex", alignItems: "center" }}>
+                </div>
+              </Grid>
+              {[...Array(4)].map((_, j) => (
+                <React.Fragment key={j}>
+                  <Grid item xs={3} style={{ marginTop: "16px" }}>
+                    <label>Answer {j + 1}</label>
+                  </Grid>
+                  <Grid item xs={7}>
+                    <TextField
+                      variant="outlined"
+                      fullWidth
+                      value={questionAnswer.options[j]?.content || ""}
+                      onChange={(event) =>
+                        handleAnswerChange(i, j, event.target.value)
+                      }
+                    />
+                  </Grid>
+                  {/* <Grid item xs={2} style={{ display: "flex", alignItems: "center" }}>
                   <Button
                     variant="contained"
                     color="primary"
@@ -300,34 +307,39 @@ const AddSectionModal = ({
                     Add
                   </Button>
                 </Grid> */}
-              </React.Fragment>
-            ))}
-            <Grid item xs={3} style={{ marginTop: "16px" }}>
-              <label>Correct Answer</label>
-            </Grid>
-            <Grid item xs={9}>
-              <FormControl variant="outlined" fullWidth>
-                <InputLabel id={`correct-answer-${i+1}-label`}>
-                  Correct Answer
-                </InputLabel>
-                <Select
-                  labelId={`correct-answer-${i+1}-label`}
-                  id={`correct-answer-${i+1}`}
-                  value={trueAnswer[i] || ""}
-                  onChange={(event) => handleTrueAnswerChange(i, String(event.target.value))}
-                  label="Correct Answer"
-                >
-                  {[...Array(4)].map((_, j) => (
-                    <MenuItem key={j} value={questionAnswer.options[j]?.content || ""}>
-                      {questionAnswer.options[j]?.content || ""}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
-          </React.Fragment>
-        )
-      })}
+                </React.Fragment>
+              ))}
+              <Grid item xs={3} style={{ marginTop: "16px" }}>
+                <label>Correct Answer</label>
+              </Grid>
+              <Grid item xs={9}>
+                <FormControl variant="outlined" fullWidth>
+                  <InputLabel id={`correct-answer-${i + 1}-label`}>
+                    Correct Answer
+                  </InputLabel>
+                  <Select
+                    labelId={`correct-answer-${i + 1}-label`}
+                    id={`correct-answer-${i + 1}`}
+                    value={trueAnswer[i] || ""}
+                    onChange={(event) =>
+                      handleTrueAnswerChange(i, String(event.target.value))
+                    }
+                    label="Correct Answer"
+                  >
+                    {[...Array(4)].map((_, j) => (
+                      <MenuItem
+                        key={j}
+                        value={questionAnswer.options[j]?.content || ""}
+                      >
+                        {questionAnswer.options[j]?.content || ""}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+            </React.Fragment>
+          );
+        })}
 
       <Grid item xs={12}>
         <div className="flex justify-center mt-5">

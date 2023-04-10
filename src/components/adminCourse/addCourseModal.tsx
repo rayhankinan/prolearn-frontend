@@ -1,17 +1,17 @@
 import { useState } from "react";
 import {
-Button,
-Dialog,
-DialogActions,
-DialogContent,
-DialogTitle,
-FormControl,
-InputLabel,
-MenuItem,
-Select,
-TextField,
-SelectChangeEvent,
-Modal
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+  SelectChangeEvent,
+  Modal,
 } from "@mui/material";
 import Course from "@/interfaces/course-interface";
 import Category from "@/interfaces/category-interface";
@@ -31,14 +31,12 @@ export const AddCourseModal = ({
   onClose,
   onSubmit,
   categories,
-  }: ModalProps) => {
+}: ModalProps) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [imgFile, setImage] = useState<File | null>();
   const [difficulty, setDifficulty] = useState("beginner");
-  const [selectedCategories, setSelectedCategories] = useState<Category[]>(
-      []
-  );
+  const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
   const [titleNameError, setTitleNameError] = useState(false);
   const [descriptionNameError, setDescriptionNameError] = useState(false);
   const [imgNameError, setImgNameError] = useState(false);
@@ -49,9 +47,7 @@ export const AddCourseModal = ({
     setModalOpen(false);
   };
 
-  const handleTitleChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
     setTitleNameError(event.target.value === "");
   };
@@ -63,24 +59,18 @@ export const AddCourseModal = ({
     setDescriptionNameError(event.target.value === "");
   };
 
-  const handleImageChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     setImage(file);
     setImgNameError(file === null);
   };
 
-  const handleDifficultyChange = (
-    event: SelectChangeEvent<string>
-  ) => {
+  const handleDifficultyChange = (event: SelectChangeEvent<string>) => {
     setDifficulty(event.target.value as string);
   };
 
-  const handleCategoryChange = (
-    event: SelectChangeEvent<string[]>
-  ) => {
-    const selected = event.target.value
+  const handleCategoryChange = (event: SelectChangeEvent<string[]>) => {
+    const selected = event.target.value;
     const selectedCategories = categories.filter((category) =>
       selected.includes(category.title)
     );
@@ -105,15 +95,15 @@ export const AddCourseModal = ({
     const newCourse: Course = {
       title: title,
       description: description,
-      imgFile : imgFile,
+      imgFile: imgFile,
       difficulty: difficulty,
       __categories__: selectedCategories.map((category) => category.id),
       status: "active",
     };
     onSubmit(newCourse);
     setSelectedCategories([]);
-    if(title === "" || description === "" || imgFile === null){
-      if(selectedCategories.length === 0 || difficulty === ""){
+    if (title === "" || description === "" || imgFile === null) {
+      if (selectedCategories.length === 0 || difficulty === "") {
         setModalOpen(true);
         setErrorMessage("Please fill in all the required fields");
         setTitleNameError(true);
@@ -122,7 +112,7 @@ export const AddCourseModal = ({
         return;
       }
     }
-    if(titleNameError || descriptionNameError || imgNameError){
+    if (titleNameError || descriptionNameError || imgNameError) {
       setModalOpen(true);
       setErrorMessage("Please fill in all the required fields");
       return;

@@ -1,12 +1,12 @@
 import http from "../http-common";
 
 class FileService {
-  getFile(id: number) {
-    return http.get<Blob>(`/file/${id}` , { responseType: "blob" });
+  async getFile(id: number) {
+    return await http.get<Blob>(`/file/${id}`, { responseType: "blob" });
   }
 
-  getHTMLFile(id: number) {
-    return http.get(`/file/${id}`);
+  async getHTMLFile(id: number) {
+    return await http.get(`/file/${id}`);
   }
 }
 

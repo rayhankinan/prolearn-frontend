@@ -1,5 +1,10 @@
-import React, { useState, useEffect, useRef } from "react";
-import Editor, { Monaco } from "@monaco-editor/react";
+import React, {
+  useState,
+  useRef,
+  ChangeEventHandler,
+  FormEventHandler,
+} from "react";
+import Editor from "@monaco-editor/react";
 import * as monaco from "monaco-editor";
 import Navbar from "@/components/navbar";
 import CodeSubmit from "@/interfaces/code-submit-interface";
@@ -9,10 +14,10 @@ import { AuthContext } from "@/contexts/AuthContext";
 const languages: {
   [key: string]: string;
 } = {
-  javascript: 'js',
-  cpp: 'cpp',
-  c: 'c',
-  python: 'py',
+  javascript: "js",
+  cpp: "cpp",
+  c: "c",
+  python: "py",
 };
 
 const Compiler = () => {
@@ -26,25 +31,26 @@ const Compiler = () => {
 
   let pollInterval: number;
 
-  const handleLanguageChange = (event) => {
+  const handleLanguageChange: ChangeEventHandler<HTMLSelectElement> = (
+    event
+  ) => {
     setSelectedLanguage(event.target.value);
   };
 
-  const handleInputChange = (event) => {
+  const handleInputChange: ChangeEventHandler<HTMLTextAreaElement> = (
+    event
+  ) => {
     setInput(event.target.value);
   };
 
-  function handleEditorDidMount(
-    editor: monaco.editor.IStandaloneCodeEditor,
-    monaco: Monaco,
-  ) {
+  function handleEditorDidMount(editor: monaco.editor.IStandaloneCodeEditor) {
     editorRef.current = editor;
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit: FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
     const extension = languages[selectedLanguage];
-    
+
     let payload: CodeSubmit;
 
     if (input !== "") {
@@ -57,7 +63,7 @@ const Compiler = () => {
       payload = {
         extension: extension,
         code: editorRef.current?.getValue() as string,
-      }
+      };
     }
 
     try {
@@ -85,10 +91,10 @@ const Compiler = () => {
 
   return (
     <div className="flex flex-col h-screen">
-      <Navbar isLoggedIn = {isLoggedIn}/>
+      <Navbar isLoggedIn={isLoggedIn} />
       <h1 className="text-3xl font-bold mt-6 text-center font-mono mb-6">
-          Online Compiler
-        </h1>
+        Online Compiler
+      </h1>
       <div className="flex flex-row">
         <div className="flex w-3/5">
           <div className="flex-1 pl-24 pr-24">
@@ -105,7 +111,7 @@ const Compiler = () => {
                 <option value="">Select a language</option>
                 <option value="javascript">JavaScript</option>
                 <option value="python">Python</option>
-                <option value="java">Java</option>
+                <option value="c">C</option>
                 <option value="cpp">C++</option>
               </select>
             </div>
@@ -136,28 +142,28 @@ const Compiler = () => {
           </div>
         </div>
         <div className="flex flex-col w-2/5 mr-10 mt-6 align-middle">
-            <div className="flex flex-col gap-2 h-1/2">
-                <label htmlFor="input" className="font-semibold pl-2">
-                    Input:
-                </label>
-                <div className="p-2 h-4/5">
-                    <textarea 
-                    className="w-full h-full border-4 border-gray-400 rounded-md placeholder:text-gray-500 pl-[14px] pt-[14px]" 
-                    style={{resize: "none"}}
-                    placeholder="Enter your input here"
-                    onChange={handleInputChange}
-                    />
-                </div>
+          <div className="flex flex-col gap-2 h-1/2">
+            <label htmlFor="input" className="font-semibold pl-2">
+              Input:
+            </label>
+            <div className="p-2 h-4/5">
+              <textarea
+                className="w-full h-full border-4 border-gray-400 rounded-md placeholder:text-gray-500 pl-[14px] pt-[14px]"
+                style={{ resize: "none" }}
+                placeholder="Enter your input here"
+                onChange={handleInputChange}
+              />
             </div>
+          </div>
 
-            <div className="flex flex-col gap-2 h-1/2 p-2">
-              <label htmlFor="output" className="font-semibold">
-                Output:
-              </label>
-              <div className="p-2 border border-4 border-gray-400 rounded-md h-4/5">
-                {output}
-                </div>
+          <div className="flex flex-col gap-2 h-1/2 p-2">
+            <label htmlFor="output" className="font-semibold">
+              Output:
+            </label>
+            <div className="p-2 border border-4 border-gray-400 rounded-md h-4/5">
+              {output}
             </div>
+          </div>
         </div>
       </div>
     </div>
