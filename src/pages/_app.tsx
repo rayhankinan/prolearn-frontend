@@ -40,18 +40,11 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
       <>
-        {showAlert && (
-          <div>
-            <p>Your session has expired. Please login again</p>
-            <button disabled>OK</button>
-          </div>
-        )}
-        {!showAlert && (
+        
         <AuthContextProvider>
           <Component {...pageProps} />
         </AuthContextProvider>
-        )
-          }
+      
       </>
   );
 }
