@@ -9,6 +9,8 @@ describe("Quiz Service", () => {
   });
 
   it("should submit quiz", async () => {
+    const id = 1;
+
     const data = {
       quizId: 1,
       answer : []
@@ -23,9 +25,27 @@ describe("Quiz Service", () => {
 
     (http.post as jest.Mock).mockResolvedValueOnce({ data: mockedResponse });
 
-    const result = await quizService.submitQuiz(data);
+    const result = await quizService.submitQuiz(id, data);
 
-    expect(http.post).toHaveBeenCalledWith("/quiz", data);
+    expect(http.post).toHaveBeenCalledWith(`/quiz/${id}`, data);
     expect(result).toEqual(mockedResponse);
+  });
+
+  it("should view history", async () => {
+    const id = 1;
+
+    const mockedResponse = {
+      data: {
+        message: "Quiz history",
+        data: [],
+      }
+    };
+
+    (http.get as jest.Mock).mockResolvedValueOnce({ data: mockedResponse });
+
+    const result = await quizService.viewHistory(id);
+
+    expect(http.get).toHaveBeenCalledWith(`/quiz/${id}`);
+    expect(result.data).toEqual(mockedResponse);
   });
 });
