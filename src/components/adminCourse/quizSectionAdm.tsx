@@ -4,6 +4,10 @@ import quizService from "@/services/quiz-service";
 import dynamic from "next/dynamic";
 import "react-quill/dist/quill.snow.css";
 import sectionService from "@/services/section-service";
+import EditIcon from '@mui/icons-material/Edit';
+import { Button } from "@material-ui/core";
+import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const DynamicReactQuill = dynamic(() => import("react-quill"), {
   ssr: false,
@@ -37,9 +41,7 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({
   const [showAddQuestionModal, setShowAddQuestionModal] = useState(false);
   const [showDeleteQuestionModal, setShowDeleteQuestionModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [option, setOption] = useState(0);
   const [newQuestion, setNewQuestion] = useState<string>("");
-  const [newAnswer, setNewAnswer] = useState("");
   const [newAnswerA, setNewAnswerA] = useState<options>({
     content: "",
     isCorrect: false,
@@ -198,150 +200,156 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({
   console.log(questions);
 
   return (
-    <div className="bg-gray-100 w-full h-full p-6 rounded-md">
+    <div style={{ marginTop: "20px" }} className="bg-gray-100 w-full h-full p-4 shadow-lg bg-gray-200 rounded-md">
       <div className="flex flex-col font-sans">
         <div className="flex flex-col">
           {questions.content.questions.length > 0 &&
           currentQuestion <= questions.content.questions.length ? (
             <>
               <div className="flex flex-row w-full">
-                <div className="w-2/3">
+                <div className="w-full">
                   <div className="flex flex-col">
-                    <div className="flex flex-row">
-                      <h1 className="text-4xl font-bold">
+                    <div className="flex flex-row justify-between rounded-md bg-neutral-300 p-2">
+                      <div className="w-fit text-3xl font-semibold">
                         {questions.content.title}
-                      </h1>
-                      <button
-                        className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 ml-6 flex justify-center"
+                      </div>
+                      <Button
+                        className="w-fit h-fit text-end"
+                        color="primary"
+                        startIcon={<EditIcon />}
                         onClick={() => handleEditTitleClick()}
                       >
-                        <i
-                          className="fas fa-edit"
-                          style={{ paddingTop: "3px" }}
-                        ></i>
-                      </button>
+                        Edit Title
+                      </Button>
                     </div>
-                    <h1 className="mt-6">Answer The Question Below</h1>
-                  </div>
-                </div>
-                <div className="w-1/3 text-end">
-                  <h2 className="text-2xl">Timer : 00:00:00</h2>
-                </div>
-              </div>
-
-              <div className="flex flex-col mt-6">
-                <div className="flex flex-row mb-6">
-                  <div className="w-1/2 flex flex-row">
-                    <h1 className="text-2xl font-bold">
-                      Question {currentQuestion + 1}
-                    </h1>
-                    <button
-                      className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 ml-6 flex justify-center"
-                      onClick={() => setShowEditQModal(true)}
-                    >
-                      <i className="fas fa-edit"></i>
-                    </button>
-                  </div>
-                  <div className="w-1/2 text-end">
-                    <h1 className="text-2xl font-bold">
-                      {currentQuestion + 1} /{" "}
-                      {questions.content.questions.length}
-                    </h1>
-                  </div>
-                </div>
-                <h1
-                  className="text-2xl font-bold"
-                  dangerouslySetInnerHTML={{
-                    __html:
-                      questions.content.questions[currentQuestion].content,
-                  }}
-                ></h1>
-                <div className="flex flex-col mt-6">
-                  <button
-                    className="bg-blue-500 text-white mr-2 font-bold py-2 px-4 rounded hover:bg-blue-700"
-                    onClick={() => {
-                      setShowEditAModal(true);
-                    }}
-                  >
-                    <i className="fas fa-edit"></i>
-                  </button>
-                  {questions.content.questions[currentQuestion].options.map(
-                    (answer, index) => (
-                      <div className="flex flex-row mt-4">
-                        <div className="flex w-1/6 ">
-                          <div className="">
-                            <p className="text-xl font-bold">
-                              Opsi {index + 1}
-                            </p>
-                          </div>
-                        </div>
-                        <div className="w-5/6" style={{ paddingTop: "4px" }}>
-                          <label htmlFor={`answer${index}`}>
-                            {answer.content}
-                          </label>
+                    <div className="flex flex-row">
+                      <div className="w-1/2">
+                        <div className="mt-3 text-sm">Answer The Question Below</div>
+                      </div>
+                      <div className="w-1/2 text-end">
+                        <div className="mt-3 font-bold text-sm">
+                          {currentQuestion + 1} / {quizContent.content.questions.length}
                         </div>
                       </div>
-                    )
-                  )}
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              <div className="flex flex-row mt-12 mb-4">
-                <div className="w-1/2">
-                  <button
-                    className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
+              <div className="flex flex-col mt-3">
+                <div className="flex justify-between">
+                  <div
+                    className="text-2xl font-semibold w-3/5 items-center"
+                    dangerouslySetInnerHTML={{
+                      __html:
+                        questions.content.questions[currentQuestion].content,
+                    }}
+                  ></div>
+                  <Button
+                    className="w-fit h-fit text-end"
+                    color="primary"
+                    startIcon={<EditIcon />}
+                    onClick={() => setShowEditQModal(true)}
+                  >
+                    Edit Question
+                  </Button>
+                </div>
+                <div className="flex justify-between">
+                  <div className="flex flex-col w-4/5 mt-1">
+                    {questions.content.questions[currentQuestion].options.map(
+                      (answer, index) => (
+                        <div className="flex flex-row mt-3">
+                          <div className="flex w-1/6">
+                            <div>
+                              <div className="text-lg font-normal">
+                                Option {index + 1}
+                              </div>
+                            </div>
+                          </div>
+                          <div className="w-5/6">
+                            <label className="text-lg font-medium" htmlFor={`answer${index}`}>
+                              {answer.content}
+                            </label>
+                          </div>
+                        </div>
+                      )
+                    )}
+                  </div>
+                  <Button
+                    style={{ marginTop: "0.75rem" }}
+                    className="w-fit h-fit text-end"
+                    color="primary"
+                    startIcon={<EditIcon />}
+                    onClick={() => setShowEditAModal(true)}
+                  >
+                    Edit Options
+                  </Button>
+                </div>
+              </div>
+
+              <div className="flex flex-row justify-evenly mt-3">
+                <div className="w-fit">
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    startIcon={<AddIcon />}
                     onClick={() => setShowAddQuestionModal(true)}
                   >
                     Add Question
-                  </button>
+                  </Button>
                 </div>
-                <div className="w-1/2 text-end">
-                  <button
-                    className="bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
+                <div className="w-fit text-end">
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    startIcon={<DeleteIcon />}
                     onClick={() => {
                       setShowDeleteQuestionModal(true);
                       setDeleteMode(true);
                     }}
                   >
-                    Delete Question
-                  </button>
+                    Delete Question(s)
+                  </Button>
                 </div>
               </div>
 
-              <div className="flex flex-row mt-12 mb-10">
-                {!isFirstQuestion && (
-                  <div className="w-1/2">
-                    <button
-                      className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
-                      onClick={handlePrevClick}
-                    >
-                      Prev
-                    </button>
-                  </div>
-                )}
+              <div className="flex flex-row mt-4">
+                <div className="w-1/2">
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    disabled={isFirstQuestion}
+                    onClick={handlePrevClick}
+                  >
+                    Previous
+                  </Button>
+                </div>
                 <div className="w-1/2 text-end">
-                  <button
-                    className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
+                  <Button
+                    variant="contained"
+                    color="primary"
                     onClick={handleNextClick}
                   >
                     {isLastQuestion ? "Finish" : "Next"}
-                  </button>
+                  </Button>
                 </div>
               </div>
             </>
           ) : (
-            <div className="flex flex-col justify-center items-center mt-6">
-              <p className="text-2xl font-bold">
-                There are no questions in this quiz yet.
+            <div className="flex flex-col justify-center items-center mt-2">
+              <p className="text-2xl font-semibold">
+                There are not any questions in this quiz.
               </p>
-              <button
-                className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 mt-4"
-                onClick={() => {
-                  setShowAddQuestionModal(true);
-                }}
-              >
-                Add Question
-              </button>
+              <div className="w-fit mt-3 mb-3">
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    startIcon={<AddIcon />}
+                    onClick={() => setShowAddQuestionModal(true)}
+                  >
+                    Add Question
+                  </Button>
+                </div>
             </div>
           )}
         </div>

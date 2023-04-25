@@ -247,12 +247,10 @@ export default function CourseDetailAdmin() {
             <Grid item xs={9} sx={{ paddingLeft: "20px" }}>
               <Grid item>
                 {fileString ? (
-                  <div dangerouslySetInnerHTML={{ __html: fileString }}></div>
+                  <div style={{ marginLeft: "20px" }} dangerouslySetInnerHTML={{ __html: fileString }}></div>
                 ) : (
                   <div>loading ... </div>
                 )}
-                {/* {file
-                  ? <div dangerouslySetInnerHTML={{__html : file!.toString()}}></div> : <div>loading ... </div>} */}
                 {quizContent ? (
                   <QuizSectionAdm
                     quizContent={quizContent}
