@@ -7,6 +7,8 @@ import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import ToggleButton from "@mui/material/ToggleButton";
 
 import "react-quill/dist/quill.snow.css";
 
@@ -42,33 +44,56 @@ const AddSectionModal = ({ material, courseId }: AddSectionModalProps) => {
   const [number, setNumber] = useState(0);
   const [question, setQuestion] = useState(" ");
   const [answer, setAnswer] = useState(" ");
-  const [trueAnswer, setTrueAnswer] = useState(" ");
+  const [trueAnswer, setTrueAnswer] = useState<string[]>([]);
+
+  const [type, setType] = useState(" ");
+
+  const [nameError, setNameError] = useState(false);
+  const [isBodyEmpty, setIsBodyEmpty] = useState<boolean>(false);
+  const [durationError, setDurationError] = useState(false);
+  const [objectiveError, setObjectiveError] = useState(false);
+  const [quizError, setQuizError] = useState(false);
+  const [countQuestionError, setCountQuestionError] = useState(false);
+  const [contentError, setContentError] = useState<boolean[]>([false, false, false, false]);
+  const [trueAnswerError, setTrueAnswerError] = useState(false);
+
+  const handleTypeChange = (event: React.MouseEvent<HTMLElement>, newType: string) => {
+    setType(newType);
+  };
 
   const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value);
+    setNameError(event.target.value === "");
   };
 
-  const handleBodyChange = (value: string | null) => {
-    if (value != null) {
-      setBody(value);
-    }
+  const handleBodyChange = (value: string) => {
+    setBody(value);
+    setIsBodyEmpty(value === "");
   };
 
   const handleDurationChange = (event: ChangeEvent<HTMLInputElement>) => {
     setDuration(parseInt(event.target.value));
+    setDurationError(parseInt(event.target.value) === 0);
+    setDurationError(parseInt(event.target.value) < 0);
+    setDurationError(event.target.value === "")
   };
 
   const handleObjectiveChange = (event: ChangeEvent<HTMLInputElement>) => {
     setObjective(event.target.value);
+    setObjectiveError(event.target.value === "");
   };
 
   const handleQuizChange = (event: ChangeEvent<HTMLInputElement>) => {
     setQuiz(event.target.value);
+    setQuizError(event.target.value === "");
   };
 
   const handleCountQuestionChange = (event: ChangeEvent<HTMLInputElement>) => {
     const count = parseInt(event.target.value);
     setCountQuestion(count);
+    setCountQuestionError(count === 0);
+    setCountQuestionError(count < 0);
+    setCountQuestionError(event.target.value === "")
 
     setQuestionAnswerList((prev) => {
       const currentCount = prev.length;
@@ -114,6 +139,8 @@ const AddSectionModal = ({ material, courseId }: AddSectionModalProps) => {
   ) => {
     setQuestionAnswerList((prev) => {
       const newList = [...prev];
+      // const errors = newList[questionIndex].options.map((option) => option.content === "");
+      // setContentError(errors);
       newList[questionIndex].options[optionIndex].content = value;
       return newList;
     });
@@ -140,10 +167,9 @@ const AddSectionModal = ({ material, courseId }: AddSectionModalProps) => {
       return newList;
     });
     setTrueAnswer((prev) => {
-      const newTrueAnswer = prev.split("");
+      const newTrueAnswer: string[] = [...prev];
       newTrueAnswer[index] = value;
-
-      return newTrueAnswer.join("");
+      return newTrueAnswer;
     });
   };
 
@@ -195,156 +221,231 @@ const AddSectionModal = ({ material, courseId }: AddSectionModalProps) => {
       <Grid item xs={9}>
         <TextField
           variant="outlined"
+          required
           fullWidth
           value={name}
           onChange={handleNameChange}
+          error={nameError}
+          helperText={nameError ? "Material Name is required" : ""}
         />
       </Grid>
-      <Grid item xs={3} style={{ marginTop: "16px" }}>
-        <label>Material Text</label>
+      <Grid item xs={12}>
+        <ToggleButtonGroup 
+          value={type}
+          exclusive
+          onChange={handleTypeChange}
+          aria-label="text alignment"
+          color="primary"
+          style={{ display: "flex", justifyContent: "center" }}
+        >
+          <ToggleButton 
+            value="quiz"
+            style={{ width: "50%", textAlign: "center" }}>
+            Quiz
+          </ToggleButton>
+
+          <ToggleButton 
+          value="material"
+          style={{ width: "50%", textAlign: "center" }}>
+            Material
+          </ToggleButton>
+        </ToggleButtonGroup>
       </Grid>
-      <Grid item xs={9}>
-        <div style={{ overflow: "auto", maxHeight: "350px" }}>
-          <DynamicReactQuill
-            placeholder="Write something amazing"
-            modules={AddSectionModal.modules}
-            formats={AddSectionModal.formats}
-            onChange={handleBodyChange}
-            value={body}
-          />
-        </div>
-      </Grid>
-      <Grid item xs={3} style={{ marginTop: "16px" }}>
-        <label>Duration (in minutes)</label>
-      </Grid>
-      <Grid item xs={9}>
-        <TextField
-          variant="outlined"
-          fullWidth
-          type="number"
-          value={duration}
-          onChange={handleDurationChange}
-        />
-      </Grid>
-      <Grid item xs={3} style={{ marginTop: "16px" }}>
-        <label>Objective</label>
-      </Grid>
-      <Grid item xs={9}>
-        <TextField
-          variant="outlined"
-          fullWidth
-          value={objective}
-          onChange={handleObjectiveChange}
-        />
-      </Grid>
-      <Grid item xs={3} style={{ marginTop: "16px" }}>
-        <label>Quiz Title</label>
-      </Grid>
-      <Grid item xs={9}>
-        <TextField
-          variant="outlined"
-          fullWidth
-          value={quiz}
-          onChange={handleQuizChange}
-        />
-      </Grid>
-      <Grid item xs={3} style={{ marginTop: "16px" }}>
-        <label>Jumlah Soal</label>
-      </Grid>
-      <Grid item xs={9}>
-        <TextField
-          variant="outlined"
-          fullWidth
-          type="number"
-          value={countQuestion}
-          onChange={handleCountQuestionChange}
-        />
-      </Grid>
-      {/* Create Dropdown for question */}
-      {countQuestion > 0 &&
-        Array.from(Array(Math.max(0, countQuestion)), (e, i) => {
-          const questionAnswer = questionAnswerList[i] || { options: [] };
-          return (
-            <React.Fragment key={i}>
-              <Grid item xs={3} style={{ marginTop: "16px" }}>
-                <label>Question {i + 1}</label>
-              </Grid>
-              <Grid item xs={9}>
-                <div style={{ overflow: "auto", maxHeight: "350px" }}>
-                  <DynamicReactQuill
-                    placeholder="Write something amazing"
-                    modules={AddSectionModal.modules}
-                    formats={AddSectionModal.formats}
-                    onChange={(content) => handleQuestionChange(i, content)}
-                    value={questionAnswer.content}
-                  />
-                </div>
-              </Grid>
-              {[...Array(4)].map((_, j) => (
-                <React.Fragment key={j}>
-                  <Grid item xs={3} style={{ marginTop: "16px" }}>
-                    <label>Answer {j + 1}</label>
-                  </Grid>
-                  <Grid item xs={7}>
-                    <TextField
-                      variant="outlined"
-                      fullWidth
-                      value={questionAnswer.options[j]?.content || ""}
-                      onChange={(event) =>
-                        handleAnswerChange(i, j, event.target.value)
-                      }
+      {type === "material" ? (
+        <>
+          <Grid item xs={3} style={{ marginTop: "16px" }}>
+            <label>Material Text</label>
+          </Grid>
+          <Grid item xs={9}>
+            <div style={{ overflow: "auto", maxHeight: "350px" }}>
+              <DynamicReactQuill
+                placeholder="Write something amazing"
+                modules={AddSectionModal.modules}
+                formats={AddSectionModal.formats}
+                onChange={handleBodyChange}
+                value={body}
+                style={{ border: isBodyEmpty ? "1px solid red" : "" }}
+              />
+            </div>
+          </Grid>
+          <Grid item xs={3} style={{ marginTop: "16px" }}>
+            <label>Duration (in minutes)</label>
+          </Grid>
+          <Grid item xs={9}>
+            <TextField
+              variant="outlined"
+              fullWidth
+              type="number"
+              required
+              value={duration}
+              onChange={handleDurationChange}
+              error={durationError}
+              helperText={durationError ? "Duration is required" : ""}
+            />
+          </Grid>
+          <Grid item xs={3} style={{ marginTop: "16px" }}>
+            <label>Objective</label>
+          </Grid>
+          <Grid item xs={9}>
+            <TextField
+              variant="outlined"
+              fullWidth
+              required
+              value={objective}
+              onChange={handleObjectiveChange}
+              error={objectiveError}
+              helperText={objectiveError ? "Objective is required" : ""}
+            />
+          </Grid>
+        </>
+      ) : (
+        <>
+          <Grid item xs={3} style={{ marginTop: "16px" }}>
+            <label>Quiz Title</label>
+          </Grid>
+          <Grid item xs={9}>
+            <TextField
+              variant="outlined"
+              fullWidth
+              required
+              value={quiz}
+              onChange={handleQuizChange}
+              error={quizError}
+              helperText={quizError ? "Quiz title is required" : ""}
+            />
+          </Grid>
+          <Grid item xs={3} style={{ marginTop: "16px" }}>
+            <label>Jumlah Soal</label>
+          </Grid>
+          <Grid item xs={9}>
+            <TextField
+              variant="outlined"
+              fullWidth
+              required
+              type="number"
+              value={countQuestion}
+              onChange={handleCountQuestionChange}
+              error={countQuestionError}
+              helperText={countQuestionError ? "Jumlah soal is required" : ""}
+            />
+          </Grid>
+          {countQuestion > 0 && Array.from(Array(Math.max(0, countQuestion)), (e, i) => {
+            const questionAnswer = questionAnswerList[i] || {options: []};
+            return (
+              <React.Fragment key={i}>
+                <Grid item xs={3} style={{ marginTop: "16px" }}>
+                  <label>Question {i+1}</label>
+                </Grid>
+                <Grid item xs={9}>
+                  <div style={{overflow: "auto", maxHeight : "350px" }}>
+                    <DynamicReactQuill
+                      placeholder="Write something amazing"
+                      modules={AddSectionModal.modules}
+                      formats={AddSectionModal.formats}
+                      onChange={(content) => handleQuestionChange(i, content)}
+                      value={questionAnswer.content}
                     />
-                  </Grid>
-                  {/* <Grid item xs={2} style={{ display: "flex", alignItems: "center" }}>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    fullWidth
-                    className="bg-green-500 hover:bg-green-600"
-                    style={{color: "white" }}
-                    onClick={() => handleAddAnswer(i)}
-                  >
-                    Add
-                  </Button>
-                </Grid> */}
-                </React.Fragment>
-              ))}
-              <Grid item xs={3} style={{ marginTop: "16px" }}>
-                <label>Correct Answer</label>
-              </Grid>
-              <Grid item xs={9}>
-                <FormControl variant="outlined" fullWidth>
-                  <InputLabel id={`correct-answer-${i + 1}-label`}>
-                    Correct Answer
-                  </InputLabel>
-                  <Select
-                    labelId={`correct-answer-${i + 1}-label`}
-                    id={`correct-answer-${i + 1}`}
-                    value={trueAnswer[i] || ""}
-                    onChange={(event) =>
-                      handleTrueAnswerChange(i, String(event.target.value))
-                    }
-                    label="Correct Answer"
-                  >
-                    {[...Array(4)].map((_, j) => (
-                      <MenuItem
-                        key={j}
+                  </div>
+                </Grid>
+                {[...Array(4)].map((_, j) => (
+                  <React.Fragment key={j}>
+                    <Grid item xs={3} style={{ marginTop: "16px" }}>
+                      <label>Answer {j+1}</label>
+                    </Grid>
+                    <Grid item xs={7}>
+                      <TextField
+                        variant="outlined"
+                        fullWidth
+                        required
                         value={questionAnswer.options[j]?.content || ""}
-                      >
-                        {questionAnswer.options[j]?.content || ""}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-            </React.Fragment>
-          );
-        })}
+                        onChange={(event) => handleAnswerChange(i, j, event.target.value)}
+                        error={contentError[j]}
+                        helperText={contentError[j] ? "Content is required" : ""}
+                      />
+                    </Grid>
+                  </React.Fragment>
+                ))}
+                <Grid item xs={3} style={{ marginTop: "16px" }}>
+                  <label>Correct Answer</label>
+                </Grid>
+                <Grid item xs={9}>
+                  <FormControl variant="outlined" fullWidth>
+                    <InputLabel id={`correct-answer-${i+1}-label`}>
+                      Correct Answer
+                    </InputLabel>
+                    <Select
+                      labelId={`correct-answer-${i+1}-label`}
+                      id={`correct-answer-${i+1}`}
+                      value={trueAnswer[i] || ""}
+                      onChange={(event) => handleTrueAnswerChange(i, String(event.target.value))}
+                      label="Correct Answer"
+                      required
+                    >
+                      {[...Array(4)].map((_, j) => (
+                        <MenuItem key={j} value={questionAnswer.options[j]?.content || ""}>
+                          {questionAnswer.options[j]?.content || ""}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
+              </React.Fragment>
+            )
+          })}
+        </>
+      )}
 
       <Grid item xs={12}>
         <div className="flex justify-center mt-5">
           <button
-            onClick={handleSave}
+            onClick={(e) => {
+              if(name === "") {
+                alert("Material Name is required");
+              }
+              if(type === "material") {
+                if(body === null) {
+                  alert("Material Text is required");
+                } else if(duration === 0) {
+                  alert("Duration is required");
+                } else if(objective === "") {
+                  alert("Objective is required");
+                } else if(duration < 0) {
+                  alert("Duration must be greater than 0");
+                }else{
+                  handleSave();
+                }
+              }
+              if(type === "quiz"){
+                if (quiz === "") {
+                  alert("Quiz title is required");
+                } else if(countQuestion === 0) {
+                  alert("Jumlah soal is required");
+                } else if(countQuestion > 0) {
+                  let isQuestionEmpty = false;
+                  let isAnswerEmpty = false;
+                  for(let i = 0; i < countQuestion; i++) {
+                    if(questionAnswerList[i].content === "") {
+                      isQuestionEmpty = true;
+                    }
+                    for(let j = 0; j < 4; j++) {
+                      if(questionAnswerList[i].options[j].content === "") {
+                        isAnswerEmpty = true;
+                      }
+                    }
+                  }
+                  if(isQuestionEmpty) {
+                    alert("Question is required");
+                  } else if(isAnswerEmpty) {
+                    alert("Answer is required");
+                  } else if(trueAnswer.includes("")) {
+                    alert("Correct Answer is required");
+                  } else if(!isQuestionEmpty && !isAnswerEmpty && !trueAnswer.includes("")) {
+                    handleSave();
+                  }
+                } 
+              }
+            }
+          }
             className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mr-4"
           >
             Save
