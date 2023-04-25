@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import quizService from "@/services/quiz-service";
 import Quiz from "@/interfaces/quiz-interface";
+import { Button } from "@material-ui/core";
 
 interface QuizSectionProps {
   quizContent: Quiz;
@@ -20,7 +21,6 @@ const QuizSection: React.FC<QuizSectionProps> = ({ quizContent }) => {
   };
 
   const handleNextClick = () => {
-    // setCurrentQuestion((prev) => prev + 1);
     if (currentQuestion < quizContent.content.questions.length - 1) {
       setCurrentQuestion((prev) => prev + 1);
       setIndexAnswer(null);
@@ -64,48 +64,39 @@ const QuizSection: React.FC<QuizSectionProps> = ({ quizContent }) => {
   const isFirstQuestion = currentQuestion === 0;
 
   return (
-    <div className="bg-gray-100 w-full h-full p-6 rounded-md">
+    <div style={{ marginTop: "20px" }} className="bg-gray-100 w-full h-full p-4 shadow-lg bg-gray-200 rounded-md">
       <div className="flex flex-col font-sans">
         <div className="flex flex-row w-full">
-          <div className="w-1/2">
+          <div className="w-full">
             <div className="flex flex-col">
-              <h1 className="text-4xl font-bold">
+              <div className="text-2xl font-bold rounded-md bg-neutral-300 p-2 flex justify-center">
                 {quizContent.content.title}
-              </h1>
-              <h1 className="mt-6">Answer The Question Below</h1>
+              </div>
+              <div className="flex flex-row">
+                <div className="w-1/2">
+                  <div className="mt-3 text-sm">Answer the Question Below</div>
+                </div>
+                <div className="w-1/2 text-end">
+                  <div className="mt-3 font-bold text-sm">{currentQuestion + 1} / {quizContent.content.questions.length}</div>
+                </div>
+              </div>
             </div>
-          </div>
-          <div className="w-1/2 text-end">
-            <h2 className="text-2xl">Timer : 00:00:00</h2>
           </div>
         </div>
 
-        <div className="flex flex-col mt-6">
-          <div className="flex flex-row">
-            <div className="w-1/2">
-              <h1 className="text-2xl font-bold">
-                Question {currentQuestion + 1}
-              </h1>
-            </div>
-            <div className="w-1/2 text-end">
-              <h1 className="text-2xl font-bold">
-                {currentQuestion + 1} / {quizContent.content.questions.length}
-              </h1>
-            </div>
-          </div>
-          <div className="flex flex-col mt-6">
-            {/* <h1 className="text-2xl font-bold">{quizContent.content.questions[currentQuestion].content}</h1> */}
-            <h1
-              className="text-2xl font-bold"
+        <div className="flex flex-col">
+          <div className="flex flex-col mt-3">
+            <div
+              className="text-xl font-semibold mb-2"
               dangerouslySetInnerHTML={{
                 __html: quizContent.content.questions[currentQuestion].content,
               }}
-            ></h1>
-            <div className="flex flex-col mt-6">
+            ></div>
+            <div className="flex flex-col">
               {quizContent.content.questions[currentQuestion].options.map(
                 (answer, index) => (
-                  <div className="flex flex-row mt-4">
-                    <div className="w-1/12">
+                  <div className="flex flex-row mt-3">
+                    <div className="w-10">
                       <input
                         type="radio"
                         name="answer"
@@ -114,7 +105,7 @@ const QuizSection: React.FC<QuizSectionProps> = ({ quizContent }) => {
                         checked={indexAnswer === index}
                       />
                     </div>
-                    <div className="w-11/12">
+                    <div className="w-10/12">
                       <label htmlFor={`answer${index}`}>{answer.content}</label>
                     </div>
                   </div>
@@ -124,24 +115,25 @@ const QuizSection: React.FC<QuizSectionProps> = ({ quizContent }) => {
           </div>
         </div>
 
-        <div className="flex flex-row mt-12 mb-10">
-          {!isFirstQuestion && (
-            <div className="w-1/2">
-              <button
-                className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
-                onClick={handlePrevClick}
-              >
-                Prev
-              </button>
-            </div>
-          )}
+        <div className="flex flex-row mt-4">
+          <div className="w-1/2">
+            <Button
+              variant="contained"
+              color="primary"
+              disabled={isFirstQuestion}
+              onClick={handlePrevClick}
+            >
+              Previous
+            </Button>
+          </div>
           <div className="w-1/2 text-end">
-            <button
-              className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
+            <Button
+              variant="contained"
+              color="primary"
               onClick={handleNextClick}
             >
               {isLastQuestion ? "Finish" : "Next"}
-            </button>
+            </Button>
           </div>
         </div>
       </div>

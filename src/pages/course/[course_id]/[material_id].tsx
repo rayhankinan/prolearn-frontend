@@ -15,6 +15,7 @@ import fileService from "@/services/file-service";
 import CategoryService from "@/services/category-service";
 import QuizSection from "@/components/userCourse/quizSection";
 import Course from "@/interfaces/course-interface";
+import { Button } from "@material-ui/core";
 
 const theme = createTheme();
 
@@ -190,25 +191,24 @@ export default function UserCourseDetail() {
             <Grid item xs={9} sx={{ paddingLeft: "20px" }}>
               <Grid item>
                 {fileString ? (
-                  <div dangerouslySetInnerHTML={{ __html: fileString }}></div>
+                  <div style={{ marginLeft: "15px" }} dangerouslySetInnerHTML={{ __html: fileString }}></div>
                 ) : (
                   <div>loading ... </div>
                 )}
-                {/* {/* <QuizSection /> */}
                 {quizContent &&
                   !quizStarted &&
                   quizContent.content.questions.length > 0 && (
-                    <div className="flex flex-col md:flex-row justify-between items-center bg-gray-200 p-4 rounded-lg shadow-md">
+                    <div style={{ marginTop: "20px" }} className="flex flex-col md:flex-row justify-between items-center bg-gray-200 p-4 rounded-lg shadow-md">
                       <div className="font-bold text-lg mb-2 md:mb-0 md:mr-2">
-                        Previous Grade: {score}/
-                        {quizContent.content.questions.length}
+                        Previous Grade:  {score !== '-' ? (parseInt(score)/quizContent.content.questions.length * 100).toFixed(0) : '-'}%
                       </div>
-                      <button
-                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                      <Button
+                        variant="contained"
+                        color="primary"
                         onClick={() => handleStartQuiz()}
                       >
-                        Start Quiz
-                      </button>
+                        Start
+                      </Button>
                     </div>
                   )}
                 {quizContent &&
