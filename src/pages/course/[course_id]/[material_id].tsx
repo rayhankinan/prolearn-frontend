@@ -15,7 +15,9 @@ import fileService from "@/services/file-service";
 import CategoryService from "@/services/category-service";
 import QuizSection from "@/components/userCourse/quizSection";
 import Course from "@/interfaces/course-interface";
-import { Button } from "@material-ui/core";
+import { Button, IconButton } from "@material-ui/core";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import MenuIcon from '@mui/icons-material/Menu';
 
 const theme = createTheme();
 
@@ -31,6 +33,14 @@ export default function UserCourseDetail() {
   const [score, setScore] = useState("");
   const [quizId, setQuizId] = useState(1);
   const [quizContent, setQuizContent] = useState<Quiz | null>(null);
+  const [showSideBar, setShowSideBar] = useState(true);
+
+  const handleToggleSideBar = () => {
+    // if(material_id){
+    //   return;
+    // }
+    setShowSideBar(!showSideBar);
+  };
 
   useEffect(() => {
     if (router.isReady) {
@@ -129,102 +139,147 @@ export default function UserCourseDetail() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <main>
-        <Grid sx={{ width: "70%", margin: "0 auto", marginTop: "30px" }}>
+        <Grid sx={{ width: "100%", margin: "0 auto", position: 'fixed', top: 0, zIndex: 1}}>
           <Grid
             container
             direction="row"
             justifyContent="space-between"
             alignItems="center"
-            sx={{ justifyContent: "center" }}
+            sx={{ justifyContent: "left" }}
+            marginLeft={"10px"}
           >
             <Box sx={{ display: "flex", alignItems: "center" }}>
+              <IconButton onClick={() => router.push('/course')}>
+                <ArrowBackIcon />
+              </IconButton>
               <Typography
                 variant="h4"
-                className="text-4xl font-bold mt-10 mx-4 mb-5"
-                sx={{ marginRight: "10px" }}
+                className="text-2xl font-bold mt-6 mx-4 mb-6"
+                sx={{ marginRight: "20px" }}
               >
-                COURSE {course_id}
+                {course?.title}
+                {/* Algorithm Strategic (Greedy Function) */}
               </Typography>
             </Box>
           </Grid>
-          <hr className="border-t-3 border-black " />
+          <hr className="border-t-2 border-black border-opacity-20 " />
         </Grid>
 
-        <Grid sx={{ width: "70%", margin: "0 auto", marginTop: "30px" }}>
-          <Grid container spacing={2}>
-            <Grid item xs={3} sx={{ borderRight: "1px solid #ccc" }}>
-              <Grid item container direction="column">
-                {section.map((material) => (
-                  <Grid
-                    sx={{
+        <Grid sx={{ width: "100%", margin: "0 auto", marginTop: "100px" }}>
+          <Grid item xs={3} sx={{marginBottom: "30px", marginLeft: "15px"}}>
+            <Button 
+              variant="contained" 
+              style={{ 
+                background: 'none', 
+                boxShadow: 'none', 
+                color: 'inherit', 
+                textTransform: 'none', 
+                fontSize: '1.2rem',
+                fontWeight: 'bold',
+              }} 
+              startIcon={<MenuIcon />} 
+              onClick={handleToggleSideBar}
+              >
+            </Button>
+          </Grid>
+          <Grid item xs={12} sx={{ paddingLeft: "20px" }}>
+            <Grid container spacing={2}>
+              {showSideBar && (
+                <Grid 
+                  item 
+                  xs={2} 
+                  sx={{
+                    borderRight: '1px solid #ccc',
+                    transform: 'translateX(0)',
+                    transition: 'transform ease-out 150ms',
+                  }}
+                  className="transition-all"
+                  >
+                  <Box sx={{marginLeft: "16px", marginTop: "-3px"}}>
+                    <Typography variant="h6" sx={{ color: "#333", mb: 4, fontWeight: "bold"}}>
+                      Daftar Modul
+                    </Typography>
+                    <Grid item container direction="column">
+                      {section.map((material) => (
+                        <Box
+                          key={material.id}
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            mb: 1,
+                            cursor: "pointer",
+                            transition: "all 0.2s",
+                            "&:hover": {
+                              backgroundColor: "#e5e7eb",
+                              borderRadius: "5px",
+                            },
+                            textDecoration: "none"
+                          }}
+                        >
+                          {material.id == material_idInt && (
+                            <Link href={`/course/${course_id}/${material.id}`} style={{ color: "black", textDecoration: "none"}}>
+                              <Typography variant="subtitle1" sx={{ fontWeight: "bold", ml: 2, mr: 1}}>
+                                {material.title}
+                              </Typography>
+                            </Link>
+                          )}
+                          {material.id != material_idInt && (
+                            <Link href={`/course/${course_id}/${material.id}`} style={{ color: "black", textDecoration: "none"}}>
+                              <Typography variant="subtitle1" sx={{ ml: 2, mr: 1 }}>{material.title}</Typography>
+                            </Link>
+                          )}
+                        </Box>
+                      ))}
+                    </Grid>
+                  </Box>
+                </Grid>
+              )}
+
+              <Grid item xs={showSideBar ? 9 : 12}>
+                <Grid item>
+                  {fileString ? (
+                    <div style={{
                       display: "flex",
                       alignItems: "center",
-                      justifyContent: "space-between",
-                      marginBottom: "10px",
-                    }}
-                    key={material.id}
-                  >
-                    {material.id == material_idInt && (
-                      <Link
-                        href={`/course/${course_id}/${material.id}`}
-                        style={{ color: "black" }}
-                      >
-                        {/* <a style={{ color: "black" }}> */}
-                        <div className="font-bold">{material.title}</div>
-                        {/* </a> */}
-                      </Link>
-                    )}
-                    {material.id != material_idInt && (
-                      <Link
-                        href={`/course/${course_id}/${material.id}`}
-                        style={{ textDecoration: "none", color: "black" }}
-                      >
-                        {/* <a style={{ color: "black" }}> */}
-                        <div>{material.title}</div>
-                        {/* </a> */}
-                      </Link>
-                    )}
-                  </Grid>
-                ))}
-              </Grid>
-            </Grid>
-            <Grid item xs={9} sx={{ paddingLeft: "20px" }}>
-              <Grid item>
-                {fileString ? (
-                  <div style={{ marginLeft: "15px" }} dangerouslySetInnerHTML={{ __html: fileString }}></div>
-                ) : (
-                  <div>loading ... </div>
-                )}
-                {quizContent &&
-                  !quizStarted &&
-                  quizContent.content.questions.length > 0 && (
-                    <div style={{ marginTop: "20px" }} className="flex flex-col md:flex-row justify-between items-center bg-gray-200 p-4 rounded-lg shadow-md">
-                      <div className="font-bold text-lg mb-2 md:mb-0 md:mr-2">
-                        Previous Grade:  {score !== '-' ? (parseInt(score)/quizContent.content.questions.length * 100).toFixed(0) : '-'}%
-                      </div>
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={() => handleStartQuiz()}
-                      >
-                        Start
-                      </Button>
-                    </div>
+                      margin: "0 200px",
+                      textAlign: "justify",
+                      flexWrap: "wrap",
+                      flexDirection: "column",
+                    }} dangerouslySetInnerHTML={{ __html: fileString }}></div>
+                  ) : (
+                    <div>loading ... </div>
                   )}
-                {quizContent &&
-                  !quizStarted &&
-                  quizContent.content.questions.length <= 0 && (
-                    <div className="flex flex-col md:flex-row justify-between items-center bg-gray-200 p-4 rounded-lg shadow-md">
-                      <div className="font-bold text-lg mb-2 md:mb-0 md:mr-2">
-                        Quiz's questions are not available
+                  {quizContent &&
+                    !quizStarted &&
+                    quizContent.content.questions.length > 0 && (
+                      <div style={{ width: "70%", marginTop: "20px", margin: "auto" }} className="flex flex-col md:flex-row justify-between items-center bg-gray-200 p-4 rounded-lg shadow-md">
+                        <div className="font-bold text-lg mb-2 md:mb-0 md:mr-2">
+                          Previous Grade:  {score !== '-' ? (parseInt(score)/quizContent.content.questions.length * 100).toFixed(0) : '-'}%
+                        </div>
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          onClick={() => handleStartQuiz()}
+                        >
+                          Start
+                        </Button>
                       </div>
-                    </div>
+                    )}
+                  {quizContent &&
+                    !quizStarted &&
+                    quizContent.content.questions.length <= 0 && (
+                      <div style={{ width: "70%", marginTop: "20px", margin: "auto" }} className="flex flex-col md:flex-row justify-between items-center bg-gray-200 p-4 rounded-lg shadow-md">
+                        <div className="font-bold text-lg mb-2 md:mb-0 md:mr-2">
+                          Quiz's questions are not available
+                        </div>
+                      </div>
+                    )}
+                  {quizContent && quizStarted ? (
+                    <QuizSection quizContent={quizContent} />
+                  ) : (
+                    <div></div>
                   )}
-                {quizContent && quizStarted ? (
-                  <QuizSection quizContent={quizContent} />
-                ) : (
-                  <div></div>
-                )}
+                </Grid>
               </Grid>
             </Grid>
           </Grid>
