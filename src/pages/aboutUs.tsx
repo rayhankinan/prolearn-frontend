@@ -1,5 +1,3 @@
-// Create About Us Page
-
 import React from "react";
 import { useState, useEffect } from "react";
 import Navbar from "@/components/navbar";
@@ -48,12 +46,9 @@ const AboutUs = () => {
     const newSwiper = new Swiper(".swiper-container", {
       slidesPerView: 3,
       spaceBetween: 10,
-      loop: true,
-      centeredSlides: true,
+      slidesPerGroup: 2,
       grabCursor: true,
-      autoplay: {
-        disableOnInteraction: false,
-      },
+      effect: "coverflow",
     });
     setSwiper(newSwiper);
   }, []);
@@ -86,7 +81,7 @@ const AboutUs = () => {
         </h1>
       </div>
 
-      <div className="swiper-container mb-20 m-10">
+      <div className="swiper-container mb-20 mt-14 pl-32 overflow-x-hidden">
         <div className="swiper-wrapper">
           {ourTeam.map((team, index) => (
             <div
