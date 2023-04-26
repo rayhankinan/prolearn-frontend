@@ -291,17 +291,24 @@ export default function CourseDetailAdmin() {
       )}
 
       {showAddModal && (
-        <Modal show={showAddModal} onClose={() => setShowModal(false)}>
-          <AddSectionModal courseId={course_id} />
-          <div className="flex justify-center mt-5">
-            <button
-              onClick={handleClose}
-              className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mr-4"
-            >
-              Cancel
-            </button>
+        <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="bg-gray-200 w-3/4 h-3/4 p-3 rounded-lg flex flex-col justify-center items-center shadow=lg">
+            <div className="text-2xl font-semibold mb-3">
+              Add Section
+            </div>
+            <AddSectionModal courseId={course_id} />
+            <div className="flex justify-center">
+              <Button
+                className="w-24"
+                onClick={handleClose}
+                variant="contained"
+                color="secondary"
+              >
+                Cancel
+              </Button>
+            </div>
           </div>
-        </Modal>
+        </div>
       )}
     </ThemeProvider>
   );

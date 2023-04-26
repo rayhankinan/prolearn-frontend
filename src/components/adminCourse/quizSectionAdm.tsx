@@ -619,25 +619,25 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({
                   onChange={handleQuestionChange}
                 />
               </div>
-              <div>Option A:</div>
+              <div>Option 1:</div>
               <input
                 type="text"
                 className="border-gray-400 border-2 p-2 rounded-md w-full mb-1"
                 onChange={handleAnswerChangeA}
               />
-              <div>Option B:</div>
+              <div>Option 2:</div>
               <input
                 type="text"
                 className="border-gray-400 border-2 p-2 rounded-md w-full mb-1"
                 onChange={handleAnswerChangeB}
               />
-              <div>Option C:</div>
+              <div>Option 3:</div>
               <input
                 type="text"
                 className="border-gray-400 border-2 p-2 rounded-md w-full mb-1"
                 onChange={handleAnswerChangeC}
               />
-              <div>Option D:</div>
+              <div>Option 4:</div>
               <input
                 type="text"
                 className="border-gray-400 border-2 p-2 rounded-md w-full mb-1"
@@ -652,10 +652,10 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({
                 <option value="" disabled>
                   Choose Answer
                 </option>
-                <option value="A">A</option>
-                <option value="B">B</option>
-                <option value="C">C</option>
-                <option value="D">D</option>
+                <option value="A">Option 1</option>
+                <option value="B">Option 2</option>
+                <option value="C">Option 3</option>
+                <option value="D">Option 4</option>
               </select>
               <div className="flex flex-col mt-2">
                 <Button
