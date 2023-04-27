@@ -106,65 +106,80 @@ export default function CourseDetailAdmin() {
       <CssBaseline />
       <main>
         {/* Header, contains logo and page name */}
-        <Grid sx={{ width: "100%", margin: "0 auto", position: 'fixed', top: 0, zIndex: 1}}>
+        <Grid sx={{ width: "100%", margin: "0 auto", top: 0, zIndex: 1}}>
           <Grid
             container
             direction="row"
             justifyContent="space-between"
             alignItems="center"
-            sx={{ justifyContent: "left" }}
-            marginLeft={"10px"}
+            sx={{ justifyContent: "space-between", padding: "25px" }}
           >
-            <IconButton onClick={() => router.push('/course')} sx={{alignItems: "center", marginLeft: "20px"}}>
-            <ArrowBackIcon />
-            </IconButton>
-            <Box sx={{ display: "flex", alignItems: "center", marginLeft: "500px" }}>
-              
-              <Typography
-                variant="h4"
-                className="text-2xl font-bold mt-10 mx-4 mb-5"
-                sx={{ marginRight: "20px" }}
+            <Box sx={{ display: "flex", alignItems: "center"}}>
+              <Button
+                onClick={() => router.push('/admin/course')}
+                variant="text"
+                // color="primary"
+                sx={{ marginRight: "10px" }}
               >
-                {course?.title}
-              </Typography>
+                <ArrowBackIcon sx={{ marginRight: "5px" }} />
+                  Back to Course List
+              </Button>
+            </Box>
+
+            <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <Typography
+                  variant="h6"
+                  sx={{ flexGrow: 1, textAlign: "center", fontWeight: "bold", justifyContent: "center", marginLeft: "40px"}}
+                >
+                  {course?.title}
+                  {/* JavaScript Basic */}
+                </Typography>
+            </Box>
+
+            <Box sx={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
+              <Button
+                onClick={() => handleAddMaterial()}
+                variant="outlined"
+              >
+                Add Material
+              </Button>
+
               {!showEditButton && (
-                <button
+                <Button
                   onClick={() => handleShowEditButton()}
-                  className=" bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mt-10 mx-4 mb-5"
+                  variant="outlined"
+                  sx={{ marginLeft: "10px" }}
                 >
                   Edit Section
-                </button>
+                </Button>
               )}
 
               {showEditButton && (
                 <Button
                   onClick={() => handleCancel()}
-                  className=" bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mt-10 mx-4 mb-5"
+                  variant="outlined"
+                  color="success"
+                  sx={{ marginLeft: "10px" }}
                 >
                   Done
                 </Button>
               )}
 
-              <button
-                onClick={() => handleAddMaterial()}
-                className=" bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mt-10 mx-4 mb-5"
-              >
-                Add Material
-              </button>
-
-              <button
+              <Button
                 onClick={() => handleEditCourse()}
-                className=" bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mt-10 mx-4 mb-5"
+                variant="outlined"
+                color="primary"
+                sx={{ marginLeft: "10px"}}
               >
                 Edit Course
-              </button>
+              </Button>
             </Box>
           </Grid>
           {/* horizontal line that have space on the left and right */}
-          <hr className="border-t-2 border-black border-opacity-20 mb-20" />
+          <hr className="border-t-2 border-black border-opacity-20 " />
         </Grid>
         {/* End hero unit */}
-        <Grid sx={{ width: "100%", margin: "0 auto", marginTop: "100px" }}>
+        <Grid sx={{ width: "100%", margin: "0 auto", marginTop: "20px" }}>
           <Grid item xs={3} sx={{marginBottom: "30px", marginLeft: "15px"}}>
             <Button 
               variant="contained" 
