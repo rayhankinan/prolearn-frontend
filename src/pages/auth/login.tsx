@@ -7,16 +7,17 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Modal from "@mui/material/Modal";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import TextField from "@material-ui/core/TextField";
+import { TextField } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { InputAdornment } from "@material-ui/core";
 import userService from "@/services/user-service";
-import { PersonOutlined } from "@mui/icons-material";
+import { PersonOutlined, Visibility, VisibilityOff } from "@mui/icons-material";
 import { useRouter } from "next/router";
 import ModalFailed from "@/pages/user/modalFailed";
 import ModalSuccess from "@/pages/user/modalSucess";
 import { AuthContext } from "@/contexts/AuthContext";
 import Image from "next/image";
+import { IconButton } from "@mui/material";
 
 // create login page
 const theme = createTheme();
@@ -28,6 +29,7 @@ export default function Login() {
   const [usernameError, setUsernameError] = useState(false);
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [modalSuccessOpen, setModalSuccessOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState<String>("");
@@ -113,14 +115,14 @@ export default function Login() {
               <Typography
                 component="h1"
                 variant="h4"
-                className="mt-10"
+                className="mt-7"
                 sx={{
                   fontFamily: "Poppins",
                   fontStyle: "bold",
-                  fontSize: "5vh",
+                  fontSize: "4vh",
                 }}
               >
-                Sign in
+                Login to ProLearn
               </Typography>
               <Box
                 component="form"
@@ -155,7 +157,7 @@ export default function Login() {
                   fullWidth
                   name="password"
                   label="Password"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   id="password"
                   autoComplete="current-password"
                   InputProps={{
@@ -164,6 +166,13 @@ export default function Login() {
                         <LockOutlinedIcon />
                       </InputAdornment>
                     ),
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton aria-label="toggle password visibility" onClick={() => setShowPassword(!showPassword)} edge="end">
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    )
                   }}
                   value={password}
                   onChange={handlePasswordChange}
@@ -172,22 +181,32 @@ export default function Login() {
                 />
                 <Button
                   type="submit"
-                  fullWidth
                   variant="contained"
                   sx={{
-                    mt: 3,
-                    mb: 2,
+                    display: "flex",
+                    margin: "auto",
+                    mt: 2,
+                    mb: 3,
+                    paddingLeft: "1.5rem",
+                    paddingRight: "1.5rem",
                     fontFamily: "Poppins",
                     color: "white",
                     fontSize: "2vh",
                     backgroundColor: "#0C21C1 !important",
-                    borderRadius: "10px",
+                    borderRadius: "7.5px",
+                    width: "content-fit",
                     "&:hover": { backgroundColor: "#0C21C1 !important" },
                   }}
                 >
-                  Sign In
+                  Login
                 </Button>
               </Box>
+              <div className="text-md font-medium">
+                Don't have an account?{" "} 
+                <a href="/auth/register" className="text-blue-700">
+                  Register here
+                </a>
+              </div>
             </Box>
           </Container>
         </Grid>
@@ -226,14 +245,14 @@ export default function Login() {
                 component="h1"
                 variant="h5"
                 color="white"
-                className="ml-10 mb-5"
+                className="ml-10"
                 sx={{
-                  fontFamily: "Poppins",
+                  fontFamily: "Montserrat",
                   fontStyle: "bold",
-                  fontSize: "5vh",
+                  fontSize: "4vh",
                 }}
               >
-                Sign In to ProLearn
+                Meet ProLearn,
               </Typography>
               <Typography
                 component="h1"
@@ -242,8 +261,9 @@ export default function Login() {
                 color="white"
                 className="ml-10"
                 sx={{
-                  fontFamily: "Poppins",
+                  fontFamily: "Montserrat",
                   fontStyle: "bold",
+                  fontSize: "3vh",
                   marginBottom: "10vh",
                 }}
               >
