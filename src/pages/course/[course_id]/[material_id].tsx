@@ -139,31 +139,50 @@ export default function UserCourseDetail() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <main>
-        <Grid sx={{ width: "100%", margin: "0 auto", position: 'fixed', top: 0, zIndex: 1, backgroundColor: "#f3f3f3"}}>
+      <Grid
+          sx={{
+            width: "100%",
+            margin: "0 auto",
+            position: "fixed",
+            top: 0,
+            zIndex: 1,
+            backgroundColor: "#f3f3f3",
+          }}
+        >
           <Grid
             container
             direction="row"
             justifyContent="space-between"
             alignItems="center"
-            sx={{ justifyContent: "left" }}
-            marginLeft={"10px"}
+            sx={{ padding: "25px" }}
+            display={"flex"}
           >
             <Box sx={{ display: "flex", alignItems: "center" }}>
-              <IconButton onClick={() => router.push('/course')}>
-                <ArrowBackIcon />
-              </IconButton>
-              <Typography
-                variant="h4"
-                className="text-2xl font-bold mt-6 mx-4 mb-6"
-                sx={{ marginRight: "20px" }}
+              <Button
+                onClick={() => router.push("/course")}
+                variant="text"
+                style={{ marginRight: "10px", textAlign: "left"}}
+                // sx={{ textAlign: "left" }}
               >
-                {course?.title}
-                {/* Algorithm Strategic (Greedy Function) */}
+                <ArrowBackIcon sx={{ marginRight: "5px" }} />
+                Back to Course List
+              </Button>
+            </Box>
+
+            <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", flexGrow: 1 }}>
+              <Typography
+                variant="h6"
+                sx={{ textAlign: "center", fontWeight: "bold", marginRight: "260px"}}
+              >
+                {/* {course?.title} */}
+                JavaScript Basic
               </Typography>
             </Box>
           </Grid>
           <hr className="border-t-2 border-black border-opacity-20 " />
         </Grid>
+
+
 
         <Grid sx={{ width: "100%", margin: "0 auto", marginTop: "100px" }}>
           <Grid item xs={3} sx={{marginBottom: "30px", marginLeft: "15px"}}>
