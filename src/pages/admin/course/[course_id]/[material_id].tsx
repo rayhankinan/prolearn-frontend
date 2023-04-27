@@ -6,7 +6,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Modal from "@/components/modal";
 import GridComponent from "@/components/GridComponent";
 import AddSectionModal from "@/components/AddSectionModal";
-import { Button, Grid, Typography } from "@mui/material";
+import { Button, Grid, Typography, IconButton } from "@mui/material";
 import { useRouter } from "next/router";
 import CourseService from "@/services/course-service";
 import CategoryService from "@/services/category-service";
@@ -18,6 +18,8 @@ import sectionService from "@/services/section-service";
 import fileService from "@/services/file-service";
 import { EditCourseModal } from "@/components/adminCourse/editCourseModal";
 import QuizSectionAdm from "@/components/adminCourse/quizSectionAdm";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import MenuIcon from '@mui/icons-material/Menu';
 
 const theme = createTheme();
 
@@ -31,6 +33,14 @@ export default function CourseDetailAdmin() {
   const [file, setFile] = useState<Blob | null>(null);
   const [fileString, setFileString] = useState(" ");
   const [quizContent, setQuizContent] = useState<Quiz | null>(null);
+  const [showSideBar, setShowSideBar] = useState(true);
+
+  const handleToggleSideBar = () => {
+    // if(material_id){
+    //   return;
+    // }
+    setShowSideBar(!showSideBar);
+  };
 
   useEffect(() => {
     if (router.isReady) {
@@ -144,21 +154,25 @@ export default function CourseDetailAdmin() {
       <CssBaseline />
       <main>
         {/* Header, contains logo and page name */}
-        <Grid sx={{ width: "70%", margin: "0 auto", marginTop: "30px" }}>
+        <Grid sx={{ width: "100%", margin: "0 auto", position: 'fixed', top: 0, zIndex: 1}}>
           <Grid
             container
             direction="row"
             justifyContent="space-between"
             alignItems="center"
             sx={{ justifyContent: "center" }}
+            marginLeft={"10px"}
           >
             <Box sx={{ display: "flex", alignItems: "center" }}>
+              <IconButton onClick={() => router.push('/course')}>
+                <ArrowBackIcon />
+              </IconButton>
               <Typography
                 variant="h4"
-                className="text-4xl font-bold mt-10 mx-4 mb-5"
-                sx={{ marginRight: "10px" }}
+                className="text-2xl font-bold mt-6 mx-4 mb-6"
+                sx={{ marginRight: "20px" }}
               >
-                COURSE {course_id}
+                {course?.title}
               </Typography>
               {!showEditButton && (
                 <button
@@ -194,62 +208,101 @@ export default function CourseDetailAdmin() {
             </Box>
           </Grid>
           {/* horizontal line that have space on the left and right */}
-          <hr className="border-t-3 border-black " />
+          <hr className="border-t-2 border-black border-opacity-20 " />
         </Grid>
         {/* End hero unit */}
-        <Grid sx={{ width: "70%", margin: "0 auto", marginTop: "30px" }}>
-          <Grid container spacing={2}>
-            <Grid item xs={3} sx={{ borderRight: "1px solid #ccc" }}>
-              <Grid item container direction="column">
-                {section.map((material) => (
-                  <Grid
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      marginBottom: "10px",
-                    }}
-                    key={material.id}
+        <Grid sx={{ width: "100%", margin: "0 auto", marginTop: "100px" }}>
+          <Grid item xs={3} sx={{marginBottom: "30px", marginLeft: "15px"}}>
+            <Button 
+              variant="contained" 
+              style={{ 
+                background: 'none', 
+                boxShadow: 'none', 
+                color: 'inherit', 
+                textTransform: 'none', 
+                fontSize: '1.2rem',
+                fontWeight: 'bold',
+              }} 
+              startIcon={<MenuIcon />} 
+              onClick={handleToggleSideBar}
+              >
+            </Button>
+          </Grid>
+          <Grid item xs={12} sx={{ paddingLeft: "20px" }}>
+            <Grid container spacing={2}>
+            {showSideBar && (
+                <Grid 
+                  item 
+                  xs={2} 
+                  sx={{
+                    borderRight: '1px solid #ccc',
+                    transform: 'translateX(0)',
+                    transition: 'transform ease-out 150ms',
+                  }}
+                  className="transition-all"
                   >
-                    {material.id != material_idInt && (
-                      <Link
-                        href={`/admin/course/${course_id}/${material.id}`}
-                        style={{ textDecoration: "none", color: "black" }}
-                      >
-                        {/* <a style={{ color: "black" }}> */}
-                        <div>{material.title}</div>
-                        {/* </a> */}
-                      </Link>
-                    )}
-                    {material.id == material_idInt && (
-                      <Link
-                        href={`/admin/course/${course_id}/${material.id}`}
-                        style={{ textDecoration: "none", color: "black" }}
-                      >
-                        <div className="font-bold">{material.title}</div>
-                      </Link>
-                    )}
-                    {showEditButton && (
-                      <Button
-                        onClick={() => handleEditSection(material)}
-                        size="small"
-                        // variant="contained"
-                        className=" bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mr-4"
-                        sx={{ height: "40px", width: "10px" }} // added width property
-                      >
-                        <i className="fas fa-edit"></i>
-                      </Button>
-                    )}
-                  </Grid>
-                ))}
-              </Grid>
-            </Grid>
-            <Grid item xs={9} sx={{ paddingLeft: "20px" }}>
-              <Grid item>
-                {fileString ? (
-                  <div style={{ marginLeft: "20px" }} dangerouslySetInnerHTML={{ __html: fileString }}></div>
-                ) : (
-                  <div>loading ... </div>
+                  <Box sx={{marginLeft: "16px", marginTop: "-3px"}}>
+                    <Typography variant="h6" sx={{ color: "#333", mb: 4, fontWeight: "bold"}}>
+                      Daftar Modul
+                    </Typography>
+                    <Grid item container direction="column">
+                      {section.map((material) => (
+                        <Box
+                          key={material.id}
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            mb: 1,
+                            cursor: "pointer",
+                            transition: "all 0.2s",
+                            "&:hover": {
+                              backgroundColor: "#e5e7eb",
+                              borderRadius: "5px",
+                            },
+                            textDecoration: "none"
+                          }}
+                        >
+                          {material.id == material_idInt && (
+                            <Link href={`/admin/course/${course_id}/${material.id}`} style={{ color: "black", textDecoration: "none"}}>
+                              <Typography variant="subtitle1" sx={{ fontWeight: "bold", ml: 2, mr: 1}}>
+                                {material.title}
+                              </Typography>
+                            </Link>
+                          )}
+                          {material.id != material_idInt && (
+                            <Link href={`/admin/course/${course_id}/${material.id}`} style={{ color: "black", textDecoration: "none"}}>
+                              <Typography variant="subtitle1" sx={{ ml: 2, mr: 1 }}>{material.title}</Typography>
+                            </Link>
+                          )}
+                          {showEditButton && (
+                            <Button
+                              onClick={() => handleEditSection(material)}
+                              size="small"
+                              // variant="contained"
+                              className=" bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mr-4"
+                              sx={{ height: "40px", width: "10px" }} // added width property
+                            >
+                            <i className="fas fa-edit"></i>
+                            </Button>
+                          )}
+                        </Box>
+                      ))}
+                    </Grid>
+                  </Box>
+                </Grid>
+              )}
+              <Grid item xs={showSideBar ? 9 : 12}>
+                <Grid item>
+                  {fileString ? (
+                    <div style={{
+                      display: "flex",
+                      margin: "0 10px",
+                      textAlign: "justify",
+                      flexWrap: "wrap",
+                      flexDirection: "column",
+                    }} dangerouslySetInnerHTML={{ __html: fileString }}></div>
+                  ) : (
+                    <div>loading ... </div>
                 )}
                 {quizContent ? (
                   <QuizSectionAdm
@@ -261,6 +314,7 @@ export default function CourseDetailAdmin() {
                 ) : (
                   <></>
                 )}
+                </Grid>
               </Grid>
             </Grid>
           </Grid>
