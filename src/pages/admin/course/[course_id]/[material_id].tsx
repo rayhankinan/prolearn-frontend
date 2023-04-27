@@ -293,7 +293,7 @@ export default function CourseDetailAdmin() {
               )}
               <Grid item xs={showSideBar ? 9 : 12}>
                 <Grid item>
-                  {fileString ? (
+                  {fileString && !quizContent ? (
                     <div style={{
                       display: "flex",
                       margin: "0 10px",
@@ -302,7 +302,7 @@ export default function CourseDetailAdmin() {
                       flexDirection: "column",
                     }} dangerouslySetInnerHTML={{ __html: fileString }}></div>
                   ) : (
-                    <div>loading ... </div>
+                    <div></div>
                 )}
                 {quizContent ? (
                   <QuizSectionAdm

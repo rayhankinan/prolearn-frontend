@@ -323,7 +323,7 @@ const AddSectionModal = ({ material, courseId }: AddSectionModalProps) => {
             </div>
             <div className="flex flex-row w-full mb-3">
               <Grid item xs={3} className="flex justify-center items-center">
-                <label>Description*</label>
+                <label>Description</label>
               </Grid>
               <Grid item xs={9} className="flex items-center">
                 <div style={{ overflow: "auto", maxHeight: "350px" }}>
@@ -436,18 +436,14 @@ const AddSectionModal = ({ material, courseId }: AddSectionModalProps) => {
             className="w-24"
             onClick={(e) => {
               if(name === "") {
-                alert("Material Name is required");
+                alert("Section title is required");
               }
               if(type === "material") {
-                if(body === null) {
+                if (body === null) {
                   alert("Material Text is required");
-                // } else if(duration === 0) {
-                //   alert("Duration is required");
-                } else if(objective === "") {
-                  alert("Objective is required");
-                } else if(duration < 0) {
-                  alert("Duration must be greater than 0");
-                }else{
+                } else if (objective === "") {
+                  alert("Objective is required"); 
+                } else {
                   handleSave();
                 }
               }
@@ -455,7 +451,7 @@ const AddSectionModal = ({ material, courseId }: AddSectionModalProps) => {
                 if (quiz === "") {
                   alert("Quiz title is required");
                 } else if(countQuestion === 0) {
-                  alert("Jumlah soal is required");
+                  alert("Number of questions cannot be 0");
                 } else if(countQuestion > 0) {
                   let isQuestionEmpty = false;
                   let isAnswerEmpty = false;
@@ -463,19 +459,25 @@ const AddSectionModal = ({ material, courseId }: AddSectionModalProps) => {
                     if(questionAnswerList[i].content === "") {
                       isQuestionEmpty = true;
                     }
+
                     for(let j = 0; j < 4; j++) {
                       if(questionAnswerList[i].options[j].content === "") {
                         isAnswerEmpty = true;
+                        break;
                       }
                     }
+
+                    if(isQuestionEmpty || isAnswerEmpty) {
+                      break;
+                    }
                   }
-                  if(isQuestionEmpty) {
+                  if (isQuestionEmpty) {
                     alert("Question is required");
-                  } else if(isAnswerEmpty) {
+                  } else if (isAnswerEmpty) {
                     alert("Answer is required");
-                  } else if(trueAnswer.includes("")) {
+                  } else if (trueAnswer.includes("")) {
                     alert("Correct Answer is required");
-                  } else if(!isQuestionEmpty && !isAnswerEmpty && !trueAnswer.includes("")) {
+                  } else if (!isQuestionEmpty && !isAnswerEmpty && !trueAnswer.includes("")) {
                     handleSave();
                   }
                 } 
