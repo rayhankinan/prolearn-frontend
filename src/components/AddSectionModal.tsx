@@ -11,6 +11,7 @@ import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import ToggleButton from "@mui/material/ToggleButton";
 
 import "react-quill/dist/quill.snow.css";
+import { Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 
 const DynamicReactQuill = dynamic(() => import("react-quill"), {
   ssr: false,
@@ -26,27 +27,29 @@ type questionAndOptions = {
   ];
 };
 
-interface AddSectionModalProps {
+type AddSectionModalProps = {
+  open: boolean;
+  onClose: () => void;
   material?: Section;
   courseId: string;
 }
 
-const AddSectionModal = ({ material, courseId }: AddSectionModalProps) => {
+const AddSectionModal = ({ open, onClose, material, courseId }: AddSectionModalProps) => {
   const [questionAnswerList, setQuestionAnswerList] = useState<
     questionAndOptions[]
   >([]);
   const [name, setName] = useState(material?.title || "");
-  const [body, setBody] = useState(" ");
+  const [body, setBody] = useState("");
   const [duration, setDuration] = useState(0);
   const [objective, setObjective] = useState(material?.objective || "");
   const [quiz, setQuiz] = useState(material?.quiz || "");
   const [countQuestion, setCountQuestion] = useState(0);
   const [number, setNumber] = useState(0);
-  const [question, setQuestion] = useState(" ");
-  const [answer, setAnswer] = useState(" ");
+  const [question, setQuestion] = useState("");
+  const [answer, setAnswer] = useState("");
   const [trueAnswer, setTrueAnswer] = useState<string[]>([]);
 
-  const [type, setType] = useState("material");
+  const [type, setType] = useState("quiz");
 
   const [nameError, setNameError] = useState(false);
   const [isBodyEmpty, setIsBodyEmpty] = useState<boolean>(false);
@@ -71,13 +74,6 @@ const AddSectionModal = ({ material, courseId }: AddSectionModalProps) => {
     setIsBodyEmpty(value === "");
   };
 
-  // const handleDurationChange = (event: ChangeEvent<HTMLInputElement>) => {
-  //   setDuration(parseInt(event.target.value));
-  //   setDurationError(parseInt(event.target.value) === 0);
-  //   setDurationError(parseInt(event.target.value) < 0);
-  //   setDurationError(event.target.value === "")
-  // };
-
   const handleObjectiveChange = (event: ChangeEvent<HTMLInputElement>) => {
     setObjective(event.target.value);
     setObjectiveError(event.target.value === "");
@@ -98,19 +94,19 @@ const AddSectionModal = ({ material, courseId }: AddSectionModalProps) => {
     setQuestionAnswerList((questionAnswerList) => [
       ... questionAnswerList,
       {
-        content: " ",
+        content: "",
         options: [
           {
-            content: " ", isCorrect: false
+            content: "", isCorrect: false
           },
           {
-            content: " ", isCorrect: false
+            content: "", isCorrect: false
           },
           {
-            content: " ", isCorrect: false
+            content: "", isCorrect: false
           },
           {
-            content: " ", isCorrect: false
+            content: "", isCorrect: false
           },
         ]
       },
@@ -221,8 +217,9 @@ const AddSectionModal = ({ material, courseId }: AddSectionModalProps) => {
   console.log(answer);
 
   return (
-    <Container className="h-3/4 mb-2">
-      <div className="h-4/5 overflow-auto">
+    <Dialog open={open} onClose={onClose}>
+      <DialogTitle>Add Section</DialogTitle>
+      <DialogContent>
         <div className="flex flex-row w-full mb-3">
           <Grid xs={3} className="flex justify-center items-center">
             <label>Section Title*</label>
@@ -230,6 +227,7 @@ const AddSectionModal = ({ material, courseId }: AddSectionModalProps) => {
           <Grid xs={9} className="flex items-center">
             <TextField
               required
+              margin="dense"
               variant="outlined"
               fullWidth
               value={name}
@@ -293,6 +291,7 @@ const AddSectionModal = ({ material, courseId }: AddSectionModalProps) => {
             <Grid item xs={9} className="flex items-center">
               <TextField
                 variant="outlined"
+                margin="dense"
                 fullWidth
                 required
                 value={objective}
@@ -313,6 +312,7 @@ const AddSectionModal = ({ material, courseId }: AddSectionModalProps) => {
                 <TextField
                   variant="outlined"
                   fullWidth
+                  margin="dense"
                   required
                   value={quiz}
                   onChange={handleQuizChange}
@@ -323,7 +323,7 @@ const AddSectionModal = ({ material, courseId }: AddSectionModalProps) => {
             </div>
             <div className="flex flex-row w-full mb-3">
               <Grid item xs={3} className="flex justify-center items-center">
-                <label>Description</label>
+                <label>Description*</label>
               </Grid>
               <Grid item xs={9} className="flex items-center">
                 <div style={{ overflow: "auto", maxHeight: "350px" }}>
@@ -340,18 +340,19 @@ const AddSectionModal = ({ material, courseId }: AddSectionModalProps) => {
             </div>
             <div className="flex flex-row w-full mb-3">
               <Grid item xs={3} className="flex justify-center items-center">
-                <label>Number of Questions*</label>
+                <label>Quantity*</label>
               </Grid>
               <Grid item xs={9} className="flex items-center">
                 <TextField
                   variant="outlined"
                   fullWidth
+                  margin="dense"
                   required
                   type="number"
                   value={countQuestion}
                   onChange={handleCountQuestionChange}
                   error={countQuestionError}
-                  helperText={countQuestionError ? "Number of Questions is required" : ""}
+                  helperText={countQuestionError ? "Quantity of Questions is required" : ""}
                   inputProps={{ min: 0 }}
                 />
               </Grid>
@@ -362,7 +363,7 @@ const AddSectionModal = ({ material, courseId }: AddSectionModalProps) => {
                 <React.Fragment key={i}>
                   <div className="flex flex-row w-full mb-3">
                     <Grid item xs={3}className="flex justify-center items-center">
-                      <label>Question No. {i+1}</label>
+                      <label>Question No. {i+1}*</label>
                     </Grid>
                     <Grid item xs={9}>
                       <div style={{overflow: "auto", maxHeight : "350px" }} className="flex items-center">
@@ -380,12 +381,13 @@ const AddSectionModal = ({ material, courseId }: AddSectionModalProps) => {
                     <React.Fragment key={j}>
                       <div className="flex flex-row w-full mb-3">
                         <Grid item xs={3} className="flex justify-center items-center">
-                          <label>Option {j+1}</label>
+                          <label>Option {j+1}*</label>
                         </Grid>
                         <Grid item xs={9} className="flex items-center">
                           <TextField
                             variant="outlined"
                             fullWidth
+                            margin="dense"
                             required
                             value={questionAnswer.options[j]?.content || ""}
                             onChange={(event) => handleAnswerChange(i, j, event.target.value)}
@@ -427,19 +429,17 @@ const AddSectionModal = ({ material, courseId }: AddSectionModalProps) => {
             })}
           </>
         )}
-
-
-      </div>
-      <Grid item xs={12}>
-        <div className="flex justify-center mt-10">
-          <Button
-            className="w-24"
-            onClick={(e) => {
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={onClose} variant="contained" color="secondary">
+          Close
+        </Button>
+        <Button onClick={(e) => {
               if(name === "") {
                 alert("Section title is required");
               }
               if(type === "material") {
-                if (body === null) {
+                if (body === "") {
                   alert("Material Text is required");
                 } else if (objective === "") {
                   alert("Objective is required"); 
@@ -450,6 +450,8 @@ const AddSectionModal = ({ material, courseId }: AddSectionModalProps) => {
               if(type === "quiz"){
                 if (quiz === "") {
                   alert("Quiz title is required");
+                } else if (body === "") {
+                  alert("Description is required");
                 } else if(countQuestion === 0) {
                   alert("Number of questions cannot be 0");
                 } else if(countQuestion > 0) {
@@ -483,15 +485,12 @@ const AddSectionModal = ({ material, courseId }: AddSectionModalProps) => {
                 } 
               }
             }
-          }
-            variant="contained"
-            color="primary"
-          >
+          } 
+          variant="contained" color="primary">
             Save
           </Button>
-        </div>
-      </Grid>
-    </Container>
+      </DialogActions>
+    </Dialog>
   );
 };
 

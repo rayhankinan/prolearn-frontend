@@ -3,10 +3,9 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
 import Link from "@mui/material/Link";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import Modal from "@/components/modal";
-import GridComponent from "@/components/GridComponent";
 import AddSectionModal from "@/components/AddSectionModal";
 import { EditCourseModal } from "@/components/adminCourse/editCourseModal";
+import { EditSectionModal } from "@/components/editSection";
 import { Button, Grid, Typography, IconButton } from "@mui/material";
 import { useRouter } from "next/router";
 import CategoryService from "@/services/category-service";
@@ -122,7 +121,7 @@ export default function CourseDetailAdmin() {
                 sx={{ marginRight: "10px" }}
               >
                 <ArrowBackIcon sx={{ marginRight: "5px" }} />
-                  Back to Course List
+                  Back
               </Button>
             </Box>
 
@@ -132,7 +131,6 @@ export default function CourseDetailAdmin() {
                   sx={{ flexGrow: 1, textAlign: "center", fontWeight: "bold", justifyContent: "center", marginLeft: "40px"}}
                 >
                   {course?.title}
-                  {/* JavaScript Basic */}
                 </Typography>
             </Box>
 
@@ -211,7 +209,7 @@ export default function CourseDetailAdmin() {
                   >
                   <Box sx={{marginLeft: "16px", marginTop: "-3px"}}>
                     <Typography variant="h6" sx={{ color: "#333", mb: 4, fontWeight: "bold"}}>
-                      Daftar Modul
+                      Modules List
                     </Typography>
                     <Grid item container direction="column">
                       {section.map((material) => (
@@ -279,38 +277,19 @@ export default function CourseDetailAdmin() {
       )}
 
       {selectedSection && (
-        <Modal show={showModal} onClose={() => setShowModal(false)}>
-          <GridComponent section={selectedSection} />
-          <div className="flex justify-center mt-5">
-            <button
-              onClick={handleClose}
-              className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mr-4"
-            >
-              Cancel
-            </button>
-          </div>
-        </Modal>
+        <EditSectionModal 
+          open={showModal}
+          onClose={() => setShowModal(false)}
+          section={selectedSection}
+        />
       )}
 
       {showAddModal && (
-        <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
-          <div className="bg-gray-200 w-3/4 h-3/4 p-3 rounded-lg flex flex-col justify-center items-center shadow=lg mt-5">
-            <div className="text-2xl font-semibold mb-3">
-              Add Section
-            </div>
-            <AddSectionModal courseId={course_id} />
-            <div className="flex justify-center">
-              <Button
-                className="w-24"
-                onClick={handleClose}
-                variant="contained"
-                color="secondary"
-              >
-                Cancel
-              </Button>
-            </div>
-          </div>
-        </div>
+        <AddSectionModal
+          open={showAddModal}
+          onClose={() => setShowAddModal(false)}
+          courseId={course_id} 
+        />
       )}
     </ThemeProvider>
   );
