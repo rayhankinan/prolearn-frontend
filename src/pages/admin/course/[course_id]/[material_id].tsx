@@ -160,16 +160,17 @@ export default function CourseDetailAdmin() {
             direction="row"
             justifyContent="space-between"
             alignItems="center"
-            sx={{ justifyContent: "center" }}
+            sx={{ justifyContent: "left" }}
             marginLeft={"10px"}
           >
-            <Box sx={{ display: "flex", alignItems: "center" }}>
-              <IconButton onClick={() => router.push('/course')}>
+            <IconButton onClick={() => router.push('/course')} sx={{alignItems: "center", marginLeft: "20px"}}>
                 <ArrowBackIcon />
               </IconButton>
+              <Box sx={{ display: "flex", alignItems: "center", marginLeft: "500px" }}>
+              
               <Typography
                 variant="h4"
-                className="text-2xl font-bold mt-6 mx-4 mb-6"
+                className="text-2xl font-bold mt-10 mx-4 mb-5"
                 sx={{ marginRight: "20px" }}
               >
                 {course?.title}
@@ -346,7 +347,7 @@ export default function CourseDetailAdmin() {
 
       {showAddModal && (
         <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
-          <div className="bg-gray-200 w-3/4 h-3/4 p-3 rounded-lg flex flex-col justify-center items-center shadow=lg">
+          <div className="bg-gray-200 w-3/4 h-3/4 p-3 rounded-lg flex flex-col justify-center items-center shadow=lg mt-5">
             <div className="text-2xl font-semibold mb-3">
               Add Section
             </div>
