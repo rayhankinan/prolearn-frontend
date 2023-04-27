@@ -237,7 +237,7 @@ export default function UserCourseDetail() {
 
               <Grid item xs={showSideBar ? 9 : 12}>
                 <Grid item>
-                  {fileString ? (
+                  {fileString && !quizStarted && (
                     <div style={{
                       display: "flex",
                       alignItems: "center",
@@ -246,8 +246,6 @@ export default function UserCourseDetail() {
                       flexWrap: "wrap",
                       flexDirection: "column",
                     }} dangerouslySetInnerHTML={{ __html: fileString }}></div>
-                  ) : (
-                    <div>loading ... </div>
                   )}
                   {quizContent &&
                     !quizStarted &&
