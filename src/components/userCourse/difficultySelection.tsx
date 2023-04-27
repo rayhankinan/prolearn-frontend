@@ -18,7 +18,7 @@ type Props = {
 
 const CourseDifficultySelect = ({ difficulty, setDifficulty }: Props) => {
   const handleDifficultyChange = (event: SelectChangeEvent<string>) => {
-    setDifficulty((event.target.value as string).toLowerCase());
+    setDifficulty((event.target.value as string));
   };
 
   return (

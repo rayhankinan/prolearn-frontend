@@ -44,7 +44,7 @@ const QuizSection: React.FC<QuizSectionProps> = ({ quizContent }) => {
       .submitQuiz(quizContent.id, sendQuizReq)
       .then((response) => {
         console.log(response.data);
-        setNumCorrectAnswers(response.data.correct_answer);
+        setNumCorrectAnswers(response.data.correctAnswers);
       })
       .catch((error) => {
         console.log(error);

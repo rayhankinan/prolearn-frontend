@@ -111,7 +111,7 @@ export default function UserCourseDetail() {
     QuizService.viewHistory(quizContent.id)
       .then((response) => {
         console.log(response.data.data);
-        setScore(response.data.data.correct_answer.toString());
+        setScore(response.data.data.correctAnswers.toString());
       })
       .catch((error) => {
         console.log(error);

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Hero from "@/components/userCourse/courseHero";
 import Sidebar from "@/components/userCourse/courseSidebar";
 import SubscribedCards from "@/components/userCourse/subscribedCards";
+import RecommendCards from "@/components/userCourse/recommendCards";
 import Course from "@/interfaces/course-interface";
 import CourseService from "@/services/course-service";
 import Navbar from "@/components/navbar";
@@ -12,9 +13,13 @@ import { AuthContext } from "@/contexts/AuthContext";
 
 export default function Courses() {
   const [courses, setCourses] = useState<Course[]>([]);
+  const [recommendCourse, setRecommendCourse] = useState<Course[]>([]);
   const [page, setPage] = useState(1);
+  const [recommPage, setRecommPage] = useState(1);
   const [perPage, setPerPage] = useState(9);
+  const [perRecommPage, setPerRecommPage] = useState(3);
   const [count, setCount] = useState(1);
+  const [recommCount, setRecommCount] = useState(1);
   const [search, setSearch] = useState("");
   const { isLoggedIn } = React.useContext(AuthContext);
 
@@ -44,12 +49,26 @@ export default function Courses() {
       categoryId: selected,
       subscribed: true,
     })
-      .then((response) => {
-        setCourses(response.data.data);
-        setPage(1);
-        setCount(response.data.meta.totalPage);
-      })
-      .catch((error) => console.log(error));
+    .then((response) => {
+      setCourses(response.data.data);
+      setPage(1);
+      setCount(response.data.meta.totalPage);
+    })
+    .catch((error) => console.log(error));
+
+    CourseService.getAll({
+      page: recommPage,
+      limit: perRecommPage,
+      difficulty: difficulty != "All Difficulty" ? difficulty : undefined,
+      categoryId: selected,
+      subscribed: false,
+    })
+    .then((response) => {
+      setRecommendCourse(response.data.data);
+      setRecommPage(1);
+      setRecommCount(response.data.meta.totalPage);
+    })
+    .catch((error) => console.log(error));
   };
 
   useEffect(() => {
@@ -63,6 +82,10 @@ export default function Courses() {
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
   };
+
+  const handleRecommChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setRecommPage(value);
+  }
 
   return (
     <>
@@ -106,6 +129,20 @@ export default function Courses() {
               onChange={handleChange}
             />
           </Grid>
+          <div className="flex flex-col mt-4 bg-stone-300 pl-5 pr-5 pt-3 pb-3 rounded-2xl shadow-lg">
+            <div className="text-xl custom-Poppins mb-3 pl-4">
+              Recommended Courses for You
+            </div>
+            <RecommendCards recommendCourses={recommendCourse} />
+            <Grid container direction="row" justifyContent="center" marginTop={2}>
+              <Pagination
+                count={recommCount}
+                size="large"
+                page={recommPage}
+                onChange={handleRecommChange}
+              />
+            </Grid>
+          </div>
         </div>
       </div>
     </>
