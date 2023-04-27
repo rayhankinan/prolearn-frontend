@@ -16,7 +16,23 @@ const RatingModal: React.FC<RatingModalProps> = ({ isOpen, onClose }) => {
     if (value !== null) {
       setRating(value);
     }
-    console.log(value);
+  };
+
+  const getRatingText = (value: number) => {
+    switch (value) {
+      case 1:
+        return "Tidak Membantu";
+      case 2:
+        return "Kurang Membantu";
+      case 3:
+        return "Cukup Membantu";
+      case 4:
+        return "Membantu";
+      case 5:
+        return "Sangat Membantu";
+      default:
+        return "";
+    }
   };
 
   return (
@@ -28,11 +44,10 @@ const RatingModal: React.FC<RatingModalProps> = ({ isOpen, onClose }) => {
       className="flex items-center justify-center"
       sx={{ backdropFilter: "blur(2px)"}}
     >
-      <div className="bg-white rounded-md shadow-lg p-8 max-w-xl mx-auto">
+      <div className="bg-white rounded-md shadow-lg p-8 min-w-l max-w-xl mx-auto ">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold text-gray-900">Rate This Course</h2>
           <div className="flex items-center">
-            <span className="ml-12"></span>
             <IconButton onClick={onClose}>
               <CloseIcon className="text-gray-700" />
             </IconButton>
@@ -43,8 +58,13 @@ const RatingModal: React.FC<RatingModalProps> = ({ isOpen, onClose }) => {
             name="rating" 
             value={rating} 
             onChange={handleRatingChange}
-            sx={{ fontSize: "3rem" }}
-            />
+            sx={{ fontSize: "5rem" }}
+          />
+        </div>
+        <div className="mb-4 text-center">
+          <div className="mt-1">
+            <span className="text-center font-bold">{rating > 0 && getRatingText(rating)}</span>
+          </div>
         </div>
         <div className="flex justify-end">
           <button

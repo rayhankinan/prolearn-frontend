@@ -15,9 +15,11 @@ import fileService from "@/services/file-service";
 import CategoryService from "@/services/category-service";
 import QuizSection from "@/components/userCourse/quizSection";
 import Course from "@/interfaces/course-interface";
-import { Button, IconButton } from "@material-ui/core";
+import { Button, IconButton, Icon } from "@material-ui/core";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import MenuIcon from '@mui/icons-material/Menu';
+import RatingModal from "@/components/rating";
+import StarIcon from '@mui/icons-material/Star';
 
 const theme = createTheme();
 
@@ -34,6 +36,15 @@ export default function UserCourseDetail() {
   const [quizId, setQuizId] = useState(1);
   const [quizContent, setQuizContent] = useState<Quiz | null>(null);
   const [showSideBar, setShowSideBar] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
 
   const handleToggleSideBar = () => {
     // if(material_id){
@@ -172,12 +183,24 @@ export default function UserCourseDetail() {
             <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", flexGrow: 1 }}>
               <Typography
                 variant="h6"
-                sx={{ textAlign: "center", fontWeight: "bold", marginRight: "260px"}}
+                sx={{ textAlign: "center", fontWeight: "bold", marginRight: "0px"}}
               >
                 {/* {course?.title} */}
                 JavaScript Basic
               </Typography>
             </Box>
+
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <Button
+                variant="text"
+                style={{ marginRight: "10px", textAlign: "right" }}
+                onClick={handleOpenModal}
+              >
+                Rate This Course
+              </Button>
+                <RatingModal isOpen={isModalOpen} onClose={handleCloseModal} />
+            </Box>
+
           </Grid>
           <hr className="border-t-2 border-black border-opacity-20 " />
         </Grid>
