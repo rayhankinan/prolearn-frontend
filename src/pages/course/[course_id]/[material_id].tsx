@@ -139,7 +139,7 @@ export default function UserCourseDetail() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <main>
-        <Grid sx={{ width: "100%", margin: "0 auto", position: 'fixed', top: 0, zIndex: 1}}>
+        <Grid sx={{ width: "100%", margin: "0 auto", position: 'fixed', top: 0, zIndex: 1, backgroundColor: "#f3f3f3"}}>
           <Grid
             container
             direction="row"
@@ -237,7 +237,7 @@ export default function UserCourseDetail() {
 
               <Grid item xs={showSideBar ? 9 : 12}>
                 <Grid item>
-                  {fileString ? (
+                  {fileString && !quizStarted && (
                     <div style={{
                       display: "flex",
                       alignItems: "center",
@@ -246,8 +246,6 @@ export default function UserCourseDetail() {
                       flexWrap: "wrap",
                       flexDirection: "column",
                     }} dangerouslySetInnerHTML={{ __html: fileString }}></div>
-                  ) : (
-                    <div>loading ... </div>
                   )}
                   {quizContent &&
                     !quizStarted &&

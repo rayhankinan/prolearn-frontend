@@ -125,7 +125,6 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({
   };
 
   const handleNextClick = () => {
-    // setCurrentQuestion((prev) => prev + 1);
     if (currentQuestion < questions.content.questions.length - 1) {
       setCurrentQuestion((prev) => prev + 1);
     } else {
@@ -135,14 +134,6 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({
 
   const handleEditTitleClick = () => {
     setShowEditTModal(true);
-  };
-
-  const handleEditQuestionClick = () => {
-    setShowEditQModal(true);
-  };
-
-  const handleEditAnswerClick = () => {
-    setShowEditAModal(true);
   };
 
   const handlePrevClick = () => {
@@ -188,11 +179,6 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({
     window.location.reload();
   };
 
-  const handleCloseDeleteModalClick = () => {
-    setShowDeleteModal(false);
-    window.location.reload();
-  };
-
   const isLastQuestion =
     currentQuestion === questions.content.questions.length - 1;
   const isFirstQuestion = currentQuestion === 0;
@@ -200,7 +186,7 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({
   console.log(questions);
 
   return (
-    <div style={{ marginTop: "20px" }} className="w-full h-full p-4 shadow-lg bg-gray-300 rounded-md">
+    <div className="w-3/4 h-full p-4 shadow-lg bg-gray-200 rounded-md m-auto">
       <div className="flex flex-col font-sans">
         <div className="flex flex-col">
           {questions.content.questions.length > 0 &&
@@ -228,7 +214,7 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({
                       </div>
                       <div className="w-1/2 text-end">
                         <div className="mt-3 font-bold text-sm">
-                          {currentQuestion + 1} / {quizContent.content.questions.length}
+                          {currentQuestion + 1} / {questions.content.questions.length}
                         </div>
                       </div>
                     </div>
@@ -282,7 +268,7 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({
                   </div>
                   <Button
                     style={{ marginTop: "1.25rem" }}
-                    className="w-1/4 h-fit"
+                    className="w-1/6 h-fit"
                     color="primary"
                     startIcon={<EditIcon />}
                     onClick={() => setShowEditAModal(true)}
@@ -343,7 +329,7 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({
           ) : (
             <div className="flex flex-col justify-center items-center mt-2">
               <p className="text-2xl font-semibold">
-                There are not any questions in this quiz.
+                There aren't any questions in this quiz.
               </p>
               <div className="w-fit mt-3 mb-3">
                   <Button
@@ -361,46 +347,18 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({
       </div>
       {showModal && (
         <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white w-1/2 h-1/2 rounded-md flex flex-col justify-center items-center">
-            <img
-              src="../../prize.png"
-              alt="prize"
-              className="w-40 h-40 mb-12"
-            />
-            <h1 className="text-2xl font-bold">Horay</h1>
-            <h1 className="text-2xl font-bold mt-4">
-              You have finished editing the quiz
-            </h1>
-            <div className="flex flex-row mt-12 justify-between">
-              <button
-                className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 mt-4 mr-4"
+          <div className="bg-gray-200 w-auto h-auto p-10 rounded-md flex flex-col justify-center items-center">
+            <div className="text-xl font-bold">
+              The quiz has been successfully edited.
+            </div>
+            <div className="flex flex-row justify-between mt-7">
+              <Button
+                variant="contained"
+                color="primary"
                 onClick={handleCloseModalClick}
               >
                 Close
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-      {showDeleteModal && (
-        <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white w-1/2 h-1/2 rounded-md flex flex-col justify-center items-center">
-            <img
-              src="../../prize.png"
-              alt="prize"
-              className="w-40 h-40 mb-12"
-            />
-            <h1 className="text-2xl font-bold">Horay</h1>
-            <h1 className="text-2xl font-bold mt-4">
-              You have deleted the question
-            </h1>
-            <div className="flex flex-row mt-12 justify-between">
-              <button
-                className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 mt-4 mr-4"
-                onClick={handleCloseDeleteModalClick}
-              >
-                Close
-              </button>
+              </Button>
             </div>
           </div>
         </div>

@@ -64,12 +64,12 @@ const QuizSection: React.FC<QuizSectionProps> = ({ quizContent }) => {
   const isFirstQuestion = currentQuestion === 0;
 
   return (
-    <div style={{ marginTop: "20px" }} className="bg-gray-100 w-full h-full p-4 shadow-lg bg-gray-200 rounded-md">
+    <div className="w-3/4 h-full p-4 shadow-lg bg-gray-200 rounded-md m-auto">
       <div className="flex flex-col font-sans">
         <div className="flex flex-row w-full">
           <div className="w-full">
             <div className="flex flex-col">
-              <div className="text-2xl font-bold rounded-md bg-neutral-300 p-2 flex justify-center">
+              <div className="text-2xl font-bold flex justify-center">
                 {quizContent.content.title}
               </div>
               <div className="flex flex-row">
@@ -84,10 +84,10 @@ const QuizSection: React.FC<QuizSectionProps> = ({ quizContent }) => {
           </div>
         </div>
 
-        <div className="flex flex-col">
-          <div className="flex flex-col mt-3">
+        <div className="flex flex-col rounded-md bg-zinc-200 p-4 shadow-md mt-3">
+          <div className="flex flex-col">
             <div
-              className="text-xl font-semibold mb-2"
+              className="text-xl font-semibold"
               dangerouslySetInnerHTML={{
                 __html: quizContent.content.questions[currentQuestion].content,
               }}
@@ -95,8 +95,8 @@ const QuizSection: React.FC<QuizSectionProps> = ({ quizContent }) => {
             <div className="flex flex-col">
               {quizContent.content.questions[currentQuestion].options.map(
                 (answer, index) => (
-                  <div className="flex flex-row mt-3">
-                    <div className="w-10">
+                  <div className="flex flex-row mt-2 p-3 hover:bg-gray-300 hover:rounded-lg hover:shadow-md">
+                    <div className="flex w-10 items-center">
                       <input
                         type="radio"
                         name="answer"
@@ -105,8 +105,8 @@ const QuizSection: React.FC<QuizSectionProps> = ({ quizContent }) => {
                         checked={indexAnswer === index}
                       />
                     </div>
-                    <div className="w-10/12">
-                      <label htmlFor={`answer${index}`}>{answer.content}</label>
+                    <div className="flex w-10/12 pl-2 items-center">
+                      <label className="text-lg font-normal w-full" htmlFor={`answer${index}`}>{answer.content}</label>
                     </div>
                   </div>
                 )
@@ -115,7 +115,7 @@ const QuizSection: React.FC<QuizSectionProps> = ({ quizContent }) => {
           </div>
         </div>
 
-        <div className="flex flex-row mt-4">
+        <div className="flex flex-row mt-7">
           <div className="w-1/2">
             <Button
               variant="contained"
@@ -139,18 +139,17 @@ const QuizSection: React.FC<QuizSectionProps> = ({ quizContent }) => {
       </div>
       {showModal && (
         <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white w-1/2 h-1/2 rounded-md flex flex-col justify-center items-center">
+          <div className="bg-gray-200 w-auto h-auto p-5 rounded-md flex flex-col justify-center items-center">
             <img
               src="../../prize.png"
               alt="prize"
-              className="w-40 h-40 mb-12"
+              className="w-40 h-40 mb-5"
             />
-            <h1 className="text-2xl font-bold">You have finished the quiz</h1>
-            <h1 className="text-2xl font-bold mt-4">
-              You got {numCorrectAnswers} out of{" "}
-              {quizContent.content.questions.length} correct
-            </h1>
-            <div className="flex flex-row mt-12 justify-between">
+            <div className="text-2xl font-bold">You have finished the quiz</div>
+            <div className="text-lg font-medium mt-2">
+              You got {numCorrectAnswers} out of {quizContent.content.questions.length} correct answers
+            </div>
+            <div className="flex flex-row mt-3 justify-between">
               <button
                 className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 mt-4 mr-4"
                 onClick={handleCloseModalClick}

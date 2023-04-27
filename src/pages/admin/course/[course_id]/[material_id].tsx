@@ -154,7 +154,7 @@ export default function CourseDetailAdmin() {
       <CssBaseline />
       <main>
         {/* Header, contains logo and page name */}
-        <Grid sx={{ width: "100%", margin: "0 auto", position: 'fixed', top: 0, zIndex: 1}}>
+        <Grid sx={{ width: "100%", margin: "0 auto", position: 'fixed', top: 0, zIndex: 1, backgroundColor: "#f3f3f3"}}>
           <Grid
             container
             direction="row"
@@ -294,7 +294,7 @@ export default function CourseDetailAdmin() {
               )}
               <Grid item xs={showSideBar ? 9 : 12}>
                 <Grid item>
-                  {fileString ? (
+                  {fileString && !quizContent ? (
                     <div style={{
                       display: "flex",
                       margin: "0 10px",
@@ -303,7 +303,7 @@ export default function CourseDetailAdmin() {
                       flexDirection: "column",
                     }} dangerouslySetInnerHTML={{ __html: fileString }}></div>
                   ) : (
-                    <div>loading ... </div>
+                    <div></div>
                 )}
                 {quizContent ? (
                   <QuizSectionAdm
