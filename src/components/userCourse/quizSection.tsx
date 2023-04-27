@@ -150,12 +150,13 @@ const QuizSection: React.FC<QuizSectionProps> = ({ quizContent }) => {
               You got {numCorrectAnswers} out of {quizContent.content.questions.length} correct answers
             </div>
             <div className="flex flex-row mt-3 justify-between">
-              <button
-                className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 mt-4 mr-4"
+              <Button
+                variant="contained"
+                color="secondary"
                 onClick={handleCloseModalClick}
               >
                 Close
-              </button>
+              </Button>
             </div>
           </div>
         </div>

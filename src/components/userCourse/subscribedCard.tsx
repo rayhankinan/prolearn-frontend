@@ -149,7 +149,7 @@ const SubcribedCard: React.FC<SubcribedCardProps> = ({ course }) => {
               className="w-64 bg-blackbutton text-white"
               href={`/course/${course.id}/description`}
             >
-              Learn Now!
+              Learn Now
             </Button>
           </CardActions>
         </CardContent>

@@ -99,8 +99,8 @@ export default function Courses() {
               href: "/",
             },
             {
-              label: "Courses",
-              href: "/course",
+              label: "My Courses",
+              href: "/course/subscribed",
             },
           ]}
         />
@@ -129,19 +129,21 @@ export default function Courses() {
               onChange={handleChange}
             />
           </Grid>
-          <div className="flex flex-col mt-4 bg-stone-300 pl-5 pr-5 pt-3 pb-3 rounded-2xl shadow-lg">
-            <div className="text-xl custom-Poppins mb-3 pl-4">
-              Recommended Courses for You
+          <div className="flex flex-col mt-4">
+            <div className="text-xl custom-Poppins pl-5">
+              {">"} Recommended Courses for You
             </div>
-            <RecommendCards recommendCourses={recommendCourse} />
-            <Grid container direction="row" justifyContent="center" marginTop={2}>
-              <Pagination
-                count={recommCount}
-                size="large"
-                page={recommPage}
-                onChange={handleRecommChange}
-              />
-            </Grid>
+            <div className="bg-gray-300 p-5 rounded-lg shadow-lg">
+              <RecommendCards recommendCourses={recommendCourse} />
+              <Grid container direction="row" justifyContent="center" marginTop={2}>
+                <Pagination
+                  count={recommCount}
+                  size="large"
+                  page={recommPage}
+                  onChange={handleRecommChange}
+                />
+              </Grid>
+            </div>
           </div>
         </div>
       </div>
