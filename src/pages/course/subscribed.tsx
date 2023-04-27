@@ -30,22 +30,36 @@ export default function Courses() {
       title: search,
       subscribed: true,
     })
-      .then((response) => {
-        setCourses(response.data.data);
-        setCount(response.data.meta.totalPage);
-      })
-      .catch((error) => console.log(error));
-  }, [page, perPage]);
+    .then((response) => {
+      setCourses(response.data.data);
+      setCount(response.data.meta.totalPage);
+    })
+    .catch((error) => console.log(error));
+    
+    CourseService.getAll({
+      page: recommPage,
+      limit: perRecommPage,
+      subscribed: false,
+    })
+    .then((response) => {
+      setRecommendCourse(response.data.data);
+      setRecommPage(1);
+      setRecommCount(response.data.meta.totalPage);
+    })
+    .catch((error) => console.log(error));
+  }, [page, perPage, recommPage, perRecommPage]);
 
   const [difficulty, setDifficulty] = useState("All Difficulty");
   const [selected, setSelected] = useState<number[] | undefined>(undefined);
-
+  const difficultyList = ["beginner", "intermediate", "advanced"];
   const searchQuery = (search: string) => {
     CourseService.getAll({
       page: page,
       limit: perPage,
       title: search,
-      difficulty: difficulty != "All Difficulty" ? difficulty : undefined,
+      difficulty: difficultyList.includes(difficulty.toLowerCase())
+        ? difficulty.toLowerCase()
+        : undefined,
       categoryId: selected,
       subscribed: true,
     })
@@ -53,20 +67,6 @@ export default function Courses() {
       setCourses(response.data.data);
       setPage(1);
       setCount(response.data.meta.totalPage);
-    })
-    .catch((error) => console.log(error));
-
-    CourseService.getAll({
-      page: recommPage,
-      limit: perRecommPage,
-      difficulty: difficulty != "All Difficulty" ? difficulty : undefined,
-      categoryId: selected,
-      subscribed: false,
-    })
-    .then((response) => {
-      setRecommendCourse(response.data.data);
-      setRecommPage(1);
-      setRecommCount(response.data.meta.totalPage);
     })
     .catch((error) => console.log(error));
   };
