@@ -12,7 +12,7 @@ const ourTeam = [
     image: "../test-team.png",
   },
   {
-    name: "Azka Syauqi Irsyad",
+    name: "Azka Syauqy Irsyad",
     role: "Backend Developer",
     image: "../test-team.png",
   },
@@ -100,41 +100,31 @@ const AboutUs = () => {
         <h1 className="text-6xl font-bold mt-10 font-mono">Our Mission</h1>
         <div className="border w-1/2 border-black border-4"></div>
         <div className="flex flex-col mt-10 text-xl">
-          <div className="flex flex-row">
-            <h1 className="font-bold">Unmatched</h1>
-            <h1 className="ml-40 font-light">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint quae
-              exercitationem voluptatem fugiat voluptatibus necessitatibus in
-              minus placeat dolores tempore id qui magni eveniet voluptas
-              aliquid, amet ipsum laudantium saepe.
-            </h1>
+          <div className="flex flex-row justify-between">
+            <h1 className="font-bold w-16">Accessibility</h1>
+            <p className="ml-40 font-light text-justify pr-10">
+              Our platform is committed to making education accessible to learners of all backgrounds and abilities. We strive 
+              to remove barriers to learning by providing flexible and inclusive educational resources that
+               meet the diverse needs of our learners.
+            </p>
           </div>
-          <div className="flex flex-row mt-10">
-            <h1 className="font-bold">Unmatched</h1>
-            <h1 className="ml-40 font-light">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint quae
-              exercitationem voluptatem fugiat voluptatibus necessitatibus in
-              minus placeat dolores tempore id qui magni eveniet voluptas
-              aliquid, amet ipsum laudantium saepe.
-            </h1>
+          <div className="flex flex-row justify-between mt-5">
+            <h1 className="font-bold w-16">Innovation</h1>
+            <p className="ml-40 font-light text-justify pr-10">
+              We believe in staying at the forefront of educational technology and pedagogy. Our platform leverages the latest tools and techniques to create innovative and engaging learning experiences that empower our learners to achieve their full potential.
+            </p>
           </div>
-          <div className="flex flex-row mt-10">
-            <h1 className="font-bold">Unmatched</h1>
-            <h1 className="ml-40 font-light">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint quae
-              exercitationem voluptatem fugiat voluptatibus necessitatibus in
-              minus placeat dolores tempore id qui magni eveniet voluptas
-              aliquid, amet ipsum laudantium saepe.
-            </h1>
+          <div className="flex flex-row justify-between mt-5">
+            <h1 className="font-bold w-16">Quality</h1>
+            <p className="ml-40 font-light text-justify pr-10">
+              We are dedicated to providing high-quality educational content and resources to our learners. Our platform is committed to ensuring that our courses are designed and taught by subject matter experts, and that our content is up-to-date, accurate, and relevant. We are constantly monitoring and evaluating our courses to ensure that they meet the highest standards of quality and effectiveness. Our aim is to provide our learners with the knowledge and skills they need to succeed in their personal and professional lives.
+            </p>
           </div>
-          <div className="flex flex-row mt-10">
-            <h1 className="font-bold">Unmatched</h1>
-            <h1 className="ml-40 font-light">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint quae
-              exercitationem voluptatem fugiat voluptatibus necessitatibus in
-              minus placeat dolores tempore id qui magni eveniet voluptas
-              aliquid, amet ipsum laudantium saepe.
-            </h1>
+          <div className="flex flex-row justify-between mt-5">
+            <h1 className="font-bold w-16">Student Success</h1>
+            <p className="ml-40 font-light text-justify pr-10">
+              Our ultimate goal is to help learners achieve their educational and career objectives. We provide personalized learning pathways, feedback, and support to help learners stay motivated and achieve success. We measure our success by the success of our learners.
+            </p>
           </div>
         </div>
       </div>
