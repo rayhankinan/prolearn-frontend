@@ -154,17 +154,17 @@ export default function CourseDetailAdmin() {
       <CssBaseline />
       <main>
         {/* Header, contains logo and page name */}
-        <Grid sx={{ width: "100%", margin: "0 auto", position: 'fixed', top: 0, zIndex: 1}}>
+        <Grid sx={{ width: "100%", margin: "0 auto", position: 'fixed', top: 0, zIndex: 1, backgroundColor: "#f3f3f3"}}>
           <Grid
             container
             direction="row"
             justifyContent="space-between"
             alignItems="center"
-            sx={{ justifyContent: "center" }}
+            sx={{ justifyContent: "left" }}
             marginLeft={"10px"}
           >
             <Box sx={{ display: "flex", alignItems: "center" }}>
-              <IconButton onClick={() => router.push('/course')}>
+              <IconButton onClick={() => router.push('/admin/course')}>
                 <ArrowBackIcon />
               </IconButton>
               <Typography

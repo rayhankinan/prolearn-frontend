@@ -16,6 +16,7 @@ const RatingModal: React.FC<RatingModalProps> = ({ isOpen, onClose }) => {
     if (value !== null) {
       setRating(value);
     }
+    console.log(value);
   };
 
   return (
@@ -29,7 +30,7 @@ const RatingModal: React.FC<RatingModalProps> = ({ isOpen, onClose }) => {
     >
       <div className="bg-white rounded-md shadow-lg p-8 max-w-xl mx-auto">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-bold text-gray-900">Berikan Penilaian Untuk Course ini</h2>
+          <h2 className="text-2xl font-bold text-gray-900">Rate This Course</h2>
           <div className="flex items-center">
             <span className="ml-12"></span>
             <IconButton onClick={onClose}>
