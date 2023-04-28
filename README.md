@@ -36,3 +36,20 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+## Foldering Rule
+
+1. Folder "src" terbagi 4, components, pages, services, sama styles
+
+2. Components isinya component2 kecil yang KEMUNGKINAN reusable, misal button, filter.
+   Dibagi juga buat per page, misal components/admin-course, components/user-course, dll.
+
+3. Pages isinya page ato component yang ada di aplikasi.
+   Bedanya kalo component dalem folder components itu reusable, kalo dalem pages itu buat yg spesifik buat page itu. Buat foldering dalem page ini bakal ngikutin routing sesuai next. Misal ada pages/user/courses bakal bisa diakses di localhost/user/courses
+
+4. Services isinya service2 yang dipake buat ngambil data dari API pake axios
+
+5. Styles isinya globalCSS. Kalo mau make font, import dari google dan masukin situ
+
+6. TAPI KARENA KITA PAKE TAILWIND KEMUNGKINAN PAKE CSS INLINE,
+   jadi gaakan terlalu banyak yang ada di folder styles
