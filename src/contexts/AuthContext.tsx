@@ -18,6 +18,7 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
   children,
 }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoading, setIsLoading] = useState(true)
 
   //check if user is logged in by checking if there is a token in local storage
   React.useEffect(() => {
@@ -25,8 +26,13 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
     if (token) {
       setIsLoggedIn(true);
     }
+    setIsLoading(false)
   }, []);
 
+
+  if(isLoading) {
+    return <div> Loading... </div>
+  }
   return (
     <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn }}>
       {children}

@@ -18,6 +18,7 @@ import Category from "@/interfaces/category-interface";
 import FilterBar from "@/components/adminCourse/filterBar";
 import { useRouter } from "next/router";
 import CourseCard from "@/components/adminCourse/courseCard";
+import Hero from "@/components/userCourse/courseHero";
 
 const theme = createTheme();
 
@@ -243,21 +244,19 @@ export default function Album() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <main>
-        <Grid
-          sx={{
-            width: "70%",
-            margin: "0 auto",
-            marginTop: "30px",
-          }}
-        >
-          <Grid container justifyContent="space-between">
-            <Typography variant="h4" className="text-4xl font-bold mt-10">
-              All Courses
-            </Typography>
-            <img src="/logo.png" alt="Logo" className="h-12 mr-4" />
-          </Grid>
-          <hr className="border-t-3 border-black " />
-        </Grid>
+      <Hero
+          title="Courses"
+          breadcrumbs={[
+            {
+              label: "Home",
+              href: "/",
+            },
+            {
+              label: "Courses",
+              href: "/course",
+            },
+          ]}
+        />
         <Container sx={{ py: 3 }} maxWidth="lg">
           <Box
             sx={{
