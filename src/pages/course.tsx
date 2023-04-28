@@ -18,7 +18,6 @@ export default function Courses() {
   const [count, setCount] = useState(1);
   const [search, setSearch] = useState("");
   const { isLoggedIn } = React.useContext(AuthContext);
-  console.log(isLoggedIn)
   useEffect(() => {
     if (!isLoggedIn) {
       CourseService.getAllForVisitor({
