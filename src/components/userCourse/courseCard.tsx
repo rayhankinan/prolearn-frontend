@@ -14,11 +14,11 @@ import courseService from "@/services/course-service";
 
 interface CourseCardProps {
   course: Course;
+  isLoggedIn: boolean;
 }
 
-const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
+const CourseCard: React.FC<CourseCardProps> = ({ course, isLoggedIn }) => {
   const [file, setFile] = useState<File | null>(null);
-  const { isLoggedIn } = React.useContext(AuthContext);
   useEffect(() => {
     if (course.__thumbnail__) {
       fileService
