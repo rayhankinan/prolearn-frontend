@@ -41,6 +41,7 @@ export default function Album() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [showAll, setShowAll] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [subscribed, setSubscribed] = useState(false);
   const [file, setFile] = useState<File | null>(null);
 
   useEffect(() => {
@@ -293,6 +294,7 @@ export default function Album() {
                   setDifficulty={setSelectedDifficulty}
                   selected={selectedCategories}
                   setSelected={setSelectedCategories}
+                  subscribed={subscribed}
                   />
                 </div>
                 <div className="w-full md:w-4/5 px-4">

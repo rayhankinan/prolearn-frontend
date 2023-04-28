@@ -21,6 +21,7 @@ export default function Courses() {
   const [count, setCount] = useState(1);
   const [recommCount, setRecommCount] = useState(1);
   const [search, setSearch] = useState("");
+  const [subscribed, setSubscribed] = useState(true);
   const { isLoggedIn } = React.useContext(AuthContext);
 
   useEffect(() => {
@@ -112,6 +113,7 @@ export default function Courses() {
             setDifficulty={setDifficulty}
             selected={selected}
             setSelected={setSelected}
+            subscribed={subscribed}
           />
         </div>
         <div className="w-full md:w-4/5 px-4">

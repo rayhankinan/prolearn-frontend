@@ -5,6 +5,10 @@ class CategoryService {
     return await http.get("/category/all");
   }
 
+  async getAllSubscribed() {
+    return await http.get("/category/subscribed");
+  }
+
   async getByTitle(title: string) {
     return await http.get(`/category?title=${title}`);
   }

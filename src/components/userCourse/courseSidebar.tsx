@@ -9,20 +9,30 @@ type SidebarProps = {
   setDifficulty: (difficulty: string) => void;
   selected: number[] | undefined;
   setSelected: (selected: number[] | undefined) => void;
+  subscribed: boolean;
 };
 const Sidebar = ({
   difficulty,
   setDifficulty,
   selected,
   setSelected,
+  subscribed,
 }: SidebarProps) => {
   const [categories, setCategories] = useState<Category[]>([]);
   useEffect(() => {
-    CategoryService.getAll()
+    if (subscribed) {
+      CategoryService.getAllSubscribed()
       .then((response) => {
         setCategories(response.data.data);
       })
       .catch((error) => console.log(error));
+    } else {
+      CategoryService.getAll()
+      .then((response) => {
+        setCategories(response.data.data);
+      })
+      .catch((error) => console.log(error));
+    }
   }, []);
 
   useEffect(() => {
