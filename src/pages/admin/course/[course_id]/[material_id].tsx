@@ -144,26 +144,6 @@ export default function CourseDetailAdmin() {
       .catch((error) => console.log(error));
   }, []);
 
-  const handlePrevious = () => {
-    const currentIndex = section.findIndex((section) => section.id === material_idInt);
-    const previousMaterialId = currentIndex > 0 ? section[currentIndex - 1].id : null;
-    if (previousMaterialId) {
-      window.location.href = `/admin/course/${course_id}/${previousMaterialId}`;
-    } else {
-      window.location.href = `/admin/course/${course_id}/description`;
-    }
-  };
-  
-  const handleNext = () => {
-    const currentIndex = section.findIndex((section) => section.id === material_idInt);
-    const nextMaterialId = currentIndex < section.length - 1 ? section[currentIndex + 1].id : null;
-    if(nextMaterialId){
-      window.location.href = `/admin/course/${course_id}/${nextMaterialId}`;
-    }else{
-      window.location.href = `/admin/course/${course_id}/description`;
-    }
-  };
-
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -350,26 +330,6 @@ export default function CourseDetailAdmin() {
             </Grid>
           </Grid>
         </Grid>
-        <div style={{ position: "fixed", bottom: 0, width: "100%", backgroundColor: "#f5f5f5", padding: "25px"}}>
-          <Grid container spacing={2} alignItems="center">
-            <Grid item xs={2}>
-              <Button variant="outlined" color="primary" startIcon={<ArrowBackIcon />} onClick={handlePrevious}>
-                Modul Sebelumnya
-              </Button>
-              
-            </Grid>
-            <Grid item xs={8}>
-              <Typography variant="h6" align="center">
-                {section[material_idInt - 1]?.title}
-              </Typography>
-            </Grid>
-            <Grid item xs={2}>
-              <Button variant="outlined" color="primary" endIcon={<ArrowForwardIcon />} onClick={handleNext}>
-                Modul Berikutnya
-              </Button>
-            </Grid>
-          </Grid>
-        </div>
       </main>
 
       {showEditModal && (
