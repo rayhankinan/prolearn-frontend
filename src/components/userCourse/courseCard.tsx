@@ -7,6 +7,8 @@ import { Card, CardContent, CardActions, Typography } from "@mui/material";
 import { Button, Skeleton } from "@mui/material";
 import userService from "@/services/user-service";
 import fileService from "@/services/file-service";
+import { AuthContext } from "@/contexts/AuthContext";
+import React from "react";
 
 interface CourseCardProps {
   course: Course;
@@ -14,7 +16,7 @@ interface CourseCardProps {
 
 const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
   const [file, setFile] = useState<File | null>(null);
-
+  const { isLoggedIn } = React.useContext(AuthContext);
   useEffect(() => {
     if (course.__thumbnail__) {
       fileService
@@ -154,16 +156,18 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
               }}
             />
           </div>
-          <CardActions className="flex items-center justify-center">
-            <Button
-              size="small"
-              variant="contained"
-              className="w-64 bg-blue-800 text-white"
-              onClick={() => handleSubscribe(course.id)}
-            >
-              Subscribe
-            </Button>
-          </CardActions>
+          {isLoggedIn &&
+            <CardActions className="flex items-center justify-center">
+              <Button
+                size="small"
+                variant="contained"
+                className="w-64 bg-blue-800 text-white"
+                onClick={() => handleSubscribe(course.id)}
+              >
+                Subscribe
+              </Button>
+            </CardActions>
+          }
         </CardContent>
       </Card>
     </Link>

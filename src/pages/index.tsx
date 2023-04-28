@@ -78,7 +78,7 @@ export default function CourseLanding() {
               Get Started
             </a>
             <a
-              href="#"
+              href="/aboutUs"
               className="inline-block w-auto h-16 text-xl px-4 py-5 leading-none 
               border border-gray-300 shadow-xl text-black bg-gray-400 mt-4 lg:mt-0 mr-5
               hover:transition ease-in-out hover:scale-110 duration-300"
@@ -124,62 +124,6 @@ export default function CourseLanding() {
             Our support team is available 24/7 to help you with any issues you
             may have.
           </p>
-        </div>
-      </div>
-      <div className="flex flex-col justify-between w-full pb-20 pt-16 ">
-        <div className="flex w-auto flex-col bg-gray-300 mr-20 ml-20 p-4 rounded-xl">
-          <ul className="flex w-full justify-center ">
-            {categories.map((category) => (
-              <li key={category.title} className="flex-1 mr-2">
-                <a
-                  className="text-center block py-2 px-4 hover:bg-gray-400 rounded-xl text-gray-800
-                  transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300"
-                  onClick={() => handleCategoryClicked(category.id)}
-                >
-                  {category.title}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className="grid grid-cols-4 ml-10 mr-10">
-          {courses.map((course) => (
-            <div
-              key={course.id}
-              className="flex flex-wrap mx-1 lg:mx-10 rounded-xl border 
-              hover:border-gray-400 overflow-hidden shadow-xl ml-20 mt-20 mr-20 transition ease-in-out 
-              delay-150 hover:-translate-y-1 hover:scale-110 duration-300"
-            >
-              <CardMedia
-                component="img"
-                image={
-                  course.__thumbnail__
-                    ? `/api/file/${course.__thumbnail__.id}`
-                    : "https://source.unsplash.com/random"
-                }
-                alt="random"
-                sx={{ height: "300px", objectFit: "cover" }}
-              />
-              <div className="w-full border-t-2"></div>
-              <div className="px-6 py-4 bg-white w-full">
-                <div className="font-bold text-xl mb-2">{course.title}</div>
-                <p className="text-gray-700 text-base">
-                  {Math.floor(Math.random() * 100)} Section
-                </p>
-              </div>
-            </div>
-          ))}
-          <div
-            className="flex flex-wrap mx-1 lg:mx-10 rounded-xl overflow-hidden shadow-lg ml-20 
-            mt-20 mr-20 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300"
-          >
-            <div className="w-full h-full flex flex-col bg-gray-600 justify-center text-center">
-              <h1 className="font-sans text-8xl font-bold text-white">. . .</h1>
-              <h2 className="font-sans text-4xl pt-10 pb-12 font-bold text-white">
-                See More
-              </h2>
-            </div>
-          </div>
         </div>
       </div>
       <div className="flex flex-row justify-between pb-20 pt-20 pr-20">
