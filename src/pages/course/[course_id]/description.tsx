@@ -250,7 +250,7 @@ export default function UserCourseDetail() {
             </Grid>
             <Grid item xs={8}>
               <Typography variant="h6" align="center">
-                {section[material_idInt - 1]?.title}
+                Description
               </Typography>
             </Grid>
             <Grid item xs={2}>

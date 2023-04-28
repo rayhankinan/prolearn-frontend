@@ -39,6 +39,19 @@ export default function UserCourseDetail() {
   const [quizContent, setQuizContent] = useState<Quiz | null>(null);
   const [showSideBar, setShowSideBar] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [material_title, setMaterialTitle] = useState("");
+
+  useEffect(() => {
+    if (section.length > 0) {
+      const material = section.find((material: Section) => {
+        return material.id === material_idInt;
+      });
+      if (material) {
+        setMaterialTitle(material.title);
+      }
+    }
+  }, [material_idInt]);
+
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -273,14 +286,14 @@ export default function UserCourseDetail() {
                           }}
                         >
                           {material.id == material_idInt && (
-                            <Link href={`course/${course_id}/${material.id}`} style={{ color: "black", textDecoration: "none"}}>
+                            <Link href={`/course/${course_id}/${material.id}`} style={{ color: "black", textDecoration: "none"}}>
                               <Typography variant="subtitle1" sx={{ fontWeight: "bold", ml: 2, mr: 1}}>
                                 {material.title}
                               </Typography>
                             </Link>
                           )}
                           {material.id != material_idInt && (
-                            <Link href={`course/${course_id}/${material.id}`} style={{ color: "black", textDecoration: "none"}}>
+                            <Link href={`/course/${course_id}/${material.id}`} style={{ color: "black", textDecoration: "none"}}>
                               <Typography variant="subtitle1" sx={{ ml: 2, mr: 1 }}>{material.title}</Typography>
                             </Link>
                           )}
