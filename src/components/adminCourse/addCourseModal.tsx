@@ -96,6 +96,7 @@ export const AddCourseModal = ({
       description: description,
       imgFile: imgFile,
       difficulty: difficulty,
+      rating_avg: 0,
       __categories__: selectedCategories.map((category) => category.id),
       status: "active",
     };
@@ -176,7 +177,7 @@ export const AddCourseModal = ({
         >
           Add
         </Button>
-        <FormControl fullWidth>
+        <FormControl sx={{ marginTop: "10px" }} fullWidth>
           <InputLabel id="difficulty-select-label">Difficulty</InputLabel>
           <Select
             labelId="difficulty-select-label"
@@ -184,7 +185,6 @@ export const AddCourseModal = ({
             value={difficulty}
             label="Difficulty"
             onChange={handleDifficultyChange}
-            className="mt-2"
           >
             <MenuItem value="beginner">Beginner</MenuItem>
             <MenuItem value="intermediate">Intermediate</MenuItem>

@@ -25,12 +25,12 @@ const ourTeam = [
   {
     name: "Rayhan Kinan Muhannad",
     role: "Backend Developer",
-    image: "../test-team.png",
+    image: "../kinan.jpg",
   },
   {
     name: "Andhika Arta Aryanto",
     role: "Frontend Developer",
-    image: "../test-team.png",
+    image: "../dhika.jpg",
   },
   {
     name: "Louis Yanggara",
