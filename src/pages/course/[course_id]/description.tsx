@@ -14,6 +14,7 @@ import Course from "@/interfaces/course-interface";
 import { Button, IconButton } from "@material-ui/core";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import MenuIcon from '@mui/icons-material/Menu';
+import RatingModal from "@/components/rating";
 
 const theme = createTheme();
 
@@ -22,6 +23,15 @@ export default function UserCourseDetail() {
   const [course_id, setCourseId] = useState("");
   const [course, setCourse] = useState<Course | null>(null);
   const [showSideBar, setShowSideBar] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
 
   const handleToggleSideBar = () => {
     // if(material_id){
@@ -70,40 +80,61 @@ export default function UserCourseDetail() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <main>
-        <Grid sx={{ width: "100%", margin: "0 auto", top: 0, zIndex: 1}}>
-            <Grid
-              container
-              direction="row"
-              justifyContent="space-between"
-              alignItems="center"
-              sx={{ justifyContent: "space-between", padding: "25px" }}
-            >
-              <Box sx={{ display: "flex", alignItems: "center" }}>
-                <Button
-                  onClick={() => router.push("/course")}
-                  variant="text"
-                  style={{ marginRight: "10px", textAlign: "left"}}
-                  // sx={{ textAlign: "left" }}
-                >
-                  <ArrowBackIcon sx={{ marginRight: "5px" }} />
-                  Back to Course List
-                </Button>
-              </Box>
+      <Grid
+          sx={{
+            width: "100%",
+            margin: "0 auto",
+            position: "fixed",
+            top: 0,
+            zIndex: 1,
+            backgroundColor: "#f3f3f3",
+          }}
+        >
+          <Grid
+            container
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+            sx={{ padding: "25px" }}
+            display={"flex"}
+          >
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <Button
+                onClick={() => router.push("/course")}
+                variant="text"
+                style={{ marginRight: "10px", textAlign: "left"}}
+                // sx={{ textAlign: "left" }}
+              >
+                <ArrowBackIcon sx={{ marginRight: "5px" }} />
+                Back to Course List
+              </Button>
+            </Box>
 
-              <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", flexGrow: 1 }}>
-                <Typography
-                  variant="h6"
-                  sx={{ textAlign: "center", fontWeight: "bold", marginRight: "195px"}}
-                >
-                  {/* {course?.title} */}
-                  JavaScript Basic
-                </Typography>
-              </Box>
-            </Grid>
-          <hr className="border-t-3 border-black " />
+            <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", flexGrow: 1 }}>
+              <Typography
+                variant="h6"
+                sx={{ textAlign: "center", fontWeight: "bold", marginRight: "0px"}}
+              >
+                {course?.title}
+              </Typography>
+            </Box>
+
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <Button
+                variant="text"
+                style={{ marginRight: "10px", textAlign: "right" }}
+                onClick={handleOpenModal}
+              >
+                Rate This Course
+              </Button>
+                <RatingModal isOpen={isModalOpen} onClose={handleCloseModal} courseId={parseInt(course_id)} />
+            </Box>
+
+          </Grid>
+          <hr className="border-t-2 border-black border-opacity-20 " />
         </Grid>
 
-        <Grid sx={{ width: "100%", margin: "0 auto", marginTop: "20px" }}>
+        <Grid sx={{ width: "100%", margin: "0 auto", marginTop: "100px" }}>
           <Grid item xs={3} sx={{marginBottom: "30px", marginLeft: "15px"}}>
             <Button 
               variant="contained" 
@@ -135,7 +166,7 @@ export default function UserCourseDetail() {
                   >
                   <Box sx={{marginLeft: "16px", marginTop: "-3px"}}>
                     <Typography variant="h6" sx={{ color: "#333", mb: 4, fontWeight: "bold"}}>
-                      Daftar Modul
+                      List of Modules
                     </Typography>
                     <Grid item container direction="column">
                       {section.map((material) => (
@@ -184,11 +215,8 @@ export default function UserCourseDetail() {
                         justifyContent: "center",
                         marginTop: "20px",
                         marginBottom: "20px"}}>
-                        <Typography variant="h4" sx={{ fontWeight: "bold", textAlign: "center", marginBottom: "20px"}}>
-                          Description
-                        </Typography>
                         <Typography variant="h6" sx={{ textAlign: "center", marginBottom: "20px"}}>
-                          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Similique nam animi suscipit minima laudantium voluptate eos dignissimos illum recusandae aperiam dolorem accusamus iure porro quaerat eligendi perspiciatis hic omnis excepturi, vel tempore ex neque veritatis! Assumenda, ex repellat. Commodi, praesentium corrupti harum, libero recusandae fugiat similique fugit eos natus aspernatur deserunt illum iure maxime ratione consequuntur vel temporibus in cumque voluptates porro. Cum quasi quia praesentium hic? Pariatur soluta vitae quidem. Saepe soluta omnis nobis quia pariatur ipsam sapiente adipisci, fugiat non magnam similique quo corrupti nostrum mollitia. Ad quam repellendus, aliquid quae sed incidunt iure nisi maiores recusandae? Possimus.
+                          {course?.description}
                         </Typography>
                     </div>
                 </Grid>
