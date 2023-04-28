@@ -7,6 +7,7 @@ import { Card, CardContent, CardActions, Typography } from "@mui/material";
 import { Button, Skeleton } from "@mui/material";
 import userService from "@/services/user-service";
 import fileService from "@/services/file-service";
+import StarIcon from "@mui/icons-material/Star";
 
 interface CourseCardProps {
   course: Course;
@@ -153,6 +154,10 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
                 marginBottom: "1rem",
               }}
             />
+            <div style={{marginBottom: "17px", marginLeft: "5px"}} className="flex items-center flex-row">
+              <StarIcon sx={{ color: "#FFB900" }} />
+              <h2 style={{marginLeft: "3px"}}>{course.rating_avg}</h2>
+            </div>
           </div>
           <CardActions className="flex items-center justify-center">
             <Button
