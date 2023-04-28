@@ -344,7 +344,7 @@ export default function UserCourseDetail() {
                     variant="contained" 
                     color="primary" 
                     onClick={handleOpenModal}>
-                      Finish
+                      Finish This Course
                     </Button>
                   )}
                   <RatingModal isOpen={isModalOpen} onClose={handleCloseModal} courseId={parseInt(course_id)} />
@@ -367,7 +367,7 @@ export default function UserCourseDetail() {
                 {section.find(material => material.id === material_idInt)?.title}
               </Typography>
             </Grid>
-            <Grid item xs={2}>
+            <Grid item xs={2} style={{display: "flex", justifyContent: "end"}}>
               {/* if last module, disable next module button */}
               {section.findIndex((material) => material.id === material_idInt) === section.length - 1 ? (
                 <Button variant="outlined" color="primary" endIcon={<ArrowForwardIcon />} disabled>

@@ -34,17 +34,17 @@ const RatingModal: React.FC<RatingModalProps> = ({ isOpen, onClose, courseId }) 
   const getRatingText = (value: number) => {
     switch (value) {
       case 0:
-        return "Sangat Tidak Membantu";
+        return "Really Bad";
       case 1:
-        return "Tidak Membantu";
+        return "Bad";
       case 2:
-        return "Kurang Membantu";
+        return "Not Bad";
       case 3:
-        return "Cukup Membantu";
+        return "Good";
       case 4:
-        return "Membantu";
+        return "Very Good";
       case 5:
-        return "Sangat Membantu";
+        return "Excellent";
       default:
         return "";
     }
