@@ -18,36 +18,24 @@ export default function Courses() {
   const [count, setCount] = useState(1);
   const [search, setSearch] = useState("");
   const { isLoggedIn } = React.useContext(AuthContext);
-  console.log(isLoggedIn)
+
   useEffect(() => {
-    if (!isLoggedIn) {
-      CourseService.getAllForVisitor({
-        page: page,
-        limit: perPage,
-        title: search,
-      })
+    CourseService.getAll({
+      page: page,
+      limit: perPage,
+      title: search,
+    })
       .then((response) => {
         setCourses(response.data.data);
         setCount(response.data.meta.totalPage);
       })
       .catch((error) => console.log(error));
-    } else {
-      CourseService.getAll({
-        page: page,
-        limit: perPage,
-        title: search,
-      })
-      .then((response) => {
-        setCourses(response.data.data);
-        setCount(response.data.meta.totalPage);
-      })
-      .catch((error) => console.log(error));
-      CourseService.getAll({
-        page: page,
-        limit: perPage,
-        title: search,
-        subscribed: true,
-      })
+    CourseService.getAll({
+      page: page,
+      limit: perPage,
+      title: search,
+      subscribed: true,
+    })
       .then((response) => {
         const subscribedCourseId = response.data.data.map(
           (course: Course) => course.id
@@ -55,55 +43,37 @@ export default function Courses() {
         setSubscribedCourses(subscribedCourseId);
       })
       .catch((error) => console.log(error));
-    }
   }, [page, perPage]);
 
   const [difficulty, setDifficulty] = useState("All Difficulty");
   const [selected, setSelected] = useState<number[] | undefined>(undefined);
   const difficultyList = ["beginner", "intermediate", "advanced"];
   const searchQuery = (search: string) => {
-    if (!isLoggedIn) {
-      CourseService.getAllForVisitor({
-        page: page,
-        limit: perPage,
-        title: search,
-        difficulty: difficultyList.includes(difficulty.toLowerCase())
-          ? difficulty.toLowerCase()
-          : undefined,
-        categoryId: selected,
-      })
+    CourseService.getAll({
+      page: page,
+      limit: perPage,
+      title: search,
+      difficulty: difficultyList.includes(difficulty.toLowerCase())
+        ? difficulty.toLowerCase()
+        : undefined,
+      categoryIDs: selected,
+    })
       .then((response) => {
         setCourses(response.data.data);
         setPage(1);
         setCount(response.data.meta.totalPage);
       })
       .catch((error) => console.log(error));
-    } else {
-      CourseService.getAll({
-        page: page,
-        limit: perPage,
-        title: search,
-        difficulty: difficultyList.includes(difficulty.toLowerCase())
-          ? difficulty.toLowerCase()
-          : undefined,
-        categoryId: selected,
-      })
-      .then((response) => {
-        setCourses(response.data.data);
-        setPage(1);
-        setCount(response.data.meta.totalPage);
-      })
-      .catch((error) => console.log(error));
-      CourseService.getAll({
-        page: page,
-        limit: perPage,
-        title: search,
-        difficulty: difficultyList.includes(difficulty.toLowerCase())
-          ? difficulty.toLowerCase()
-          : undefined,
-        categoryId: selected,
-        subscribed: true,
-      })
+    CourseService.getAll({
+      page: page,
+      limit: perPage,
+      title: search,
+      difficulty: difficultyList.includes(difficulty.toLowerCase())
+        ? difficulty.toLowerCase()
+        : undefined,
+      categoryIDs: selected,
+      subscribed: true,
+    })
       .then((response) => {
         const subscribedCourseId = response.data.data.map(
           (course: Course) => course.id
@@ -111,7 +81,6 @@ export default function Courses() {
         setSubscribedCourses(subscribedCourseId);
       })
       .catch((error) => console.log(error));
-    }
   };
 
   useEffect(() => {
@@ -125,6 +94,8 @@ export default function Courses() {
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
   };
+
+  console.log(isLoggedIn);
   return (
     <>
       <Navbar isLoggedIn={isLoggedIn} />
@@ -159,7 +130,7 @@ export default function Courses() {
           <CourseCards
             courses={courses}
             subscribedCourses={subscribedCourses}
-            isLoggedIn={isLoggedIn}
+            isLoggedIn = {isLoggedIn}
           />
           <Grid container direction="row" justifyContent="center" marginTop={2}>
             <Pagination

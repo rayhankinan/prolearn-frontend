@@ -12,6 +12,8 @@ import {
   Skeleton,
 } from "@mui/material";
 import FileService from "@/services/file-service";
+import Image from "next/image";
+import { Chip } from "@mui/material"; 
 
 interface CourseCardProps {
   course: Course;
@@ -21,6 +23,9 @@ interface CourseCardProps {
 
 const CourseCard = ({ course, handleEdit, handleDelete }: CourseCardProps) => {
   const [file, setFile] = useState<File | null>(null);
+  const imageLoader = ({ src }: { src: string }): string => {
+    return `${src}`;
+  };
 
   useEffect(() => {
     if (course.__thumbnail__) {
@@ -33,61 +38,114 @@ const CourseCard = ({ course, handleEdit, handleDelete }: CourseCardProps) => {
       });
     }
   }, []);
+
   return (
-    <Grid item key={course.id} xs={12} sm={6} md={4}>
+    <div>
       <Card
         sx={{
-          display: "flex",
-          flexDirection: "column",
+          maxWidth: 360,
+          borderRadius: "0.5rem",
+          boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+          border: "1px solid #D1D5DB",
+          borderColor: "gray.400",
+          transition: "transform 0.3s ease-in-out",
+          "&:hover": {
+            transform: "translateY(-4px)",
+            boxShadow: "0px 4px 8px rgba(38, 38, 38, 0.2)",
+          },
+          "&:active": {
+            transform: "translateY(0)",
+            boxShadow: "0px 2px 4px rgba(38, 38, 38, 0.2)",
+          },
         }}
       >
-        {file && (
-          <CardMedia
-            component="img"
-            image={
-              course.__thumbnail__
-                ? `/api/file/${course.__thumbnail__.id}`
-                : "https://source.unsplash.com/random"
-            }
-            alt="random"
-            sx={{ height: "300px", objectFit: "cover" }}
-          />
-        )}
-        {!file && <Skeleton variant="rectangular" sx={{ height: "300px" }} />}
-        <CardContent sx={{ flexGrow: 1 }}>
+        <div
+          style={{
+            position: "relative",
+            paddingTop: "56.25%",
+          }}
+        >
+          {file && (
+            <Image
+              fill
+              src={
+                file
+                  ? URL.createObjectURL(file)
+                  : "https://source.unsplash.com/random"
+              }
+              alt="course thumbnail"
+              loader={imageLoader}
+              className="absolute top-0 left-0 w-full h-full 
+              object-contain rounded object-center py-3 px-3 bg-zinc-100"
+            />
+          )}
+          {!file && (
+            <div
+              className="absolute top-0 left-0 w-full h-full 
+              object-contain rounded object-center py-3 px-3 bg-zinc-100"
+            >
+              <Skeleton
+                className="absolute inset-0 m-auto w-full h-full"
+                variant="rectangular"
+                width={210}
+                height={118}
+              />
+            </div>
+          )}
+        </div>
+        <CardContent>
           <Typography
-            gutterBottom
-            variant="h5"
-            component="h2"
-            className="font-bold custom-Source-Code-Pro"
+            variant="h6"
+            component="div"
+            className="font-bold custom-Montserrat-Bold "
+            sx={{
+              fontWeight: "bold",
+              fontSize: "1.5rem",
+              mb: "1rem",
+              maxHeight: 64,
+              overflow: "hidden",
+              display: "-webkit-box",
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: "vertical",
+            }}
           >
             {course.title}
           </Typography>
           <Typography
-            className="custom-Source-Code-Pro text-greytext"
+            variant="body2"
+            color="text.secondary"
+            className="custom-Montserrat-Bold font-bold"
             sx={{
-              minHeight: "50px",
-              maxHeight: "50px",
-              overflow: "auto",
+              maxHeight: 48,
+              overflow: "hidden",
+              display: "-webkit-box",
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: "vertical",
             }}
           >
             {course.description}
           </Typography>
-        </CardContent>
-
-        <Box
-          sx={{
-            mt: "auto",
-            p: 2,
-            display: "flex",
-            justifyContent: "space-between",
-          }}
-        >
-          <Typography variant="caption" component="p"></Typography>
-          <Typography variant="caption" component="p">
-            {course.difficulty.toUpperCase()}
-          </Typography>
-        </Box>
+          <div style={{ display: "flex", flexWrap: "wrap", marginTop: "1rem" }}>
+            <Chip
+              label={course.difficulty}
+              sx={{
+                backgroundColor:
+                  course.difficulty === "beginner"
+                    ? "#E8F5E9"
+                    : course.difficulty === "intermediate"
+                    ? "#FFFDE7"
+                    : "#FFEBEE",
+                color:
+                  course.difficulty === "beginner"
+                    ? "#2E7D32"
+                    : course.difficulty === "intermediate"
+                    ? "#FFB900"
+                    : "#C62828",
+                marginRight: "0.5rem",
+                marginBottom: "1rem",
+              }}
+            />
+          </div>
         <CardActions className="flex justify-between">
           <Button
             size="small"
@@ -107,8 +165,9 @@ const CourseCard = ({ course, handleEdit, handleDelete }: CourseCardProps) => {
             Delete
           </Button>
         </CardActions>
+        </CardContent>
       </Card>
-    </Grid>
+    </div>
   );
 };
 

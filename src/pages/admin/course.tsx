@@ -18,7 +18,8 @@ import Category from "@/interfaces/category-interface";
 import FilterBar from "@/components/adminCourse/filterBar";
 import { useRouter } from "next/router";
 import CourseCard from "@/components/adminCourse/courseCard";
-import Hero from "@/components/userCourse/courseHero";
+import Hero from "@/components/adminCourse/courseHero";
+import Sidebar from "@/components/userCourse/courseSidebar";
 
 const theme = createTheme();
 
@@ -32,8 +33,8 @@ export default function Album() {
   const [courses, setCourses] = useState<Course[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedDifficulty, setSelectedDifficulty] = useState<
-    string | undefined
-  >(undefined);
+    string
+  >("All Difficulty");
   const [selectedCategories, setSelectedCategories] = useState<
     number[] | undefined
   >(undefined);
@@ -64,17 +65,22 @@ export default function Album() {
       .catch((error) => console.log(error));
   }, []);
 
+  const difficultyList = ["beginner", "intermediate", "advanced"];
+
   const search = (
     searchTerm: string,
     selectedDifficulty: string | undefined,
     selectedCategories: number[] | undefined
   ) => {
+    
     CourseService.getAll({
       page: page,
       limit: perPage,
       title: searchTerm,
-      difficulty: selectedDifficulty,
-      categoryId: selectedCategories,
+      difficulty: difficultyList.includes(selectedDifficulty!.toLowerCase())
+      ? selectedDifficulty!.toLowerCase()
+      : undefined,
+      categoryIDs: selectedCategories,
     })
       .then((response) => {
         setCourses(response.data.data);
@@ -92,33 +98,6 @@ export default function Album() {
 
     return () => clearTimeout(delayDebounceFn);
   }, [searchTerm, selectedDifficulty, selectedCategories]);
-
-  const handleCategoryChange = (value: string[]) => {
-    let categoryIDs: number[] = [];
-    value.map((categoryTitle) => {
-      let category = categories.find(
-        (category) => category.title === categoryTitle
-      );
-      if (category != null) {
-        categoryIDs.push(category.id);
-      }
-    });
-
-    if (categoryIDs.length == 0) {
-      setSelectedCategories(undefined);
-    } else {
-      setSelectedCategories(categoryIDs);
-    }
-  };
-
-  const handleDifficultyChange = (value: string | null) => {
-    if (value != null) {
-      value = value.toLowerCase();
-      setSelectedDifficulty(value?.toLowerCase());
-    } else {
-      setSelectedDifficulty(undefined);
-    }
-  };
 
   const handlePlusClick = () => {
     setIsModalOpen(true);
@@ -245,109 +224,93 @@ export default function Album() {
       <CssBaseline />
       <main>
       <Hero
-          title="Courses"
+          title="Edit Courses"
           breadcrumbs={[
-            {
-              label: "Home",
-              href: "/",
-            },
-            {
-              label: "Courses",
-              href: "/course",
-            },
           ]}
         />
-        <Container sx={{ py: 3 }} maxWidth="lg">
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-          >
-            <Grid
-              container
-              direction="row"
-              justify-content="space-between"
-              className="mb-2"
-            >
-              <Grid container>
-                <Grid
-                  container
-                  item
-                  xs={0}
-                  sm={0}
-                  md={4}
-                  direction="row"
-                  justifyContent="space-between"
-                >
-                  {leftButton}
-                </Grid>
-                <Grid
-                  item
-                  xs={6}
-                  sm={6}
-                  md={4}
-                  display="flex"
-                  justifyContent="center"
-                  alignItems="center"
-                  marginBottom={1}
-                >
-                  <SearchBar
-                    searchTerm={searchTerm}
-                    setSearchTerm={setSearchTerm}
-                  />
-                </Grid>
-                <Grid
-                  item
-                  xs={6}
-                  sm={6}
-                  md={4}
-                  display="flex"
-                  justifyContent="space-between"
-                  alignItems="center"
-                  paddingBottom={4}
-                >
+        <div className = "container mx-auto">
+              <Grid
+                container
+                direction="row"
+                justify-content="space-between"
+                className="mb-2 px-3"
+              >
+                <Grid container>
+                  <Grid
+                    container
+                    item
+                    xs={0}
+                    sm={0}
+                    md={4}
+                    direction="row"
+                    justifyContent="space-between"
+                  >
+                    {leftButton}
+                  </Grid>
                   <Grid
                     item
                     xs={6}
                     sm={6}
-                    md={12}
+                    md={4}
                     display="flex"
-                    justifyContent="flex-end"
+                    justifyContent="center"
                     alignItems="center"
+                    marginBottom={1}
                   >
-                    {rightButton}
+                    <SearchBar
+                      searchTerm={searchTerm}
+                      setSearchTerm={setSearchTerm}
+                    />
+                  </Grid>
+                  <Grid
+                    item
+                    xs={6}
+                    sm={6}
+                    md={4}
+                    display="flex"
+                    justifyContent="space-between"
+                    alignItems="center"
+                    paddingBottom={4}
+                  >
+                    <Grid
+                      item
+                      xs={6}
+                      sm={6}
+                      md={12}
+                      display="flex"
+                      justifyContent="flex-end"
+                      alignItems="center"
+                    >
+                      {rightButton}
+                    </Grid>
                   </Grid>
                 </Grid>
               </Grid>
-            </Grid>
-            <Box sx={{ my: 2, mx: "auto", marginTop: 4 }}>
-              <FilterBar
-                categories={categories}
-                handleDifficultyChange={handleDifficultyChange}
-                handleCategoryChange={handleCategoryChange}
-              />
-            </Box>
-            <Grid
-              container
-              spacing={10}
-              sx={{ alignItems: "center", marginTop: 0 }}
-            >
-              {courses.map((card) => (
-                <CourseCard
-                  key={card.id}
-                  course={card}
-                  handleEdit={handleEdit}
-                  handleDelete={handleDelete}
-                />
-              ))}
-              <Grid item>
-                <Plus handlePlusClick={handlePlusClick} />
-              </Grid>
-            </Grid>
-          </Box>
-        </Container>
+              <div className="container w-full flex justify-center custom-Poppins ">
+              <div className="w-full md:w-1/5 px-4">
+                  <Sidebar
+                  difficulty={selectedDifficulty!}
+                  setDifficulty={setSelectedDifficulty}
+                  selected={selectedCategories}
+                  setSelected={setSelectedCategories}
+                  />
+                </div>
+                <div className="w-full md:w-4/5 px-4">
+                  <Grid container spacing={3}>
+                    {courses.map((card) => (
+                      <Grid item key={card.id} xs={12} md={6} lg ={4}>
+                        <CourseCard
+                          course={card}
+                          handleEdit={handleEdit}
+                          handleDelete={handleDelete}
+                        />
+                      </Grid>
+                    ))}
+                    
+                  </Grid>
+                </div>
+              </div>
+        </div>
 
         <Grid container direction="row" justifyContent="center" marginTop={2}>
           {pagination}
