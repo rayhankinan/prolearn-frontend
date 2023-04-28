@@ -181,7 +181,7 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({
 
   const isLastQuestion =
     currentQuestion === questions.content.questions.length - 1;
-  const isFirstQuestion = currentQuestion ===
+  const isFirstQuestion = currentQuestion === 0;
 
   return (
     <div className="w-3/4 h-full p-4 shadow-lg bg-gray-200 rounded-md m-auto">
