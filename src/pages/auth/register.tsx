@@ -1,11 +1,11 @@
 import userService from "@/services/user-service";
 import {
   createTheme,
-  CssBaseline,
   InputAdornment,
   ThemeProvider,
 } from "@material-ui/core";
-import { PersonOutlined } from "@mui/icons-material";
+import CssBaseline from "@mui/material/CssBaseline";
+import { PersonOutlined, Visibility, VisibilityOff } from "@mui/icons-material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import {
   Box,
@@ -15,11 +15,13 @@ import {
   TextField,
   Typography,
   Modal,
+  IconButton,
 } from "@mui/material";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import ModalFailed from "../user/modalFailed";
 import ModalSuccess from "../user/modalSucess";
+import Image from "next/image";
 
 const theme = createTheme();
 
@@ -30,8 +32,10 @@ export default function Register() {
   const [usernameError, setUsernameError] = useState(false);
   const [password, setPassword] = useState<String>("");
   const [passwordError, setPasswordError] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [passwordConfirm, setPasswordConfirm] = useState<String>("");
   const [passwordConfirmError, setPasswordConfirmError] = useState(false);
+  const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [modalSuccessOpen, setModalSuccessOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState<String>("");
@@ -109,9 +113,8 @@ export default function Register() {
         router.push("/auth/login");
       })
       .catch((error) => {
-        console.log(error);
-        // alert("Error: " + error.message);
-        setErrorMessage("Error: " + error.message);
+
+        setErrorMessage("Error: Please try another username" + error.message);
         setModalOpen(true);
       });
   };
@@ -130,18 +133,24 @@ export default function Register() {
                 alignItems: "center",
               }}
             >
-              <img src="/logo.png" alt="logo" className="h-12 mt-5 mb-10" />
+              <Image
+                src="/logo.png"
+                alt="Logo"
+                className="h-12 mt-5 mb-5"
+                width={250}
+                height={61}
+              />
               <Typography
                 component="h1"
                 variant="h4"
-                className="mt-10"
+                className="mt-3"
                 sx={{
                   fontFamily: "Poppins",
                   fontStyle: "bold",
-                  fontSize: "5vh",
+                  fontSize: "4vh",
                 }}
               >
-                Register
+                Register to ProLearn
               </Typography>
               <Box
                 component="form"
@@ -175,7 +184,7 @@ export default function Register() {
                   required
                   fullWidth
                   id="password"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   label="Password"
                   name="password"
                   autoComplete="current-password"
@@ -186,6 +195,13 @@ export default function Register() {
                         <LockOutlinedIcon />
                       </InputAdornment>
                     ),
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton aria-label="toggle password visibility" onClick={() => setShowPassword(!showPassword)} edge="end">
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    )
                   }}
                   value={password}
                   onChange={handlePasswordChange}
@@ -197,7 +213,7 @@ export default function Register() {
                   required
                   fullWidth
                   id="confpassword"
-                  type="password"
+                  type={showPasswordConfirm ? "text" : "password"}
                   label="Password Confirmation"
                   name="confpassword"
                   autoComplete="current-confirmation-password"
@@ -208,6 +224,13 @@ export default function Register() {
                         <LockOutlinedIcon />
                       </InputAdornment>
                     ),
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton aria-label="toggle password visibility" onClick={() => setShowPasswordConfirm(!showPasswordConfirm)} edge="end">
+                          {showPasswordConfirm ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    )
                   }}
                   value={passwordConfirm}
                   onChange={handlePasswordConfirmChange}
@@ -220,22 +243,32 @@ export default function Register() {
                 />
                 <Button
                   type="submit"
-                  fullWidth
                   variant="contained"
                   sx={{
-                    mt: 3,
-                    mb: 2,
+                    display: "flex",
+                    margin: "auto",
+                    mt: 2,
+                    mb: 3,
+                    paddingLeft: "1.5rem",
+                    paddingRight: "1.5rem",
                     fontFamily: "Poppins",
                     color: "white",
                     fontSize: "2vh",
                     backgroundColor: "#0C21C1 !important",
-                    borderRadius: "10px",
+                    borderRadius: "7.5px",
+                    width: "content-fit",
                     "&:hover": { backgroundColor: "#0C21C1 !important" },
                   }}
                 >
                   Register
                 </Button>
               </Box>
+              <div className="text-md font-medium">
+                Already have an account?{" "}
+                <a href="/auth/login" className="text-blue-700">
+                  Login here
+                </a>
+              </div>
             </Box>
           </Container>
         </Grid>
@@ -268,35 +301,45 @@ export default function Register() {
                   marginBottom: 5,
                 }}
               >
-                <img src="/Saly-10 (1).png" alt="logo" />
+                <Image
+                  src="/Saly-10 (1).png"
+                  alt="Logo"
+                  width={1826}
+                  height={2084}
+                  priority
+                />
               </Container>
-              <Typography
-                component="h1"
-                variant="h5"
-                color="white"
-                className="ml-10 mb-5"
-                sx={{
-                  fontFamily: "Poppins",
-                  fontStyle: "bold",
-                  fontSize: "5vh",
-                }}
-              >
-                Register to Using ProLearn
-              </Typography>
-              <Typography
-                component="h1"
-                variant="h5"
-                textAlign={"center"}
-                color="white"
-                className="ml-10"
-                sx={{
-                  fontFamily: "Poppins",
-                  fontStyle: "bold",
-                  marginBottom: "10vh",
-                }}
-              >
-                Learning Like a Pro Starts Here
-              </Typography>
+              <Container component="main" maxWidth="xl">
+                <Typography
+                  component="h1"
+                  variant="h5"
+                  textAlign={"center"}
+                  color="white"
+                  className="ml-10"
+                  sx={{
+                    fontFamily: "Montserrat",
+                    fontStyle: "bold",
+                    fontSize: "4vh",
+                  }}
+                >
+                  Meet ProLearn,
+                </Typography>
+                <Typography
+                  component="h1"
+                  variant="h5"
+                  textAlign={"center"}
+                  color="white"
+                  className="ml-10"
+                  sx={{
+                    fontFamily: "Montserrat",
+                    fontStyle: "bold",
+                    fontSize: "2.5vh",
+                    marginBottom: "10vh",
+                  }}
+                >
+                  Learning Like a Pro Starts Here
+                </Typography>
+              </Container>
             </Box>
           </Container>
         </Grid>

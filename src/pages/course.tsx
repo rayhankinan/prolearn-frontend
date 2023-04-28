@@ -1,21 +1,24 @@
 import React, { useState, useEffect } from "react";
-import Hero from "@/pages/course/courseHero";
-import Sidebar from "@/pages/course/courseSidebar";
-import CourseCards from "@/pages/course/courseCards";
-import { Course } from "@/services/course-service";
+import Hero from "@/components/userCourse/courseHero";
+import Sidebar from "@/components/userCourse/courseSidebar";
+import CourseCards from "@/components/userCourse/courseCards";
+import Course from "@/interfaces/course-interface";
 import CourseService from "@/services/course-service";
-import Navbar from "../components/navbar";
 import SearchBar from "@/components/adminCourse/search";
 import { Grid } from "@mui/material";
 import { Pagination } from "@mui/material";
+import Navbar from "@/components/navbar";
+import { AuthContext } from "@/contexts/AuthContext";
 
 export default function Courses() {
   const [courses, setCourses] = useState<Course[]>([]);
+  const [subscribedCourses, setSubscribedCourses] = useState<number[]>([]);
   const [page, setPage] = useState(1);
   const [perPage, setPerPage] = useState(9);
   const [count, setCount] = useState(1);
-  const [length, setLength] = useState(0);
   const [search, setSearch] = useState("");
+  const [subscribed, setSubscribed] = useState(false);
+  const { isLoggedIn } = React.useContext(AuthContext);
 
   useEffect(() => {
     CourseService.getAll({
@@ -25,8 +28,20 @@ export default function Courses() {
     })
       .then((response) => {
         setCourses(response.data.data);
-        setLength(response.data.meta.totalPage * perPage);
         setCount(response.data.meta.totalPage);
+      })
+      .catch((error) => console.log(error));
+    CourseService.getAll({
+      page: page,
+      limit: perPage,
+      title: search,
+      subscribed: true,
+    })
+      .then((response) => {
+        const subscribedCourseId = response.data.data.map(
+          (course: Course) => course.id
+        );
+        setSubscribedCourses(subscribedCourseId);
       })
       .catch((error) => console.log(error));
   }, [page, perPage]);
@@ -42,13 +57,29 @@ export default function Courses() {
       difficulty: difficultyList.includes(difficulty.toLowerCase())
         ? difficulty.toLowerCase()
         : undefined,
-      categoryId: selected,
+      categoryIDs: selected,
     })
       .then((response) => {
         setCourses(response.data.data);
         setPage(1);
-        setLength(response.data.meta.totalPage * perPage);
         setCount(response.data.meta.totalPage);
+      })
+      .catch((error) => console.log(error));
+    CourseService.getAll({
+      page: page,
+      limit: perPage,
+      title: search,
+      difficulty: difficultyList.includes(difficulty.toLowerCase())
+        ? difficulty.toLowerCase()
+        : undefined,
+      categoryIDs: selected,
+      subscribed: true,
+    })
+      .then((response) => {
+        const subscribedCourseId = response.data.data.map(
+          (course: Course) => course.id
+        );
+        setSubscribedCourses(subscribedCourseId);
       })
       .catch((error) => console.log(error));
   };
@@ -65,9 +96,10 @@ export default function Courses() {
     setPage(value);
   };
 
+  console.log(isLoggedIn);
   return (
     <>
-      <Navbar />
+      <Navbar isLoggedIn={isLoggedIn} />
       <div className="container mx-auto justify-center custom-Poppins ">
         <Hero
           title="Courses"
@@ -90,13 +122,18 @@ export default function Courses() {
             setDifficulty={setDifficulty}
             selected={selected}
             setSelected={setSelected}
+            subscribed={subscribed}
           />
         </div>
         <div className="w-full md:w-4/5 px-4">
           <div className="flex justify-center">
             <SearchBar searchTerm={search} setSearchTerm={setSearch} />
           </div>
-          <CourseCards courses={courses} />
+          <CourseCards
+            courses={courses}
+            subscribedCourses={subscribedCourses}
+            isLoggedIn = {isLoggedIn}
+          />
           <Grid container direction="row" justifyContent="center" marginTop={2}>
             <Pagination
               count={count}

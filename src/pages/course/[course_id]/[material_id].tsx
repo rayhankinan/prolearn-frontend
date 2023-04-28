@@ -1,108 +1,387 @@
-import React, {useState}  from "react";
+import React, { useState, useEffect } from "react";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
 import Link from "@mui/material/Link";
-import {LinkProps} from 'react-router-dom';
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { styled } from '@mui/material/styles';
-import ReactMarkdown from 'react-markdown'
-import { Material } from "@/components/material";
-import GridComponent from '@/components/GridComponent';
-import { Button, Grid, Typography } from "@mui/material";
-import { useRouter, Router } from 'next/router';
-
-function Copyright() {
-
-    return (
-        <Typography variant="body2" color="text.secondary" align="center">
-            {"Copyright © "}
-            <Link color="inherit" href="https://mui.com/">
-                Your Website
-            </Link>{" "}
-            {new Date().getFullYear()}
-            {"."}
-        </Typography>
-    );
-}
-
-const materials: Material[] = [
-    {
-        id: 1,
-        name: "Introduction to Web Development",
-        text:
-            "Learn the basics of web development and build your own website from scratch.",
-        video_url: "https://picsum.photos/300/300?random=1",
-        course_id: 1,
-    },
-    {
-        id: 2,
-        name: "JavaScript Fundamentals",
-        text:
-            "Understand the core concepts of JavaScript and how to use it to build dynamic web applications.",
-        video_url: "https://picsum.photos/300/300?random=2",
-        course_id: 1,
-    },
-]
+import { Grid, Typography } from "@mui/material";
+import { useRouter } from "next/router";
+import Section from "@/interfaces/section-interface";
+import Category from "@/interfaces/category-interface";
+import Quiz from "@/interfaces/quiz-interface";
+import CourseService from "@/services/course-service";
+import SectionService from "@/services/section-service";
+import QuizService from "@/services/quiz-service";
+import fileService from "@/services/file-service";
+import CategoryService from "@/services/category-service";
+import QuizSection from "@/components/userCourse/quizSection";
+import Course from "@/interfaces/course-interface";
+import { Button, IconButton, Icon } from "@material-ui/core";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import MenuIcon from '@mui/icons-material/Menu';
+import RatingModal from "@/components/rating";
+import StarIcon from '@mui/icons-material/Star';
+import RatingService from "@/services/rating-service";
 
 const theme = createTheme();
 
 export default function UserCourseDetail() {
-    const [selectedMaterial, setSelectedMaterial] = useState(null);
+  const router = useRouter();
+  const [course_id, setCourseId] = useState("");
+  const [course, setCourse] = useState<Course | null>(null);
+  const [material_id, setMaterialId] = useState("");
+  const [file_id, setFileId] = useState(1);
+  const [material_idInt, setMaterialIdInt] = useState(-1);
+  const [file, setFile] = useState<Blob | null>(null);
+  const [fileString, setFileString] = useState(" ");
+  const [score, setScore] = useState("");
+  const [quizId, setQuizId] = useState(1);
+  const [quizContent, setQuizContent] = useState<Quiz | null>(null);
+  const [showSideBar, setShowSideBar] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [material_title, setMaterialTitle] = useState("");
 
-    const router = useRouter();
-    // let {course_id, material_id} = router.query;
-    // TO DO - fix error
-    const course_id: string = router.query.course_id ? router.query.course_id.toString() : '';
-    const material_id: string = router.query.material_id ? router.query.material_id.toString() : '';
+  useEffect(() => {
+    if (section.length > 0) {
+      const material = section.find((material: Section) => {
+        return material.id === material_idInt;
+      });
+      if (material) {
+        setMaterialTitle(material.title);
+      }
+    }
+  }, [material_idInt]);
 
-    const course_idInt = parseInt(course_id);
-    const material_idInt = parseInt(material_id);
 
-    return(
-        <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <main>
-                <Grid sx ={{width: "70%", margin: "0 auto", marginTop: "30px"}}>
-                    <Grid container direction= "row" justifyContent= "space-between" alignItems="center" sx={{justifyContent: 'center'}}>
-                        <Box sx= {{display: "flex", alignItems: "center"}}>
-                            <Typography variant= "h4" className= "text-4xl font-bold mt-10 mx-4 mb-5" sx= {{marginRight: "10px"}}>
-                                Course X
-                            </Typography>
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleToggleSideBar = () => {
+    // if(material_id){
+    //   return;
+    // }
+    setShowSideBar(!showSideBar);
+  };
+
+  useEffect(() => {
+    if (router.isReady) {
+      setCourseId(router.query.course_id!.toString());
+      setMaterialId(router.query.material_id!.toString());
+      //set material id int with material id converted to int
+      setMaterialIdInt(parseInt(router.query.material_id!.toString()));
+    }
+  }, [router.isReady]);
+
+  const [section, setSection] = useState<Section[]>([]);
+
+  useEffect(() => {
+    if (course_id === "" || material_idInt === -1) return;
+    SectionService.getSectionByCourse(course_id)
+      .then((response) => {
+        setSection(response.data.data);
+        //find material with material id
+        const material = response.data.data.find((material: Section) => {
+          return material.id === material_idInt;
+        });
+        setFileId(material.__file__.id);
+        if (material.__quiz__ !== null) {
+          setQuizContent(material.__quiz__);
+        }
+      })
+      .catch((error) => console.log(error));
+
+    CourseService.getById(parseInt(course_id))
+      .then((response) => {
+        setCourse(response.data.data);
+      })
+      .catch((error) => console.log(error));
+  }, [course_id, material_idInt]);
+
+  useEffect(() => {
+    if (course_id === "" || material_idInt === -1) return;
+    fileService
+      .getFile(file_id)
+      .then((response) => {
+        setFile(response.data);
+        //convert file to string
+        const reader = new FileReader();
+        reader.readAsBinaryString(response.data);
+        reader.onload = () => {
+          setFileString(reader.result as string);
+        };
+      })
+      .catch((error) => console.log(error));
+  }, [file_id]);
+
+  const [category, setCategory] = useState<Category[] | null>(null);
+  useEffect(() => {
+    CategoryService.getAll()
+      .then((response) => {
+        setCategory(response.data.data);
+      })
+      .catch((error) => console.log(error));
+  }, []);
+
+  useEffect(() => {
+    if (quizContent === null) return;
+    QuizService.viewHistory(quizContent.id)
+      .then((response) => {
+        setScore(response.data.data.correctAnswers.toString());
+      })
+      .catch((error) => {
+        console.log(error);
+        setScore("-");
+      });
+  }, [quizContent]);
+
+  const [selectedSection, setSelectedSection] = useState<Section | null>(null);
+
+  const [categories, setCategories] = useState<Category[]>([]);
+  useEffect(() => {
+    CategoryService.getAll()
+      .then((response) => {
+        setCategories(response.data.data);
+      })
+      .catch((error) => console.log(error));
+  }, []);
+
+  const [quizStarted, setQuizStarted] = useState(false);
+  const handleStartQuiz = () => {
+    setQuizStarted(true);
+  };
+
+  const handlePrevious = () => {
+    const currentIndex = section.findIndex((section) => section.id === material_idInt);
+    const previousMaterialId = currentIndex > 0 ? section[currentIndex - 1].id : null;
+    // router.push(`/course/${course_id}/${previousMaterialId}`);
+    // return `/course/${course_id}/${previousMaterialId}`
+    if (previousMaterialId) {
+      window.location.href = `/course/${course_id}/${previousMaterialId}`;
+    } else {
+      window.location.href = `/course/${course_id}/description`;
+    }
+  };
+  
+  const handleNext = () => {
+    const currentIndex = section.findIndex((section) => section.id === material_idInt);
+    const nextMaterialId = currentIndex < section.length - 1 ? section[currentIndex + 1].id : null;
+    // return `/course/${course_id}/${nextMaterialId}`
+    // router.push(`/course/${course_id}/${nextMaterialId}`);
+    if(nextMaterialId){
+      window.location.href = `/course/${course_id}/${nextMaterialId}`;
+    }else{
+      window.location.href = `/course/${course_id}/description`;
+    }
+  };
+
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <main>
+        <Grid
+          sx={{
+            width: "100%",
+            margin: "0 auto",
+            position: "fixed",
+            top: 0,
+            zIndex: 1,
+            backgroundColor: "#f3f3f3",
+          }}
+        >
+          <Grid
+            container
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+            sx={{ padding: "25px" }}
+            display={"flex"}
+          >
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <Button
+                onClick={() => router.push("/course")}
+                variant="text"
+                style={{ marginRight: "10px", textAlign: "left"}}
+                // sx={{ textAlign: "left" }}
+              >
+                <ArrowBackIcon sx={{ marginRight: "5px" }} />
+                Back to Course List
+              </Button>
+            </Box>
+
+            <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", flexGrow: 1 }}>
+              <Typography
+                variant="h6"
+                sx={{ textAlign: "center", fontWeight: "bold", marginRight: "210px"}}
+              >
+                {course?.title}
+              </Typography>
+            </Box>
+            <Box sx={{ display: "flex", alignItems: "center" }}></Box>
+
+          </Grid>
+          <hr className="border-t-2 border-black border-opacity-20 " />
+        </Grid>
+        <Grid sx={{ width: "100%", margin: "0 auto", marginTop: "120px", marginBottom: "150px"}}>
+          <Grid item xs={3} sx={{marginBottom: "30px", marginLeft: "15px"}}>
+            <Button 
+              variant="contained" 
+              style={{ 
+                background: 'none', 
+                boxShadow: 'none', 
+                color: 'inherit', 
+                textTransform: 'none', 
+                fontSize: '1.2rem',
+                fontWeight: 'bold',
+              }} 
+              startIcon={<MenuIcon />} 
+              onClick={handleToggleSideBar}
+              >
+            </Button>
+          </Grid>
+          <Grid item xs={12} sx={{ paddingLeft: "20px" }}>
+            <Grid container spacing={2}>
+              {showSideBar && (
+                <Grid 
+                  item 
+                  xs={2} 
+                  sx={{
+                    borderRight: '1px solid #ccc',
+                    transform: 'translateX(0)',
+                    transition: 'transform ease-out 150ms',
+                  }}
+                  className="transition-all"
+                  >
+                  <Box sx={{marginLeft: "16px", marginTop: "-3px"}}>
+                    <Typography variant="h6" sx={{ color: "#333", mb: 4, fontWeight: "bold"}}>
+                      List Of Sections
+                    </Typography>
+                    <Grid item container direction="column">
+                      {section.map((material) => (
+                        <Box
+                          key={material.id}
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            mb: 1,
+                            cursor: "pointer",
+                            transition: "all 0.2s",
+                            "&:hover": {
+                              backgroundColor: "#e5e7eb",
+                              borderRadius: "5px",
+                            },
+                            textDecoration: "none"
+                          }}
+                        >
+                          {material.id == material_idInt && (
+                            <Link href={`/course/${course_id}/${material.id}`} style={{ color: "black", textDecoration: "none"}}>
+                              <Typography variant="subtitle1" sx={{ fontWeight: "bold", ml: 2, mr: 1}}>
+                                {material.title}
+                              </Typography>
+                            </Link>
+                          )}
+                          {material.id != material_idInt && (
+                            <Link href={`/course/${course_id}/${material.id}`} style={{ color: "black", textDecoration: "none"}}>
+                              <Typography variant="subtitle1" sx={{ ml: 2, mr: 1 }}>{material.title}</Typography>
+                            </Link>
+                          )}
                         </Box>
+                      ))}
                     </Grid>
-                    <hr className="border-t-3 border-black " />
+                  </Box>
                 </Grid>
+              )}
 
-                <Grid sx={{width: "70%", margin: "0 auto", marginTop: "30px"}}>
-                    <Grid container spacing={2}>
-                        <Grid item xs={3} sx={{borderRight: "1px solid #ccc"}}>
-                            <Grid item container direction= "column">
-                                {materials.map((material) => (
-                                    <Grid sx= {{display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "10px"}} key= {material.id}>
-                                        {(material.id == material_idInt) &&
-                                            <Link href={`/course/1/${material.id}`} style={{   color: "black" }}>
-                                                {/* <a style={{ color: "black" }}> */}
-                                                    <div>{material.name}</div>
-                                                {/* </a> */}
-                                            </Link>                                        }
-                                        {(material.id != material_idInt) &&
-                                            <Link href={`/course/1/${material.id}`} style={{ textDecoration: "none", color: "black" }}>
-                                            {/* <a style={{ color: "black" }}> */}
-                                                <div>{material.name}</div>
-                                            {/* </a> */}
-                                        </Link>
-                                        }
-                                    </Grid>
-                                ))}
-                            </Grid>
-                        </Grid>
-                        <Grid item xs={9} sx={{ paddingLeft: '20px' }}>
-                            <Grid item><ReactMarkdown>Bla b;a bla</ReactMarkdown></Grid>
-                        </Grid>
-                    </Grid>
+              <Grid item xs={showSideBar ? 9 : 12}>
+                <Grid item>
+                  {fileString && !quizStarted && (
+                    <div style={{
+                      display: "flex",
+                      alignItems: "center",
+                      margin: "0 200px",
+                      textAlign: "justify",
+                      flexWrap: "wrap",
+                      flexDirection: "column",
+                    }} dangerouslySetInnerHTML={{ __html: fileString }}></div>
+                  )}
+                  {quizContent &&
+                    !quizStarted &&
+                    quizContent.content.questions.length > 0 && (
+                      <div style={{ width: "70%", marginTop: "20px", margin: "auto" }} className="flex flex-col md:flex-row justify-between items-center bg-gray-200 p-4 rounded-lg shadow-md">
+                        <div className="font-bold text-lg mb-2 md:mb-0 md:mr-2">
+                          Previous Grade:  {score !== '-' ? (parseInt(score)/quizContent.content.questions.length * 100).toFixed(0) : '-'}%
+                        </div>
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          onClick={() => handleStartQuiz()}
+                        >
+                          Start
+                        </Button>
+                      </div>
+                    )}
+                  {quizContent &&
+                    !quizStarted &&
+                    quizContent.content.questions.length <= 0 && (
+                      <div style={{ width: "70%", marginTop: "20px", margin: "auto" }} className="flex flex-col md:flex-row justify-between items-center bg-gray-200 p-4 rounded-lg shadow-md">
+                        <div className="font-bold text-lg mb-2 md:mb-0 md:mr-2">
+                          Quiz's questions are not available
+                        </div>
+                      </div>
+                    )}
+                  {quizContent && quizStarted ? (
+                    <QuizSection quizContent={quizContent} />
+                  ) : (
+                    <div></div>
+                  )}
+                  {section.findIndex((material) => material.id === material_idInt) === section.length - 1 && (
+                    <Button 
+                    style={{ display: "flex", margin: "auto", marginTop: "20px" }}
+                    variant="contained" 
+                    color="primary" 
+                    onClick={handleOpenModal}>
+                      Finish This Course
+                    </Button>
+                  )}
+                  <RatingModal isOpen={isModalOpen} onClose={handleCloseModal} courseId={parseInt(course_id)} />
                 </Grid>
-            </main>
-        </ThemeProvider>
-    )
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+
+        <div style={{ position: "fixed", bottom: 0, width: "100%", backgroundColor: "#f5f5f5", padding: "25px"}}>
+          <Grid container spacing={2} alignItems="center">
+            <Grid item xs={2}>
+              <Button variant="outlined" color="primary" startIcon={<ArrowBackIcon />} onClick={handlePrevious}>
+                Previous Section
+              </Button>
+              
+            </Grid>
+            <Grid item xs={8}>
+              <Typography variant="h6" align="center">
+                {section.find(material => material.id === material_idInt)?.title}
+              </Typography>
+            </Grid>
+            <Grid item xs={2} style={{display: "flex", justifyContent: "end"}}>
+              {/* if last module, disable next module button */}
+              {section.findIndex((material) => material.id === material_idInt) === section.length - 1 ? (
+                <Button variant="outlined" color="primary" endIcon={<ArrowForwardIcon />} disabled>
+                  Next Section
+                </Button>
+              ) : (
+                <Button variant="outlined" color="primary" endIcon={<ArrowForwardIcon />} onClick={handleNext}>
+                  Next Section
+                </Button>
+              )}
+            </Grid>
+          </Grid>
+        </div>
+      </main>
+    </ThemeProvider>
+  );
 }

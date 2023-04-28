@@ -1,129 +1,88 @@
 import React, { useState, useEffect } from "react";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
 import Link from "@mui/material/Link";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { styled } from "@mui/material/styles";
-import ReactMarkdown from "react-markdown";
-// import { Material } from "@/components/material";
-import Modal from "@/components/modal";
-import GridComponent from "@/components/GridComponent";
-import { Button, Grid, Typography } from "@mui/material";
+import AddSectionModal from "@/components/AddSectionModal";
+import { EditCourseModal } from "@/components/adminCourse/editCourseModal";
+import { EditSectionModal } from "@/components/editSection";
+import { Button, Grid, Typography, IconButton } from "@mui/material";
 import { useRouter } from "next/router";
 import CategoryService from "@/services/category-service";
-import { Category } from "@/services/category-service";
-import { Course } from "@/services/course-service";
-interface Material {
-  id: number;
-  name: string;
-  text: string;
-  video_url: string;
-  course_id: number;
-}
-
-interface GridComponentProps {
-  material: Material;
-}
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center">
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
-
-const materials: Material[] = [
-  {
-    id: 1,
-    name: "Introduction to Web Development",
-    text: "Learn the basics of web development and build your own website from scratch.",
-    video_url: "https://picsum.photos/300/300?random=1",
-    course_id: 1,
-  },
-  {
-    id: 2,
-    name: "JavaScript Fundamentals",
-    text: "Understand the core concepts of JavaScript and how to use it to build dynamic web applications.",
-    video_url: "https://picsum.photos/300/300?random=2",
-    course_id: 1,
-  },
-  {
-    id: 3,
-    name: "ReactJS: Building User Interfaces",
-    text: "Learn how to build user interfaces with the popular JavaScript library ReactJS.",
-    video_url: "https://picsum.photos/300/300?random=3",
-    course_id: 1,
-  },
-  {
-    id: 4,
-    name: "NodeJS: Building Backends",
-    text: "Build scalable and efficient backends with NodeJS and understand how to connect to databases.",
-    video_url: "https://picsum.photos/300/300?random=4",
-    course_id: 1,
-  },
-  {
-    id: 5,
-    name: "Advanced CSS and SASS",
-    text: "Take your CSS skills to the next level with SASS and learn how to write efficient and maintainable stylesheets.",
-    video_url: "https://picsum.photos/300/300?random=5",
-    course_id: 1,
-  },
-  {
-    id: 6,
-    name: "Full Stack Development with MERN",
-    text: "Build full-stack web applications using the MERN stack (MongoDB, ExpressJS, ReactJS, NodeJS).",
-    video_url: "https://picsum.photos/300/300?random=6",
-    course_id: 1,
-  },
-  {
-    id: 7,
-    name: "Data Structures and Algorithms",
-    text: "Understand the basics of data structures and algorithms and learn how to implement them in code.",
-    video_url: "https://picsum.photos/300/300?random=7",
-    course_id: 1,
-  },
-  {
-    id: 8,
-    name: "Introduction to Python",
-    text: "Learn the basics of Python and how to use it to build powerful applications.",
-    video_url: "https://picsum.photos/300/300?random=8",
-    course_id: 1,
-  },
-];
+import SectionService from "@/services/section-service";
+import CourseService from "@/services/course-service";
+import Category from "@/interfaces/category-interface";
+import Section from "@/interfaces/section-interface";
+import Course from "@/interfaces/course-interface";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import MenuIcon from '@mui/icons-material/Menu';
 
 const theme = createTheme();
 
 export default function CourseDetailAdmin() {
+  const router = useRouter();
+  const [course_id, setCourseId] = useState("");
+  const [showSideBar, setShowSideBar] = useState(true);
+
+  const handleToggleSideBar = () => {
+    // if(material_id){
+    //   return;
+    // }
+    setShowSideBar(!showSideBar);
+  };
+
+  useEffect(() => {
+    if (router.isReady) {
+      setCourseId(router.query.course_id!.toString());
+    }
+  }, [router.isReady]);
+  const material_idInt = -1;
+
   const [showModal, setShowModal] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
-  const [selectedMaterial, setSelectedMaterial] = useState<Material | null>(
-    null
-  );
-  const [showEditButton, setShowEditButton] = useState(false);
-  const router = useRouter();
-  const { course_id, material_id } = router.query;
-  // const course_id: string = router.query.course_id!.toString() ;
-  // const material_id: string = router.query.material_id!.toString();
-  if (typeof course_id === "string") {
-    const course_idInt = parseInt(course_id);
-  }
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [section, setSection] = useState<Section[]>([]);
+  const [course, setCourse] = useState<Course | null>(null);
+  const [category, setCategory] = useState<Category[] | null>(null);
 
-  const material_idInt = -1;
+  useEffect(() => {
+    if (course_id === "") return;
+    SectionService.getSectionByCourse(course_id)
+      .then((response) => {
+        setSection(response.data.data);
+      })
+      .catch((error) => console.log(error));
+
+    CourseService.getById(parseInt(course_id))
+      .then((response) => {
+        setCourse(response.data.data);
+      })
+      .catch((error) => console.log(error));
+  }, [course_id]);
+
+  useEffect(() => {
+    CategoryService.getAll()
+      .then((response) => {
+        setCategory(response.data.data);
+      })
+      .catch((error) => console.log(error));
+  }, []);
+
+  const [selectedSection, setSelectedSection] = useState<Section | null>(null);
+  const [showEditButton, setShowEditButton] = useState(false);
 
   const handleAddMaterial = () => {
     setShowAddModal(true);
   };
 
-  const handleEditMaterial = (material: Material) => {
-    setSelectedMaterial(material);
+  const handleEditSection = (section: Section) => {
+    setSelectedSection(section);
     setShowModal(true);
+  };
+
+  const handleEditCourse = () => {
+    setShowEditModal(true);
   };
 
   const handleShowEditButton = () => {
@@ -136,176 +95,205 @@ export default function CourseDetailAdmin() {
   const handleClose = () => {
     setShowModal(false);
     setShowAddModal(false);
+    setShowEditModal(false);
   };
-
-  const [categories, setCategories] = useState<Category[]>([]);
-  useEffect(() => {
-    CategoryService.getAll()
-      .then((response) => {
-        setCategories(response.data.data);
-      })
-      .catch((error) => console.log(error));
-  }, []);
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <main>
         {/* Header, contains logo and page name */}
-        <Grid sx={{ width: "70%", margin: "0 auto", marginTop: "30px" }}>
+        <Grid sx={{ width: "100%", margin: "0 auto", top: 0, zIndex: 1}}>
           <Grid
             container
             direction="row"
             justifyContent="space-between"
             alignItems="center"
-            sx={{ justifyContent: "center" }}
+            sx={{ justifyContent: "space-between", padding: "25px" }}
           >
-            <Box sx={{ display: "flex", alignItems: "center" }}>
-              <Typography
-                variant="h4"
-                className="text-4xl font-bold mt-10 mx-4 mb-5"
+            <Box sx={{ display: "flex", alignItems: "center"}}>
+              <Button
+                onClick={() => router.push('/admin/course')}
+                variant="text"
+                // color="primary"
                 sx={{ marginRight: "10px" }}
               >
-                COURSE X
-              </Typography>
-              {!showEditButton && (
-                <button
+                <ArrowBackIcon sx={{ marginRight: "5px" }} />
+                  Back
+              </Button>
+            </Box>
+
+            <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <Typography
+                  variant="h6"
+                  sx={{ flexGrow: 1, textAlign: "center", fontWeight: "bold", justifyContent: "center", marginLeft: "40px"}}
+                >
+                  {course?.title}
+                </Typography>
+            </Box>
+
+            {!showEditButton && (
+              <Box sx={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
+                <Button
+                  onClick={() => handleAddMaterial()}
+                  variant="outlined"
+                >
+                  Add Section
+                </Button>
+                <Button
                   onClick={() => handleShowEditButton()}
-                  className=" bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mt-10 mx-4 mb-5"
+                  variant="outlined"
+                  sx={{ marginLeft: "10px" }}
+                >
+                  Edit Sections
+                </Button>
+                <Button
+                  onClick={() => handleEditCourse()}
+                  variant="outlined"
+                  color="primary"
+                  sx={{ marginLeft: "10px"}}
                 >
                   Edit Course
-                </button>
-              )}
+                </Button>
+              </Box>
+            )}
 
-              {showEditButton && (
+            {showEditButton && (
+              <Box sx={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
                 <Button
                   onClick={() => handleCancel()}
-                  className=" bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mt-10 mx-4 mb-5"
+                  variant="outlined"
+                  color="success"
+                  sx={{ marginLeft: "10px" }}
                 >
                   Done
                 </Button>
-              )}
+              </Box>
+            )}
 
-              <button
-                onClick={() => handleAddMaterial()}
-                className=" bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mt-10 mx-4 mb-5"
-              >
-                Add Material
-              </button>
-            </Box>
           </Grid>
           {/* horizontal line that have space on the left and right */}
-          <hr className="border-t-3 border-black " />
+          <hr className="border-t-2 border-black border-opacity-20 " />
         </Grid>
         {/* End hero unit */}
-        <Grid sx={{ width: "70%", margin: "0 auto", marginTop: "30px" }}>
-          <Grid container spacing={2}>
-            <Grid item xs={3} sx={{ borderRight: "1px solid #ccc" }}>
-              <Grid item container direction="column">
-                <Grid
+        <Grid sx={{ width: "100%", margin: "0 auto", marginTop: "20px" }}>
+          <Grid item xs={3} sx={{marginBottom: "30px", marginLeft: "15px"}}>
+            <Button 
+              variant="contained" 
+              style={{ 
+                background: 'none', 
+                boxShadow: 'none', 
+                color: 'inherit', 
+                textTransform: 'none', 
+                fontSize: '1.2rem',
+                fontWeight: 'bold',
+              }} 
+              startIcon={<MenuIcon />} 
+              onClick={handleToggleSideBar}
+              >
+            </Button>
+          </Grid>
+          <Grid item xs={12} sx={{ paddingLeft: "20px" }}>
+            <Grid container spacing={2}>
+            {showSideBar && (
+                <Grid 
+                  item 
+                  xs={2} 
                   sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    marginBottom: "10px",
+                    borderRight: '1px solid #ccc',
+                    transform: 'translateX(0)',
+                    transition: 'transform ease-out 150ms',
                   }}
-                  key={"desc"}
-                >
-                  <Link
-                    href={`/course/admin/1/description`}
-                    style={{ color: "black" }}
+                  className="transition-all"
                   >
-                    {/* <a style={{ color: "black" }}> */}
-                    <div>Description</div>
-                    {/* </a> */}
-                  </Link>
+                  <Box sx={{marginLeft: "16px", marginTop: "-3px"}}>
+                    <Typography variant="h6" sx={{ color: "#333", mb: 4, fontWeight: "bold"}}>
+                      List of Sections
+                    </Typography>
+                    <Grid item container direction="column">
+                      {section.map((material) => (
+                        <Box
+                          key={material.id}
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                            mb: 1,
+                            cursor: "pointer",
+                            transition: "all 0.2s",
+                            "&:hover": {
+                              backgroundColor: "#e5e7eb",
+                              borderRadius: "5px",
+                            },
+                            textDecoration: "none"
+                          }}
+                        >
+                          {material.id == material_idInt && (
+                            <Link href={`/admin/course/${course_id}/${material.id}`} style={{ color: "black", textDecoration: "none"}}>
+                              <Typography variant="subtitle1" sx={{ fontWeight: "bold", ml: 2, mr: 1}}>
+                                {material.title}
+                              </Typography>
+                            </Link>
+                          )}
+                          {material.id != material_idInt && (
+                            <Link href={`/admin/course/${course_id}/${material.id}`} style={{ color: "black", textDecoration: "none"}}>
+                              <Typography variant="subtitle1" sx={{ ml: 2, mr: 1 }}>{material.title}</Typography>
+                            </Link>
+                          )}
+                          {showEditButton && (
+                            <Button
+                              onClick={() => handleEditSection(material)}
+                              size="small"
+                              // variant="contained"
+                              className=" bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mr-4"
+                              sx={{ height: "30px", width: "7.5px"}} // added width property
+                            >
+                            <i className="fas fa-edit"></i>
+                            </Button>
+                          )}
+                        </Box>
+                      ))}
+                    </Grid>
+                  </Box>
                 </Grid>
-                {materials.map((material) => (
-                  <Grid
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      marginBottom: "10px",
-                    }}
-                    key={material.id}
-                  >
-                    {material.id != material_idInt && (
-                      <Link
-                        href={`/course/admin/1/${material.id}`}
-                        style={{ textDecoration: "none", color: "black" }}
-                      >
-                        {/* <a style={{ color: "black" }}> */}
-                        <div>{material.name}</div>
-                        {/* </a> */}
-                      </Link>
-                    )}
-                    {showEditButton && (
-                      <Button
-                        onClick={() => handleEditMaterial(material)}
-                        size="small"
-                        // variant="contained"
-                        className=" bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mr-4"
-                        sx={{ height: "40px", width: "10px" }} // added width property
-                      >
-                        <i className="fas fa-edit"></i>
-                      </Button>
-                    )}
-                  </Grid>
-                ))}
-              </Grid>
-            </Grid>
-            <Grid item xs={9} sx={{ paddingLeft: "20px" }}>
-              <Grid item>
-                <ReactMarkdown></ReactMarkdown>
+              )}
+              <Grid item xs={showSideBar ? 9 : 12}>
+                <Grid item>
+                    <div>
+                      <p>{course?.description}</p>
+                    </div>
+                </Grid>
               </Grid>
             </Grid>
           </Grid>
         </Grid>
       </main>
-      {/* Footer */}
-      <Box sx={{ bgcolor: "background.paper", p: 6 }} component="footer">
-        <Typography variant="h6" align="center" gutterBottom>
-          Footer
-        </Typography>
-        <Typography
-          variant="subtitle1"
-          align="center"
-          color="text.secondary"
-          component="p"
-        >
-          Something here to give the footer a purpose!
-        </Typography>
-        <Copyright />
-      </Box>
-      {/* End footer */}
-      {selectedMaterial && (
-        <Modal show={showModal} onClose={() => setShowModal(false)}>
-          <GridComponent material={selectedMaterial} />
-          <div className="flex justify-center mt-5">
-            <button
-              onClick={handleClose}
-              className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mr-4"
-            >
-              Cancel
-            </button>
-          </div>
-        </Modal>
+
+      {showEditModal && (
+        <EditCourseModal
+          open={showEditModal}
+          onClose={() => setShowEditModal(false)}
+          categories={category!}
+          course={course!}
+        />
+      )}
+
+      {selectedSection && (
+        <EditSectionModal 
+          open={showModal}
+          onClose={() => setShowModal(false)}
+          section={selectedSection}
+        />
       )}
 
       {showAddModal && (
-        <Modal show={showAddModal} onClose={() => setShowModal(false)}>
-          <GridComponent />
-          <div className="flex justify-center mt-5">
-            <button
-              onClick={handleClose}
-              className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mr-4"
-            >
-              Cancel
-            </button>
-          </div>
-        </Modal>
+        <AddSectionModal
+          open={showAddModal}
+          onClose={() => setShowAddModal(false)}
+          courseId={course_id} 
+        />
       )}
     </ThemeProvider>
   );
 }
+

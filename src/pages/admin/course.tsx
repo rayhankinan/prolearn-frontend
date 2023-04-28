@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
-import Card from "@mui/material/Card";
 import { Pagination } from "@mui/material";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
 import CssBaseline from "@mui/material/CssBaseline";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -15,46 +11,39 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import SearchBar from "@/components/adminCourse/search";
 import { Plus } from "@/components/adminCourse/plus";
 import { AddCourseModal } from "@/components/adminCourse/addCourseModal";
-import Autocomplete from "@mui/material/Autocomplete";
-import TextField from "@mui/material/TextField";
 import CourseService from "@/services/course-service";
-import { Course } from "@/services/course-service";
 import CategoryService from "@/services/category-service";
-import { Category } from "@/services/category-service";
-import { createGlobalStyle } from "styled-components";
+import Course from "@/interfaces/course-interface";
+import Category from "@/interfaces/category-interface";
 import FilterBar from "@/components/adminCourse/filterBar";
 import { useRouter } from "next/router";
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center">
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
+import CourseCard from "@/components/adminCourse/courseCard";
+import Hero from "@/components/adminCourse/courseHero";
+import Sidebar from "@/components/userCourse/courseSidebar";
 
 const theme = createTheme();
 
 export default function Album() {
   const router = useRouter();
+  const [selectedId, setSelectedId] = useState<number>(1);
   const [length, setLength] = useState(0);
   const [count, setCount] = useState(0);
   const [perPage, setperPage] = useState(6);
   let [page, setPage] = React.useState(1);
   const [courses, setCourses] = useState<Course[]>([]);
-  const APINEMBAK = "/api/file";
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedDifficulty, setSelectedDifficulty] = useState<
-    string | undefined
-  >(undefined);
+    string
+  >("All Difficulty");
   const [selectedCategories, setSelectedCategories] = useState<
     number[] | undefined
   >(undefined);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [showAll, setShowAll] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [subscribed, setSubscribed] = useState(false);
+  const [file, setFile] = useState<File | null>(null);
+
   useEffect(() => {
     CourseService.getAll({
       page: page,
@@ -69,7 +58,6 @@ export default function Album() {
       .catch((error) => console.log(error));
   }, [page, perPage]);
 
-  const [categories, setCategories] = useState<Category[]>([]);
   useEffect(() => {
     CategoryService.getAll()
       .then((response) => {
@@ -78,17 +66,22 @@ export default function Album() {
       .catch((error) => console.log(error));
   }, []);
 
+  const difficultyList = ["beginner", "intermediate", "advanced"];
+
   const search = (
     searchTerm: string,
     selectedDifficulty: string | undefined,
     selectedCategories: number[] | undefined
   ) => {
+    
     CourseService.getAll({
       page: page,
       limit: perPage,
       title: searchTerm,
-      difficulty: selectedDifficulty,
-      categoryId: selectedCategories,
+      difficulty: difficultyList.includes(selectedDifficulty!.toLowerCase())
+      ? selectedDifficulty!.toLowerCase()
+      : undefined,
+      categoryIDs: selectedCategories,
     })
       .then((response) => {
         setCourses(response.data.data);
@@ -107,40 +100,6 @@ export default function Album() {
     return () => clearTimeout(delayDebounceFn);
   }, [searchTerm, selectedDifficulty, selectedCategories]);
 
-  const handleCategoryChange = (value: string[]) => {
-    // handle category change here
-    //search the corresponding category id
-    let categoryIDs: number[] = [];
-    value.map((categoryTitle) => {
-      let category = categories.find(
-        (category) => category.title === categoryTitle
-      );
-      if (category != null) {
-        categoryIDs.push(category.id);
-      }
-    });
-
-    if (categoryIDs.length == 0) {
-      setSelectedCategories(undefined);
-    } else {
-      setSelectedCategories(categoryIDs);
-    }
-  };
-
-  const handleDifficultyChange = (value: string | null) => {
-    //change value to all lowercase
-    if (value != null) {
-      value = value.toLowerCase();
-      setSelectedDifficulty(value?.toLowerCase());
-    } else {
-      setSelectedDifficulty(undefined);
-    }
-  };
-
-  const [showAll, setShowAll] = useState(false);
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
   const handlePlusClick = () => {
     setIsModalOpen(true);
   };
@@ -150,16 +109,16 @@ export default function Album() {
   };
 
   const handleEdit = (courseId?: number) => {
-    // set data
     if (courseId) {
+      setSelectedId(courseId);
+
       router.push(`/admin/course/${courseId}/description`);
     }
   };
 
   const handleModalSubmit = (course: Course) => {
-    //add course to setCourses
     if (course.imgFile == null) {
-      // alert("Please upload an image");
+      alert("Please upload an image");
       return;
     }
     const formData = new FormData();
@@ -171,7 +130,6 @@ export default function Album() {
       formData.append("categoryIDs[]", course.__categories__[i].toString());
     }
     formData.append("file", course.imgFile, course.imgFile.name);
-
     CourseService.create(formData)
       .then((newCourse) => {
         window.location.reload();
@@ -180,10 +138,11 @@ export default function Album() {
         console.error(error);
       });
   };
+
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
   };
-  //view all course button is clicked, show all courses remove pagination
+
   const handleShowAll = () => {
     setShowAll(!showAll);
     if (!showAll) {
@@ -194,7 +153,6 @@ export default function Album() {
   };
 
   const handleDelete = async (id?: number) => {
-    //check if id not null
     if (id == null) {
       return;
     }
@@ -209,11 +167,9 @@ export default function Album() {
   let pagination;
   let rightButton;
   let leftButton;
-  let leftButton2;
 
   if (showAll) {
     pagination = null;
-
     rightButton = (
       <Button
         component={Link}
@@ -226,7 +182,6 @@ export default function Album() {
         </Typography>
       </Button>
     );
-
     leftButton = (
       <Button
         component={Link}
@@ -250,7 +205,6 @@ export default function Album() {
         onChange={handleChange}
       />
     );
-
     rightButton = (
       <Button
         component={Link}
@@ -263,7 +217,6 @@ export default function Album() {
         </Typography>
       </Button>
     );
-
     leftButton = null;
   }
 
@@ -271,181 +224,97 @@ export default function Album() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <main>
-        {/* Header, contains logo and page name */}
-        <Grid sx={{ width: "70%", margin: "0 auto", marginTop: "30px" }}>
-          <Grid container justifyContent="space-between">
-            <Typography variant="h4" className="text-4xl font-bold mt-10">
-              All Courses
-            </Typography>
-            <img src="/logo.png" alt="Logo" className="h-12 mr-4" />
-          </Grid>
-          {/* horizontal line that have space on the left and right */}
-          <hr className="border-t-3 border-black " />
-        </Grid>
-
-        <Container sx={{ py: 3 }} maxWidth="lg">
-          {/* End hero unit */}
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-          >
-            <Grid
-              container
-              direction="row"
-              justify-content="space-between"
-              className="mb-2"
-            >
-              <Grid container>
-                <Grid
-                  container
-                  xs={0}
-                  sm={0}
-                  md={4}
-                  direction="row"
-                  justifyContent="space-between"
-                >
-                  {leftButton}
-                </Grid>
-
-                <Grid
-                  item
-                  xs={6}
-                  sm={6}
-                  md={4}
-                  display="flex"
-                  justifyContent="center"
-                  alignItems="center"
-                  marginBottom={1}
-                >
-                  <SearchBar
-                    searchTerm={searchTerm}
-                    setSearchTerm={setSearchTerm}
-                  />
-                </Grid>
-
-                <Grid
-                  item
-                  xs={6}
-                  sm={6}
-                  md={4}
-                  display="flex"
-                  justifyContent="space-between"
-                  alignItems="center"
-                  paddingBottom={4}
-                >
+      <Hero
+          title="Edit Courses"
+          breadcrumbs={[
+          ]}
+        />
+        <div className = "container mx-auto">
+              <Grid
+                container
+                direction="row"
+                justify-content="space-between"
+                className="mb-2 px-3"
+              >
+                <Grid container>
+                  <Grid
+                    container
+                    item
+                    xs={0}
+                    sm={0}
+                    md={4}
+                    direction="row"
+                    justifyContent="space-between"
+                  >
+                    {leftButton}
+                  </Grid>
                   <Grid
                     item
                     xs={6}
                     sm={6}
-                    md={12}
+                    md={4}
                     display="flex"
-                    justifyContent="flex-end"
+                    justifyContent="center"
                     alignItems="center"
+                    marginBottom={1}
                   >
-                    {rightButton}
+                    <SearchBar
+                      searchTerm={searchTerm}
+                      setSearchTerm={setSearchTerm}
+                    />
+                  </Grid>
+                  <Grid
+                    item
+                    xs={6}
+                    sm={6}
+                    md={4}
+                    display="flex"
+                    justifyContent="space-between"
+                    alignItems="center"
+                    paddingBottom={4}
+                  >
+                    <Grid
+                      item
+                      xs={6}
+                      sm={6}
+                      md={12}
+                      display="flex"
+                      justifyContent="flex-end"
+                      alignItems="center"
+                    >
+                      {rightButton}
+                    </Grid>
                   </Grid>
                 </Grid>
               </Grid>
-            </Grid>
-
-            <Box sx={{ my: 2, mx: "auto", marginTop: 4 }}>
-              <FilterBar
-                categories={categories}
-                handleDifficultyChange={handleDifficultyChange}
-                handleCategoryChange={handleCategoryChange}
-              />
-            </Box>
-
-            <Grid
-              container
-              spacing={10}
-              sx={{ alignItems: "center", marginTop: 0 }}
-            >
-              {courses.map((card) => (
-                <Grid item key={card.id} xs={12} sm={6} md={4}>
-                  <Card
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                    }}
-                  >
-                    <CardMedia
-                      component="img"
-                      image={
-                        card.__thumbnail__
-                          ? `${APINEMBAK}/${card.__thumbnail__.id}`
-                          : "https://source.unsplash.com/random"
-                      }
-                      alt="random"
-                      sx={{ height: "300px", objectFit: "cover" }}
-                    />
-                    <CardContent sx={{ flexGrow: 1 }}>
-                      <Typography
-                        gutterBottom
-                        variant="h5"
-                        component="h2"
-                        className="font-bold custom-Source-Code-Pro"
-                      >
-                        {card.title}
-                      </Typography>
-                      <Typography
-                        className="custom-Source-Code-Pro text-greytext"
-                        sx={{
-                          minHeight: "50px",
-                          maxHeight: "50px",
-                          overflow: "auto",
-                        }}
-                      >
-                        {card.description}
-                      </Typography>
-                    </CardContent>
-
-                    <Box
-                      sx={{
-                        mt: "auto",
-                        p: 2,
-                        display: "flex",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <Typography variant="caption" component="p"></Typography>
-                      <Typography variant="caption" component="p">
-                        {card.difficulty.toUpperCase()}
-                      </Typography>
-                    </Box>
-                    <CardActions className="flex justify-between">
-                      <Button
-                        size="small"
-                        variant="contained"
-                        className="w-64 rounded-full bg-blackbutton text-white"
-                        onClick={() => handleEdit(card.id)}
-                      >
-                        Edit
-                      </Button>
-
-                      <Button
-                        size="small"
-                        variant="contained"
-                        className="w-64 rounded-full bg-redButton text-white"
-                        onClick={() => handleDelete(card.id)}
-                      >
-                        Delete
-                      </Button>
-                    </CardActions>
-                  </Card>
-                </Grid>
-              ))}
-              {/*a plus button to add new course*/}
-
-              <Grid item>
-                <Plus handlePlusClick={handlePlusClick} />
-              </Grid>
-            </Grid>
-          </Box>
-        </Container>
+              <div className="container w-full flex justify-center custom-Poppins ">
+              <div className="w-full md:w-1/5 px-4">
+                  <Sidebar
+                  difficulty={selectedDifficulty!}
+                  setDifficulty={setSelectedDifficulty}
+                  selected={selectedCategories}
+                  setSelected={setSelectedCategories}
+                  subscribed={subscribed}
+                  />
+                </div>
+                <div className="w-full md:w-4/5 px-4">
+                  <Grid container spacing={3}>
+                    {courses.map((card) => (
+                      <Grid item key={card.id} xs={12} md={6} lg ={4}>
+                        <CourseCard
+                          course={card}
+                          handleEdit={handleEdit}
+                          handleDelete={handleDelete}
+                        />
+                      </Grid>
+                    ))}
+                    <Grid item>
+                      <Plus handlePlusClick={handlePlusClick} />
+                    </Grid>
+                  </Grid>
+                </div>
+              </div>
+        </div>
 
         <Grid container direction="row" justifyContent="center" marginTop={2}>
           {pagination}
@@ -458,22 +327,6 @@ export default function Album() {
           categories={categories}
         />
       </main>
-      {/* Footer */}
-      <Box sx={{ bgcolor: "background.paper", p: 6 }} component="footer">
-        <Typography variant="h6" align="center" gutterBottom>
-          Footer
-        </Typography>
-        <Typography
-          variant="subtitle1"
-          align="center"
-          color="text.secondary"
-          component="p"
-        >
-          Something here to give the footer a purpose!
-        </Typography>
-        <Copyright />
-      </Box>
-      {/* End footer */}
     </ThemeProvider>
   );
 }

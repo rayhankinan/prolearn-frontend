@@ -1,21 +1,38 @@
 import Image from "next/image";
-import { Course } from "@/services/course-service";
-import { Chip, CssBaseline } from "@mui/material";
-import { Category } from "@/services/category-service";
+import Course from "@/interfaces/course-interface";
+import { Chip } from "@mui/material";
 import Link from "next/link";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardActions, Typography } from "@mui/material";
-import { Button } from "@mui/material";
-import { createTheme } from "@material-ui/core";
-import { ThemeProvider } from "styled-components";
-import { useRouter } from "next/router";
+import { Button, Skeleton } from "@mui/material";
 import userService from "@/services/user-service";
+import fileService from "@/services/file-service";
+import { AuthContext } from "@/contexts/AuthContext";
+import React from "react";
+import StarIcon from "@mui/icons-material/Star";
+import courseService from "@/services/course-service";
 
 interface CourseCardProps {
   course: Course;
+  isLoggedIn: boolean;
 }
 
-const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
-  const APINEMBAK = "/api/file";
+const CourseCard: React.FC<CourseCardProps> = ({ course, isLoggedIn }) => {
+  const [file, setFile] = useState<File | null>(null);
+  useEffect(() => {
+    if (course.__thumbnail__) {
+      fileService
+        .getFile(course.__thumbnail__.id)
+        .then((response) => {
+          const selectedImage = new File([response.data], "image.png");
+          setFile(selectedImage);
+        })
+        .catch((error) => {
+          setFile(null);
+        });
+    }
+  }, []);
+
   const imageLoader = ({ src }: { src: string }): string => {
     return `${src}`;
   };
@@ -32,8 +49,8 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
 
   return (
     <Link
-      href="/course/[id]/description"
-      as={`/course/${course.id}/description`}
+      href= {isLoggedIn ? "/course/[id]/description" : "/auth/login"}
+      as= {isLoggedIn ? `/course/${course.id}/description` : "/auth/login"}
     >
       <Card
         sx={{
@@ -59,19 +76,34 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
             paddingTop: "56.25%",
           }}
         >
-          <Image
-            fill
-            src={
-              course.__thumbnail__
-                ? `${APINEMBAK}/${course.__thumbnail__.id}`
-                : "https://source.unsplash.com/random"
-            }
-            alt="course thumbnail"
-            loader={imageLoader}
-            className="absolute top-0 left-0 w-full h-full object-contain rounded object-center py-3 px-3 bg-zinc-100"
-          />
+          {file && (
+            <Image
+              fill
+              src={
+                file
+                  ? URL.createObjectURL(file)
+                  : "https://source.unsplash.com/random"
+              }
+              alt="course thumbnail"
+              loader={imageLoader}
+              className="absolute top-0 left-0 w-full h-full 
+              object-contain rounded object-center py-3 px-3 bg-zinc-100"
+            />
+          )}
+          {!file && (
+            <div
+              className="absolute top-0 left-0 w-full h-full 
+              object-contain rounded object-center py-3 px-3 bg-zinc-100"
+            >
+              <Skeleton
+                className="absolute inset-0 m-auto w-full h-full"
+                variant="rectangular"
+                width={210}
+                height={118}
+              />
+            </div>
+          )}
         </div>
-
         <CardContent>
           <Typography
             variant="h6"
@@ -124,17 +156,24 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
                 marginBottom: "1rem",
               }}
             />
+            <div style={{marginBottom: "17px", marginLeft: "5px"}} className="flex items-center flex-row">
+              <StarIcon sx={{ color: "#FFB900" }} />
+              <h2 style={{marginLeft: "3px"}}>{course.rating_avg}</h2>
+            </div>
           </div>
-          <CardActions className="flex items-center justify-center">
-            <Button
-              size="small"
-              variant="contained"
-              className="w-64 bg-blackbutton text-white"
-              onClick={() => handleSubscribe(course.id)}
-            >
-              Subscribe
-            </Button>
-          </CardActions>
+          {isLoggedIn &&
+            <CardActions className="flex items-center justify-center">
+              <Button
+                size="small"
+                variant="outlined"
+                color="primary"
+                className="w-64"
+                onClick={() => handleSubscribe(course.id)}
+              >
+                Subscribe
+              </Button>
+            </CardActions>
+          }
         </CardContent>
       </Card>
     </Link>

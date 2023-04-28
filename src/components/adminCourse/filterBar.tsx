@@ -2,9 +2,9 @@ import { Autocomplete, TextField } from "@mui/material";
 import React from "react";
 
 type FilterBarProps = {
-  categories: { title: string }[],
-  handleDifficultyChange: (value: string | null) => void,
-  handleCategoryChange: (value: string[]) => void,
+  categories: { title: string }[];
+  handleDifficultyChange: (value: string | null) => void;
+  handleCategoryChange: (value: string[]) => void;
 };
 
 const FilterBar: React.FC<FilterBarProps> = ({
@@ -20,9 +20,7 @@ const FilterBar: React.FC<FilterBarProps> = ({
         options={categories.map((category) => category.title)}
         sx={{ width: 350, marginRight: 2 }}
         renderInput={(params) => <TextField {...params} label="Categories" />}
-        onChange={(event, inputValue) =>
-          handleCategoryChange(inputValue || [])
-        }
+        onChange={(_, inputValue) => handleCategoryChange(inputValue || [])}
       />
       <Autocomplete
         disablePortal
@@ -30,9 +28,7 @@ const FilterBar: React.FC<FilterBarProps> = ({
         options={["Beginner", "Intermediate", "Advanced"]}
         sx={{ width: 350, height: 10 }}
         renderInput={(params) => <TextField {...params} label="Difficulty" />}
-        onChange={(event, inputValue) =>
-          handleDifficultyChange(inputValue || null)
-        }
+        onChange={(_, inputValue) => handleDifficultyChange(inputValue || null)}
       />
     </div>
   );

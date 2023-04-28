@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import {
   FormControl,
   InputLabel,
@@ -18,7 +18,7 @@ type Props = {
 
 const CourseDifficultySelect = ({ difficulty, setDifficulty }: Props) => {
   const handleDifficultyChange = (event: SelectChangeEvent<string>) => {
-    setDifficulty((event.target.value as string).toLowerCase());
+    setDifficulty((event.target.value as string));
   };
 
   return (

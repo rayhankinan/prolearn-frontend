@@ -3,13 +3,14 @@ import CardMedia from "@mui/material/CardMedia";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import CourseService from "@/services/course-service";
-import { Course } from "@/services/course-service";
 import CategoryService from "@/services/category-service";
-import { Category } from "@/services/category-service";
+import Course from "@/interfaces/course-interface";
+import Category from "@/interfaces/category-interface";
+import { AuthContext } from "@/contexts/AuthContext";
 
 export default function CourseLanding() {
+  const { isLoggedIn } = React.useContext(AuthContext);
   const [courses, setCourses] = useState<Course[]>([]);
-  const APINEMBAK = "/api/file";
   useEffect(() => {
     CourseService.getAllForVisitor({
       page: 1,
@@ -55,31 +56,32 @@ export default function CourseLanding() {
 
   return (
     <div>
-      <Navbar />
+      {/* <Login_navbar />1 */}
+      <Navbar isLoggedIn={isLoggedIn} />
       <div className="flex flex-row justify-between">
         <div className="flex flex-col justify-center">
           <h1 className="font-sans text-6xl font-bold ml-24">
             {" "}
             Learn Everywhere Like a Professional
           </h1>
-          <p className="font-sans text-2xl ml-24 mt-10">
-            | A learning system based on formalised teaching with the help of
+          <p className="font-sans text-2xl ml-24 mt-10 border-l-2 border-gray-400 p-4">
+            A learning system based on formalised teaching with the help of
             resources.
           </p>
           <div className="flex flex-row justify-start ml-14 mt-10">
             <a
               href="/auth/register"
               className="inline-block w-auto h-16 text-xl px-4 py-5 
-                        leading-none border border-gray-300 shadow-xl text-black bg-white 
-                        mt-4 lg:mt-0 mr-12 ml-10 hover:transition ease-in-out hover:scale-110 duration-300 "
+              leading-none border border-gray-300 shadow-xl text-black bg-white mt-4 lg:mt-0
+              mr-12 ml-10 hover:transition ease-in-out hover:scale-110 duration-300"
             >
               Get Started
             </a>
             <a
-              href="#"
-              className="inline-block w-auto h-16 text-xl px-4 py-5 
-                        leading-none border border-gray-300 shadow-xl text-black bg-gray-400 
-                        mt-4 lg:mt-0 mr-5 hover:transition ease-in-out hover:scale-110 duration-300"
+              href="/aboutUs"
+              className="inline-block w-auto h-16 text-xl px-4 py-5 leading-none 
+              border border-gray-300 shadow-xl text-black bg-gray-400 mt-4 lg:mt-0 mr-5
+              hover:transition ease-in-out hover:scale-110 duration-300"
             >
               Learn More
             </a>
@@ -124,63 +126,6 @@ export default function CourseLanding() {
           </p>
         </div>
       </div>
-      <div className="flex flex-col justify-between w-full pb-20 pt-16 ">
-        <div className="flex w-auto flex-col bg-gray-300 mr-20 ml-20 p-4 rounded-xl">
-          <ul className="flex w-full justify-center ">
-            {categories.map((category) => (
-              <li key={category.title} className="flex-1 mr-2">
-                <a
-                  className="text-center block py-2 px-4 hover:bg-gray-400 
-                                rounded-xl text-gray-800 transition ease-in-out 
-                                delay-150 hover:-translate-y-1 hover:scale-110 duration-300"
-                  onClick={() => handleCategoryClicked(category.id)}
-                >
-                  {category.title}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className="grid grid-cols-4 ml-10 mr-10">
-          {courses.map((course) => (
-            <div
-              key={course.id}
-              className="flex flex-wrap mx-1 lg:mx-10 rounded-xl border 
-                        hover:border-gray-400 overflow-hidden shadow-xl ml-20 mt-20 mr-20 transition ease-in-out 
-                        delay-150 hover:-translate-y-1 hover:scale-110 duration-300"
-            >
-              <CardMedia
-                component="img"
-                image={
-                  course.__thumbnail__
-                    ? `${APINEMBAK}/${course.__thumbnail__.id}`
-                    : "https://source.unsplash.com/random"
-                }
-                alt="random"
-                sx={{ height: "300px", objectFit: "cover" }}
-              />
-              <div className="w-full border-t-2"></div>
-              <div className="px-6 py-4 bg-white w-full">
-                <div className="font-bold text-xl mb-2">{course.title}</div>
-                <p className="text-gray-700 text-base">
-                  {Math.floor(Math.random() * 100)} Section
-                </p>
-              </div>
-            </div>
-          ))}
-          <div
-            className="flex flex-wrap mx-1 lg:mx-10 rounded-xl overflow-hidden shadow-lg ml-20 
-                    mt-20 mr-20 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300"
-          >
-            <div className="w-full h-full flex flex-col bg-gray-600 justify-center text-center">
-              <h1 className="font-sans text-8xl font-bold text-white">. . .</h1>
-              <h2 className="font-sans text-4xl pt-10 pb-12 font-bold text-white">
-                See More
-              </h2>
-            </div>
-          </div>
-        </div>
-      </div>
       <div className="flex flex-row justify-between pb-20 pt-20 pr-20">
         <div className="flex flex-col">
           <h1 className="font-sans text-6xl font-bold ml-24">
@@ -196,7 +141,6 @@ export default function CourseLanding() {
           <img src="../Logos.png" alt="Logo" />
         </div>
       </div>
-
       <Footer />
     </div>
   );
