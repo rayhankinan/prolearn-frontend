@@ -5,6 +5,7 @@ import SubscribedCards from "@/components/userCourse/subscribedCards";
 import RecommendCards from "@/components/userCourse/recommendCards";
 import Course from "@/interfaces/course-interface";
 import CourseService from "@/services/course-service";
+import RecommendService from "@/services/recommend-service";
 import Navbar from "@/components/navbar";
 import SearchBar from "@/components/adminCourse/search";
 import { Grid } from "@mui/material";
@@ -37,12 +38,9 @@ export default function Courses() {
     })
     .catch((error) => console.log(error));
     
-    CourseService.getAll({
-      page: recommPage,
-      limit: perRecommPage,
-      subscribed: false,
-    })
+    RecommendService.getRecommendation()
     .then((response) => {
+      console.log(response.data.data)
       setRecommendCourse(response.data.data);
       setRecommPage(1);
       setRecommCount(response.data.meta.totalPage);
@@ -137,14 +135,6 @@ export default function Courses() {
             </div>
             <div className="bg-gray-300 p-5 rounded-lg shadow-lg">
               <RecommendCards recommendCourses={recommendCourse} />
-              <Grid container direction="row" justifyContent="center" marginTop={2}>
-                <Pagination
-                  count={recommCount}
-                  size="large"
-                  page={recommPage}
-                  onChange={handleRecommChange}
-                />
-              </Grid>
             </div>
           </div>
         </div>

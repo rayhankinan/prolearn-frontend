@@ -78,6 +78,7 @@ export default function UserCourseDetail() {
   useEffect(() => {
     SectionService.getSectionByCourse(course_id)
       .then((response) => {
+        console.log(response.data.data);
         setSection(response.data.data);
       })
       .catch((error) => console.log(error));
@@ -138,7 +139,7 @@ export default function UserCourseDetail() {
             <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", flexGrow: 1 }}>
               <Typography
                 variant="h6"
-                sx={{ textAlign: "center", fontWeight: "bold", marginRight: "0px"}}
+                sx={{ textAlign: "center", fontWeight: "bold", marginRight: "210px"}}
               >
                 {course?.title}
               </Typography>
@@ -147,7 +148,7 @@ export default function UserCourseDetail() {
           <hr className="border-t-2 border-black border-opacity-20 " />
         </Grid>
 
-        <Grid sx={{ width: "100%", margin: "0 auto", marginTop: "100px" }}>
+        <Grid sx={{ width: "100%", margin: "0 auto", marginTop: "120px", marginBottom: "150px"}}>
           <Grid item xs={3} sx={{marginBottom: "30px", marginLeft: "15px"}}>
             <Button 
               variant="contained" 
@@ -241,7 +242,7 @@ export default function UserCourseDetail() {
           <Grid container spacing={2} alignItems="center">
             <Grid item xs={2}>
               <Button variant="outlined" color="primary" startIcon={<ArrowBackIcon />} disabled={true}>
-                Previous Module
+                Previous Section
               </Button>
               
             </Grid>
@@ -250,9 +251,9 @@ export default function UserCourseDetail() {
                 Description
               </Typography>
             </Grid>
-            <Grid item xs={2}>
+            <Grid item xs={2} style={{display: "flex", justifyContent: "end"}}>
               <Button variant="outlined" color="primary" endIcon={<ArrowForwardIcon />} onClick={handleNext}>
-                Next Module
+                Next Section
               </Button>
             </Grid>
           </Grid>
