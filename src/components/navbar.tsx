@@ -18,13 +18,25 @@ const Navbar = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
           >
             Course
           </a>
-          <a
-            href="/course/subscribed"
-            className="block mt-4 lg:inline-block lg:mt-0 text-black-200 hover:transition 
-            ease-in-out hover:scale-110 duration-300"
-          >
-            My Course
-          </a>
+          {
+            isLoggedIn ? (
+              <a
+                href="/course/subscribed"
+                className="block mt-4 lg:inline-block lg:mt-0 text-black-200 hover:transition
+                ease-in-out hover:scale-110 duration-300"
+              >
+                My Course
+              </a>
+            ) : (
+              <a
+                href="/auth/login"
+                className="block mt-4 lg:inline-block lg:mt-0 text-black-200 hover:transition
+                ease-in-out hover:scale-110 duration-300"
+              >
+                My Course
+              </a>
+            )
+          }
           <a
             href="/compiler"
             className="block mt-4 lg:inline-block lg:mt-0 text-black-200 hover:transition 
