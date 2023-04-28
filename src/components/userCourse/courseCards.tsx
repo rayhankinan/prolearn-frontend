@@ -7,12 +7,15 @@ import SubscribedCard from "@/components/userCourse/subscribedCard";
 interface CourseCardsProps {
   courses: Course[];
   subscribedCourses: number[];
+  isLoggedIn: boolean;
 }
 
 const CourseCards: React.FC<CourseCardsProps> = ({
   courses,
   subscribedCourses,
+  isLoggedIn,
 }) => {
+  console.log(isLoggedIn);
   return (
     <Grid container spacing={3}>
       {courses.map((course) => (
@@ -22,10 +25,10 @@ const CourseCards: React.FC<CourseCardsProps> = ({
               subscribedCourses.includes(course.id) ? (
                 <SubscribedCard course={course} />
               ) : (
-                <CourseCard course={course} />
+                <CourseCard course={course} isLoggedIn={isLoggedIn}/>
               )
             ) : (
-              <CourseCard course={course} />
+              <CourseCard course={course} isLoggedIn={isLoggedIn} />
             )}
           </div>
         </Grid>

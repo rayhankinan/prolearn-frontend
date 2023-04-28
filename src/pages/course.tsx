@@ -158,6 +158,7 @@ export default function Courses() {
           <CourseCards
             courses={courses}
             subscribedCourses={subscribedCourses}
+            isLoggedIn={isLoggedIn}
           />
           <Grid container direction="row" justifyContent="center" marginTop={2}>
             <Pagination
