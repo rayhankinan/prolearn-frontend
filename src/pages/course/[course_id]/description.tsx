@@ -241,7 +241,7 @@ export default function UserCourseDetail() {
           <Grid container spacing={2} alignItems="center">
             <Grid item xs={2}>
               <Button variant="outlined" color="primary" startIcon={<ArrowBackIcon />} disabled={true}>
-                Modul Sebelumnya
+                Previous Module
               </Button>
               
             </Grid>
@@ -252,7 +252,7 @@ export default function UserCourseDetail() {
             </Grid>
             <Grid item xs={2}>
               <Button variant="outlined" color="primary" endIcon={<ArrowForwardIcon />} onClick={handleNext}>
-                Modul Berikutnya
+                Next Module
               </Button>
             </Grid>
           </Grid>
