@@ -138,7 +138,7 @@ const QuizSection: React.FC<QuizSectionProps> = ({ quizContent }) => {
         </div>
       </div>
       {showModal && (
-        <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
+        <div className="fixed z-10 top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
           <div className="bg-gray-200 w-auto h-auto p-5 rounded-md flex flex-col justify-center items-center">
             <img
               src="../../prize.png"
