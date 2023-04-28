@@ -113,8 +113,7 @@ export default function Register() {
         router.push("/auth/login");
       })
       .catch((error) => {
-        console.log(error);
-        // alert("Error: " + error.message);
+
         setErrorMessage("Error: " + error.message);
         setModalOpen(true);
       });

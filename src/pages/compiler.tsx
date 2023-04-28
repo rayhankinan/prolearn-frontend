@@ -74,7 +74,6 @@ const Compiler = () => {
         setStatus(response.data.status);
         pollInterval = window.setInterval(async () => {
           jobsService.getStatus(response.data.id).then((response) => {
-            console.log(response.data);
             setStatus(response.data.status);
             if (status !== "PENDING") {
               clearInterval(pollInterval);
@@ -84,7 +83,6 @@ const Compiler = () => {
         }, 1000);
       });
     } catch (error) {
-      console.log(error);
       setOutput("Error");
     }
   };

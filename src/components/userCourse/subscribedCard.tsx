@@ -31,7 +31,6 @@ const SubcribedCard: React.FC<SubcribedCardProps> = ({ course }) => {
           setFile(selectedImage);
         })
         .catch((error) => {
-          console.log(error);
           setFile(null);
         });
     }

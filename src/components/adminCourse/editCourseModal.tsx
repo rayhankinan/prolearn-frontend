@@ -58,7 +58,6 @@ export const EditCourseModal = ({
         setImage(selectedImage);
       })
       .catch((error) => {
-        console.log(error);
         setImage(null);
       });
   }, []);
@@ -70,7 +69,6 @@ export const EditCourseModal = ({
       courseCategory!.some((categories) => categories.id === category.id)
     );
     setSelectedCategories(selected);
-    console.log(selected);
   }, []);
 
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {

@@ -78,7 +78,6 @@ export const AddCourseModal = ({
   };
 
   const handleAddCategory = () => {
-    console.log(newCategory);
     // const newCategoryString = newCategory as string;
     categoryService.create({ title: newCategory })
     .then((res) => {

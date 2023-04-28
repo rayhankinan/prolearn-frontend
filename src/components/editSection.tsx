@@ -31,7 +31,6 @@ export const EditSectionModal = ({ open, onClose, section }: EditSectionProps) =
 
   useEffect(() => {
     if (router.isReady) {
-      console.log(router.query);
       setCourseId(router.query.course_id!.toString());
     }
   }, [router.isReady]);
@@ -90,7 +89,6 @@ export const EditSectionModal = ({ open, onClose, section }: EditSectionProps) =
         }
         SectionService.update(section.id.toString(), formData)
           .then((res) => {
-            console.log(res);
             window.location.reload();
           })
           .catch((error) => {
@@ -101,12 +99,10 @@ export const EditSectionModal = ({ open, onClose, section }: EditSectionProps) =
   };
 
   const handleDelete = () => {
-    console.log("DELETING");
     if (section != null) {
       if (section.id != null && file_id != null) {
         SectionService.delete(section.id)
           .then((res) => {
-            console.log(res);
             window.location.reload();
           })
           .catch((error) => {
