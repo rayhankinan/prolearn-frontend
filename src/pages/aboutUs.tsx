@@ -20,7 +20,7 @@ const ourTeam = [
   {
     name: "Aira Thalca Avila Putra",
     role: "Backend Developer",
-    image: "../test-team.png",
+    image: "../aira.jpg",
   },
   {
     name: "Rayhan Kinan Muhannad",
