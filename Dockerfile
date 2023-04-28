@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 FROM node:18-alpine AS base
 
 # Install dependencies only when needed
@@ -58,18 +57,3 @@ EXPOSE 8080
 ENV PORT 8080
 
 CMD ["node", "server.js"]
-=======
-FROM node:18
-
-WORKDIR /app
-
-COPY package*.json ./
-
-RUN yarn
-
-COPY . .
-
-CMD ["yarn", "dev"]
-
-EXPOSE 8080
->>>>>>> 260dcca5d2ca5d723eff03c6628242e74923092a
