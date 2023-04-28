@@ -358,7 +358,7 @@ export default function UserCourseDetail() {
           <Grid container spacing={2} alignItems="center">
             <Grid item xs={2}>
               <Button variant="outlined" color="primary" startIcon={<ArrowBackIcon />} onClick={handlePrevious}>
-                Modul Sebelumnya
+                Previous Module
               </Button>
               
             </Grid>
@@ -368,9 +368,16 @@ export default function UserCourseDetail() {
               </Typography>
             </Grid>
             <Grid item xs={2}>
-              <Button variant="outlined" color="primary" endIcon={<ArrowForwardIcon />} onClick={handleNext}>
-                Modul Berikutnya
-              </Button>
+              {/* if last module, disable next module button */}
+              {section.findIndex((material) => material.id === material_idInt) === section.length - 1 ? (
+                <Button variant="outlined" color="primary" endIcon={<ArrowForwardIcon />} disabled>
+                  Next Module
+                </Button>
+              ) : (
+                <Button variant="outlined" color="primary" endIcon={<ArrowForwardIcon />} onClick={handleNext}>
+                  Next Module
+                </Button>
+              )}
             </Grid>
           </Grid>
         </div>

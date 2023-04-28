@@ -4,6 +4,7 @@ import Rating from "@mui/material/Rating";
 import { IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import RatingService from "@/services/rating-service";
+import { useRouter } from "next/router";
 
 interface RatingModalProps {
   isOpen: boolean;
@@ -13,7 +14,7 @@ interface RatingModalProps {
 
 const RatingModal: React.FC<RatingModalProps> = ({ isOpen, onClose, courseId }) => {
   const [rating, setRating] = useState<number>(0);
-
+  const router = useRouter();
   const handleRatingChange = (event: React.ChangeEvent<{}>, value: number | null) => {
     if (value !== null) {
       setRating(value);
@@ -24,6 +25,7 @@ const RatingModal: React.FC<RatingModalProps> = ({ isOpen, onClose, courseId }) 
     try {
       await RatingService.create({ courseId, rating });
       onClose();
+      router.push(`/course`);
     } catch (error) {
       console.error(error);
     }
