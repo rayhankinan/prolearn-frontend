@@ -27,7 +27,6 @@ const QuizSection: React.FC<QuizSectionProps> = ({ quizContent }) => {
     } else {
       handleFinishClick();
     }
-    console.log(listOfAnswers);
   };
 
   const handlePrevClick = () => {
@@ -39,11 +38,9 @@ const QuizSection: React.FC<QuizSectionProps> = ({ quizContent }) => {
       answer: listOfAnswers,
     };
 
-    console.log(sendQuizReq);
     quizService
       .submitQuiz(quizContent.id, sendQuizReq)
       .then((response) => {
-        console.log(response.data);
         setNumCorrectAnswers(response.data.correctAnswers);
       })
       .catch((error) => {
@@ -56,8 +53,6 @@ const QuizSection: React.FC<QuizSectionProps> = ({ quizContent }) => {
     setShowModal(false);
     window.location.reload();
   };
-
-  console.log(quizContent.content.questions.length);
 
   const isLastQuestion =
     currentQuestion === quizContent.content.questions.length - 1;

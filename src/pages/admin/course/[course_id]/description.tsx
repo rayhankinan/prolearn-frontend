@@ -50,14 +50,12 @@ export default function CourseDetailAdmin() {
     if (course_id === "") return;
     SectionService.getSectionByCourse(course_id)
       .then((response) => {
-        console.log(response.data.data);
         setSection(response.data.data);
       })
       .catch((error) => console.log(error));
 
     CourseService.getById(parseInt(course_id))
       .then((response) => {
-        console.log(response.data.data);
         setCourse(response.data.data);
       })
       .catch((error) => console.log(error));
@@ -66,7 +64,6 @@ export default function CourseDetailAdmin() {
   useEffect(() => {
     CategoryService.getAll()
       .then((response) => {
-        console.log(response.data.data);
         setCategory(response.data.data);
       })
       .catch((error) => console.log(error));

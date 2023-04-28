@@ -42,7 +42,6 @@ export default function UserCourseDetail() {
   };
 
   const handlePrevious = () => {
-    console.log("previous");
     const currentIndex = section.findIndex((section) => section.id === material_idInt);
     const previousMaterialId = currentIndex > 0 ? section[currentIndex - 1].id : null;
     // router.push(`/course/${course_id}/${previousMaterialId}`);
@@ -55,7 +54,6 @@ export default function UserCourseDetail() {
   };
   
   const handleNext = () => {
-    console.log("next");
     const currentIndex = section.findIndex((section) => section.id === material_idInt);
     const nextMaterialId = currentIndex < section.length - 1 ? section[currentIndex + 1].id : null;
     // return `/course/${course_id}/${nextMaterialId}`
@@ -80,7 +78,6 @@ export default function UserCourseDetail() {
   useEffect(() => {
     SectionService.getSectionByCourse(course_id)
       .then((response) => {
-        console.log(response.data.data);
         setSection(response.data.data);
       })
       .catch((error) => console.log(error));

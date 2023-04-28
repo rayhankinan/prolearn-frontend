@@ -27,7 +27,6 @@ const GridComponent = ({ section }: GridComponentProps = {}) => {
 
   useEffect(() => {
     if (router.isReady) {
-      console.log(router.query);
       setCourseId(router.query.course_id!.toString());
     }
   }, [router.isReady]);
@@ -92,7 +91,6 @@ const GridComponent = ({ section }: GridComponentProps = {}) => {
   };
 
   const handleDelete = () => {
-    console.log("DELETING");
     if (section != null) {
       if (section.id != null && file_id != null) {
         SectionService.delete(section.id)

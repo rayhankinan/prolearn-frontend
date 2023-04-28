@@ -156,8 +156,6 @@ const AddSectionModal = ({ open, onClose, material, courseId }: AddSectionModalP
     );
     if (emptyOption) {
       emptyOption.content = answer;
-    } else {
-      console.log("Full");
     }
   };
 
@@ -199,22 +197,14 @@ const AddSectionModal = ({ open, onClose, material, courseId }: AddSectionModalP
       };
       formData.append("quizContent", JSON.stringify(quizContent));
     }
-
-    console.log(formData);
     SectionService.create(formData)
       .then((res) => {
-        console.log(res);
-        // refresh page
         window.location.reload();
       })
       .catch((err) => {
         console.log(err);
       });
   };
-
-  console.log(questionAnswerList);
-  console.log(number);
-  console.log(answer);
 
   return (
     <Dialog open={open} onClose={onClose}>

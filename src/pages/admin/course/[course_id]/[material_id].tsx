@@ -44,7 +44,6 @@ export default function CourseDetailAdmin() {
 
   useEffect(() => {
     if (router.isReady) {
-      console.log(router.query);
       setCourseId(router.query.course_id!.toString());
       setMaterialId(router.query.material_id!.toString());
       //set material id int with material id converted to int
@@ -64,7 +63,6 @@ export default function CourseDetailAdmin() {
     sectionService
       .getSectionByCourse(course_id)
       .then((response) => {
-        console.log(response.data.data);
         setSection(response.data.data);
         //find material with material id
         const material = response.data.data.find((material: Section) => {
@@ -80,7 +78,6 @@ export default function CourseDetailAdmin() {
 
     CourseService.getById(parseInt(course_id))
       .then((response) => {
-        console.log(response.data.data);
         setCourse(response.data.data);
       })
       .catch((error) => console.log(error));
@@ -92,7 +89,6 @@ export default function CourseDetailAdmin() {
       .getFile(file_id)
       .then((response) => {
         setFile(response.data);
-        // console.log(file);
         //convert file to string
         const reader = new FileReader();
         reader.readAsBinaryString(response.data);
@@ -106,7 +102,6 @@ export default function CourseDetailAdmin() {
   useEffect(() => {
     CategoryService.getAll()
       .then((response) => {
-        console.log(response.data.data);
         setCategory(response.data.data);
       })
       .catch((error) => console.log(error));

@@ -91,7 +91,6 @@ export default function Login() {
         }
       })
       .catch((error) => {
-        console.log(error);
         setErrorMessage("Username or password is incorrect");
         setModalOpen(true);
       });

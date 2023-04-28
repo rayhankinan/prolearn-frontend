@@ -70,7 +70,6 @@ export default function UserCourseDetail() {
 
   useEffect(() => {
     if (router.isReady) {
-      console.log(router.query);
       setCourseId(router.query.course_id!.toString());
       setMaterialId(router.query.material_id!.toString());
       //set material id int with material id converted to int
@@ -84,7 +83,6 @@ export default function UserCourseDetail() {
     if (course_id === "" || material_idInt === -1) return;
     SectionService.getSectionByCourse(course_id)
       .then((response) => {
-        console.log(response.data.data);
         setSection(response.data.data);
         //find material with material id
         const material = response.data.data.find((material: Section) => {
@@ -99,7 +97,6 @@ export default function UserCourseDetail() {
 
     CourseService.getById(parseInt(course_id))
       .then((response) => {
-        console.log(response.data.data);
         setCourse(response.data.data);
       })
       .catch((error) => console.log(error));
@@ -111,7 +108,6 @@ export default function UserCourseDetail() {
       .getFile(file_id)
       .then((response) => {
         setFile(response.data);
-        console.log(file);
         //convert file to string
         const reader = new FileReader();
         reader.readAsBinaryString(response.data);
@@ -126,7 +122,6 @@ export default function UserCourseDetail() {
   useEffect(() => {
     CategoryService.getAll()
       .then((response) => {
-        console.log(response.data.data);
         setCategory(response.data.data);
       })
       .catch((error) => console.log(error));
@@ -136,7 +131,6 @@ export default function UserCourseDetail() {
     if (quizContent === null) return;
     QuizService.viewHistory(quizContent.id)
       .then((response) => {
-        console.log(response.data.data);
         setScore(response.data.data.correctAnswers.toString());
       })
       .catch((error) => {
@@ -162,7 +156,6 @@ export default function UserCourseDetail() {
   };
 
   const handlePrevious = () => {
-    console.log("previous");
     const currentIndex = section.findIndex((section) => section.id === material_idInt);
     const previousMaterialId = currentIndex > 0 ? section[currentIndex - 1].id : null;
     // router.push(`/course/${course_id}/${previousMaterialId}`);
@@ -175,7 +168,6 @@ export default function UserCourseDetail() {
   };
   
   const handleNext = () => {
-    console.log("next");
     const currentIndex = section.findIndex((section) => section.id === material_idInt);
     const nextMaterialId = currentIndex < section.length - 1 ? section[currentIndex + 1].id : null;
     // return `/course/${course_id}/${nextMaterialId}`

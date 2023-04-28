@@ -28,7 +28,6 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, isLoggedIn }) => {
           setFile(selectedImage);
         })
         .catch((error) => {
-          console.log(error);
           setFile(null);
         });
     }
