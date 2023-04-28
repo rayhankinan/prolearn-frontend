@@ -150,7 +150,8 @@ const CourseCard = ({ course, handleEdit, handleDelete }: CourseCardProps) => {
           <Button
             size="small"
             variant="contained"
-            className="w-64 rounded-full bg-blackbutton text-white"
+            color="primary"
+            className="w-64 rounded-full"
             onClick={() => handleEdit(course.id!)}
           >
             Edit
@@ -159,7 +160,8 @@ const CourseCard = ({ course, handleEdit, handleDelete }: CourseCardProps) => {
           <Button
             size="small"
             variant="contained"
-            className="w-64 rounded-full bg-redButton text-white"
+            color="error"
+            className="w-64 rounded-full"
             onClick={() => handleDelete(course.id!)}
           >
             Delete
