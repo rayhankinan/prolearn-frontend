@@ -9,6 +9,8 @@ import userService from "@/services/user-service";
 import fileService from "@/services/file-service";
 import { AuthContext } from "@/contexts/AuthContext";
 import React from "react";
+import StarIcon from "@mui/icons-material/Star";
+import courseService from "@/services/course-service";
 
 interface CourseCardProps {
   course: Course;
@@ -155,6 +157,10 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
                 marginBottom: "1rem",
               }}
             />
+            <div style={{marginBottom: "17px", marginLeft: "5px"}} className="flex items-center flex-row">
+              <StarIcon sx={{ color: "#FFB900" }} />
+              <h2 style={{marginLeft: "3px"}}>{course.rating_avg}</h2>
+            </div>
           </div>
           {isLoggedIn &&
             <CardActions className="flex items-center justify-center">

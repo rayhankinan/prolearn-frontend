@@ -6,6 +6,9 @@ import { Button } from "@mui/material";
 import Link from "next/link";
 import fileService from "@/services/file-service";
 import { useState, useEffect } from "react";
+import Rating from "@mui/material/Rating";
+import { IconButton, Icon } from "@mui/material";
+import StarIcon from "@mui/icons-material/Star";
 
 interface SubcribedCardProps {
   course: Course;
@@ -121,7 +124,7 @@ const SubcribedCard: React.FC<SubcribedCardProps> = ({ course }) => {
           >
             {course.description}
           </Typography>
-          <div style={{ display: "flex", flexWrap: "wrap", marginTop: "1rem" }}>
+          <div style={{ display: "flex", flexWrap: "wrap", marginTop: "1rem"}}>
             <Chip
               label={course.difficulty}
               sx={{
@@ -141,6 +144,10 @@ const SubcribedCard: React.FC<SubcribedCardProps> = ({ course }) => {
                 marginBottom: "1rem",
               }}
             />
+            <div style={{marginBottom: "17px", marginLeft: "5px"}} className="flex items-center flex-row">
+              <StarIcon sx={{ color: "#FFB900" }} />
+              <h2 style={{marginLeft: "3px"}}>{course.rating_avg}</h2>
+            </div>
           </div>
           <CardActions className="flex items-center justify-center">
             <Button

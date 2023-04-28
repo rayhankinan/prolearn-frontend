@@ -3,13 +3,15 @@ import Modal from "@mui/material/Modal";
 import Rating from "@mui/material/Rating";
 import { IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import RatingService from "@/services/rating-service";
 
 interface RatingModalProps {
   isOpen: boolean;
   onClose: () => void;
+  courseId: number;
 }
 
-const RatingModal: React.FC<RatingModalProps> = ({ isOpen, onClose }) => {
+const RatingModal: React.FC<RatingModalProps> = ({ isOpen, onClose, courseId }) => {
   const [rating, setRating] = useState<number>(0);
 
   const handleRatingChange = (event: React.ChangeEvent<{}>, value: number | null) => {
@@ -18,8 +20,19 @@ const RatingModal: React.FC<RatingModalProps> = ({ isOpen, onClose }) => {
     }
   };
 
+  const handleRatingSubmit = async () => {
+    try {
+      await RatingService.create({ courseId, rating });
+      onClose();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const getRatingText = (value: number) => {
     switch (value) {
+      case 0:
+        return "Sangat Tidak Membantu";
       case 1:
         return "Tidak Membantu";
       case 2:
@@ -69,7 +82,7 @@ const RatingModal: React.FC<RatingModalProps> = ({ isOpen, onClose }) => {
         <div className="flex justify-end">
           <button
             className="inline-flex justify-center items-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-            onClick={onClose}
+            onClick={handleRatingSubmit}
           >
             Submit
           </button>

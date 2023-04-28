@@ -20,6 +20,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import MenuIcon from '@mui/icons-material/Menu';
 import RatingModal from "@/components/rating";
 import StarIcon from '@mui/icons-material/Star';
+import RatingService from "@/services/rating-service";
 
 const theme = createTheme();
 
@@ -198,7 +199,7 @@ export default function UserCourseDetail() {
               >
                 Rate This Course
               </Button>
-                <RatingModal isOpen={isModalOpen} onClose={handleCloseModal} />
+                <RatingModal isOpen={isModalOpen} onClose={handleCloseModal} courseId={parseInt(course_id)} />
             </Box>
 
           </Grid>

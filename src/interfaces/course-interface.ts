@@ -7,6 +7,7 @@ interface Course {
   title: string;
   description: string;
   difficulty: string;
+  rating_avg: number;
   __categories__: number[];
   status: string;
   imgFile?: File | null;
