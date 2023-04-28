@@ -189,24 +189,11 @@ export default function UserCourseDetail() {
                 {course?.title}
               </Typography>
             </Box>
-
-            <Box sx={{ display: "flex", alignItems: "center" }}>
-              <Button
-                variant="text"
-                style={{ marginRight: "10px", textAlign: "right" }}
-                onClick={handleOpenModal}
-              >
-                Rate This Course
-              </Button>
-                <RatingModal isOpen={isModalOpen} onClose={handleCloseModal} courseId={parseInt(course_id)} />
-            </Box>
+            <Box sx={{ display: "flex", alignItems: "center" }}></Box>
 
           </Grid>
           <hr className="border-t-2 border-black border-opacity-20 " />
         </Grid>
-
-
-
         <Grid sx={{ width: "100%", margin: "0 auto", marginTop: "100px" }}>
           <Grid item xs={3} sx={{marginBottom: "30px", marginLeft: "15px"}}>
             <Button 
@@ -239,7 +226,7 @@ export default function UserCourseDetail() {
                   >
                   <Box sx={{marginLeft: "16px", marginTop: "-3px"}}>
                     <Typography variant="h6" sx={{ color: "#333", mb: 4, fontWeight: "bold"}}>
-                      Daftar Modul
+                      List Of Sections
                     </Typography>
                     <Grid item container direction="column">
                       {section.map((material) => (
@@ -319,6 +306,16 @@ export default function UserCourseDetail() {
                   ) : (
                     <div></div>
                   )}
+                  {section.findIndex((material) => material.id === material_idInt) === section.length - 1 && (
+                    <Button 
+                    style={{ display: "flex", margin: "auto", marginTop: "20px" }}
+                    variant="contained" 
+                    color="primary" 
+                    onClick={handleOpenModal}>
+                      Finish
+                    </Button>
+                  )}
+                  <RatingModal isOpen={isModalOpen} onClose={handleCloseModal} courseId={parseInt(course_id)} />
                 </Grid>
               </Grid>
             </Grid>
