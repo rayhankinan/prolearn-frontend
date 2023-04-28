@@ -260,7 +260,9 @@ export default function CourseDetailAdmin() {
               )}
               <Grid item xs={showSideBar ? 9 : 12}>
                 <Grid item>
-                  <p>Description</p>
+                    <div>
+                      <p>{course?.description}</p>
+                    </div>
                 </Grid>
               </Grid>
             </Grid>
