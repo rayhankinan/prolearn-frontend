@@ -166,7 +166,7 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, isLoggedIn }) => {
               <Button
                 size="small"
                 variant="contained"
-                className="w-64 bg-blue-800 text-white"
+                className="w-64 bg-blackbutton text-white"
                 onClick={() => handleSubscribe(course.id)}
               >
                 Subscribe

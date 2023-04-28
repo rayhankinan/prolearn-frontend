@@ -114,7 +114,7 @@ export default function Register() {
       })
       .catch((error) => {
 
-        setErrorMessage("Error: " + error.message);
+        setErrorMessage("Error: Please try another username" + error.message);
         setModalOpen(true);
       });
   };
