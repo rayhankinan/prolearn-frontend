@@ -158,25 +158,34 @@ export default function CourseDetailAdmin() {
                 </Typography>
             </Box>
 
-            <Box sx={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
-              <Button
-                onClick={() => handleAddMaterial()}
-                variant="outlined"
-              >
-                Add Material
-              </Button>
-
-              {!showEditButton && (
+            {!showEditButton && (
+              <Box sx={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
+                <Button
+                  onClick={() => handleAddMaterial()}
+                  variant="outlined"
+                >
+                  Add Section
+                </Button>
                 <Button
                   onClick={() => handleShowEditButton()}
                   variant="outlined"
                   sx={{ marginLeft: "10px" }}
                 >
-                  Edit Section
+                  Edit Sections
                 </Button>
-              )}
+                <Button
+                  onClick={() => handleEditCourse()}
+                  variant="outlined"
+                  color="primary"
+                  sx={{ marginLeft: "10px"}}
+                >
+                  Edit Course
+                </Button>
+              </Box>
+            )}
 
-              {showEditButton && (
+            {showEditButton && (
+              <Box sx={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
                 <Button
                   onClick={() => handleCancel()}
                   variant="outlined"
@@ -185,17 +194,9 @@ export default function CourseDetailAdmin() {
                 >
                   Done
                 </Button>
-              )}
+              </Box>
+            )}
 
-              <Button
-                onClick={() => handleEditCourse()}
-                variant="outlined"
-                color="primary"
-                sx={{ marginLeft: "10px"}}
-              >
-                Edit Course
-              </Button>
-            </Box>
           </Grid>
           {/* horizontal line that have space on the left and right */}
           <hr className="border-t-2 border-black border-opacity-20 " />
@@ -233,7 +234,7 @@ export default function CourseDetailAdmin() {
                   >
                   <Box sx={{marginLeft: "16px", marginTop: "-3px"}}>
                     <Typography variant="h6" sx={{ color: "#333", mb: 4, fontWeight: "bold"}}>
-                      Modules List
+                      List of Sections
                     </Typography>
                     <Grid item container direction="column">
                       {section.map((material) => (

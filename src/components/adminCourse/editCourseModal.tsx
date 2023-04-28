@@ -111,6 +111,7 @@ export const EditCourseModal = ({
       description: description,
       imgFile: imgFile,
       difficulty: difficulty,
+      rating_avg: course.rating_avg,
       __categories__: selectedCategories.map((category) => category.id),
       status: "active",
     };

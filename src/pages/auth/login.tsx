@@ -241,34 +241,37 @@ export default function Login() {
               >
                 <Image src="/Saly-10 (1).png" alt="Logo" width={1826} height={2084} priority />
               </Container>
-              <Typography
-                component="h1"
-                variant="h5"
-                color="white"
-                className="ml-10"
-                sx={{
-                  fontFamily: "Montserrat",
-                  fontStyle: "bold",
-                  fontSize: "4vh",
-                }}
-              >
-                Meet ProLearn,
-              </Typography>
-              <Typography
-                component="h1"
-                variant="h5"
-                textAlign={"center"}
-                color="white"
-                className="ml-10"
-                sx={{
-                  fontFamily: "Montserrat",
-                  fontStyle: "bold",
-                  fontSize: "3vh",
-                  marginBottom: "10vh",
-                }}
-              >
-                Learning Like a Pro Starts Here
-              </Typography>
+              <Container component="main" maxWidth="xl">
+                <Typography
+                  component="h1"
+                  variant="h5"
+                  textAlign={"center"}
+                  color="white"
+                  className="ml-10"
+                  sx={{
+                    fontFamily: "Montserrat",
+                    fontStyle: "bold",
+                    fontSize: "4vh",
+                  }}
+                >
+                  Meet ProLearn,
+                </Typography>
+                <Typography
+                  component="h1"
+                  variant="h5"
+                  textAlign={"center"}
+                  color="white"
+                  className="ml-10"
+                  sx={{
+                    fontFamily: "Montserrat",
+                    fontStyle: "bold",
+                    fontSize: "2.5vh",
+                    marginBottom: "10vh",
+                  }}
+                >
+                  Learning Like a Pro Starts Here
+                </Typography>
+              </Container>
             </Box>
           </Container>
         </Grid>
