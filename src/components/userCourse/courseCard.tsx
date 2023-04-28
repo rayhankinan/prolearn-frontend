@@ -48,8 +48,8 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
 
   return (
     <Link
-      href="/course/[id]/description"
-      as={`/course/${course.id}/description`}
+      href= {isLoggedIn ? "/course/[id]/description" : "/auth/login"}
+      as= {isLoggedIn ? `/course/${course.id}/description` : "/auth/login"}
     >
       <Card
         sx={{
