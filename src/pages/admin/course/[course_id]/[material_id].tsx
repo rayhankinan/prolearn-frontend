@@ -179,7 +179,6 @@ export default function CourseDetailAdmin() {
                   sx={{ flexGrow: 1, textAlign: "center", fontWeight: "bold", justifyContent: "center", marginLeft: "40px"}}
                 >
                   {course?.title}
-                  {/* JavaScript Basic */}
                 </Typography>
             </Box>
 
@@ -225,8 +224,6 @@ export default function CourseDetailAdmin() {
           {/* horizontal line that have space on the left and right */}
           <hr className="border-t-2 border-black border-opacity-20 " />
         </Grid>
-
-
         {/* End hero unit */}
         <Grid sx={{ width: "100%", margin: "0 auto", marginTop: "20px" }}>
           <Grid item xs={3} sx={{marginBottom: "30px", marginLeft: "15px"}}>
@@ -269,6 +266,7 @@ export default function CourseDetailAdmin() {
                           sx={{
                             display: "flex",
                             alignItems: "center",
+                            justifyContent: "space-between",
                             mb: 1,
                             cursor: "pointer",
                             transition: "all 0.2s",
@@ -297,7 +295,7 @@ export default function CourseDetailAdmin() {
                               size="small"
                               // variant="contained"
                               className=" bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mr-4"
-                              sx={{ height: "40px", width: "10px" }} // added width property
+                              sx={{ height: "30px", width: "7.5px"}} // added width property
                             >
                             <i className="fas fa-edit"></i>
                             </Button>
@@ -310,10 +308,10 @@ export default function CourseDetailAdmin() {
               )}
               <Grid item xs={showSideBar ? 9 : 12}>
                 <Grid item>
-                  {fileString && !quizContent ? (
+                {fileString && !quizContent ? (
                     <div style={{
                       display: "flex",
-                      margin: "0 200px",
+                      margin: "0 10px",
                       textAlign: "justify",
                       flexWrap: "wrap",
                       flexDirection: "column",
@@ -348,7 +346,7 @@ export default function CourseDetailAdmin() {
       )}
 
       {selectedSection && (
-        <EditSectionModal
+        <EditSectionModal 
           open={showModal}
           onClose={() => setShowModal(false)}
           section={selectedSection}

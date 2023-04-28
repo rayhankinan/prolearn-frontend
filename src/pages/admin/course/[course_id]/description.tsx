@@ -218,6 +218,7 @@ export default function CourseDetailAdmin() {
                           sx={{
                             display: "flex",
                             alignItems: "center",
+                            justifyContent: "space-between",
                             mb: 1,
                             cursor: "pointer",
                             transition: "all 0.2s",
@@ -246,7 +247,7 @@ export default function CourseDetailAdmin() {
                               size="small"
                               // variant="contained"
                               className=" bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mr-4"
-                              sx={{ height: "40px", width: "10px" }} // added width property
+                              sx={{ height: "30px", width: "7.5px"}} // added width property
                             >
                             <i className="fas fa-edit"></i>
                             </Button>
