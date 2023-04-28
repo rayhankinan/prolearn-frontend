@@ -12,7 +12,7 @@ const CourseCards: React.FC<CourseCardsProps> = ({
 }) => {
   return (
     <Grid container spacing={3}>
-      {recommendCourses.map((course) => (
+      {recommendCourses.slice(0,3).map((course) => (
         <Grid item xs={12} sm={6} md={4} lg={4} key={course.id}>
           <div style={{ maxWidth: "400px" }}>
             <RecommendCard course={course} />

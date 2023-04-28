@@ -306,7 +306,9 @@ export default function Album() {
                         />
                       </Grid>
                     ))}
-                    
+                    <Grid item>
+                      <Plus handlePlusClick={handlePlusClick} />
+                    </Grid>
                   </Grid>
                 </div>
               </div>
