@@ -371,11 +371,11 @@ export default function UserCourseDetail() {
               {/* if last module, disable next module button */}
               {section.findIndex((material) => material.id === material_idInt) === section.length - 1 ? (
                 <Button variant="outlined" color="primary" endIcon={<ArrowForwardIcon />} disabled>
-                  Next Module
+                  Next Section
                 </Button>
               ) : (
                 <Button variant="outlined" color="primary" endIcon={<ArrowForwardIcon />} onClick={handleNext}>
-                  Next Module
+                  Next Section
                 </Button>
               )}
             </Grid>
