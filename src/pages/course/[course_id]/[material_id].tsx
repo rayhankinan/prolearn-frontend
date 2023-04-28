@@ -17,6 +17,7 @@ import QuizSection from "@/components/userCourse/quizSection";
 import Course from "@/interfaces/course-interface";
 import { Button, IconButton, Icon } from "@material-ui/core";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import MenuIcon from '@mui/icons-material/Menu';
 import RatingModal from "@/components/rating";
 import StarIcon from '@mui/icons-material/Star';
@@ -147,6 +148,32 @@ export default function UserCourseDetail() {
     setQuizStarted(true);
   };
 
+  const handlePrevious = () => {
+    console.log("previous");
+    const currentIndex = section.findIndex((section) => section.id === material_idInt);
+    const previousMaterialId = currentIndex > 0 ? section[currentIndex - 1].id : null;
+    // router.push(`/course/${course_id}/${previousMaterialId}`);
+    // return `/course/${course_id}/${previousMaterialId}`
+    if (previousMaterialId) {
+      window.location.href = `/course/${course_id}/${previousMaterialId}`;
+    } else {
+      window.location.href = `/course/${course_id}/description`;
+    }
+  };
+  
+  const handleNext = () => {
+    console.log("next");
+    const currentIndex = section.findIndex((section) => section.id === material_idInt);
+    const nextMaterialId = currentIndex < section.length - 1 ? section[currentIndex + 1].id : null;
+    // return `/course/${course_id}/${nextMaterialId}`
+    // router.push(`/course/${course_id}/${nextMaterialId}`);
+    if(nextMaterialId){
+      window.location.href = `/course/${course_id}/${nextMaterialId}`;
+    }else{
+      window.location.href = `/course/${course_id}/description`;
+    }
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -246,14 +273,14 @@ export default function UserCourseDetail() {
                           }}
                         >
                           {material.id == material_idInt && (
-                            <Link href={`/course/${course_id}/${material.id}`} style={{ color: "black", textDecoration: "none"}}>
+                            <Link href={`course/${course_id}/${material.id}`} style={{ color: "black", textDecoration: "none"}}>
                               <Typography variant="subtitle1" sx={{ fontWeight: "bold", ml: 2, mr: 1}}>
                                 {material.title}
                               </Typography>
                             </Link>
                           )}
                           {material.id != material_idInt && (
-                            <Link href={`/course/${course_id}/${material.id}`} style={{ color: "black", textDecoration: "none"}}>
+                            <Link href={`course/${course_id}/${material.id}`} style={{ color: "black", textDecoration: "none"}}>
                               <Typography variant="subtitle1" sx={{ ml: 2, mr: 1 }}>{material.title}</Typography>
                             </Link>
                           )}
@@ -321,6 +348,27 @@ export default function UserCourseDetail() {
             </Grid>
           </Grid>
         </Grid>
+
+        <div style={{ position: "fixed", bottom: 0, width: "100%", backgroundColor: "#f5f5f5", padding: "25px"}}>
+          <Grid container spacing={2} alignItems="center">
+            <Grid item xs={2}>
+              <Button variant="outlined" color="primary" startIcon={<ArrowBackIcon />} onClick={handlePrevious}>
+                Modul Sebelumnya
+              </Button>
+              
+            </Grid>
+            <Grid item xs={8}>
+              <Typography variant="h6" align="center">
+                {section[material_idInt - 1]?.title}
+              </Typography>
+            </Grid>
+            <Grid item xs={2}>
+              <Button variant="outlined" color="primary" endIcon={<ArrowForwardIcon />} onClick={handleNext}>
+                Modul Berikutnya
+              </Button>
+            </Grid>
+          </Grid>
+        </div>
       </main>
     </ThemeProvider>
   );

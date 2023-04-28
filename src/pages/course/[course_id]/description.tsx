@@ -13,6 +13,7 @@ import CourseService from "@/services/course-service";
 import Course from "@/interfaces/course-interface";
 import { Button, IconButton } from "@material-ui/core";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import MenuIcon from '@mui/icons-material/Menu';
 import RatingModal from "@/components/rating";
 
@@ -38,6 +39,33 @@ export default function UserCourseDetail() {
     //   return;
     // }
     setShowSideBar(!showSideBar);
+  };
+
+  const handlePrevious = () => {
+    console.log("previous");
+    const currentIndex = section.findIndex((section) => section.id === material_idInt);
+    const previousMaterialId = currentIndex > 0 ? section[currentIndex - 1].id : null;
+    // router.push(`/course/${course_id}/${previousMaterialId}`);
+    // return `/course/${course_id}/${previousMaterialId}`
+    if (previousMaterialId) {
+      window.location.href = `/course/${course_id}/${previousMaterialId}`;
+    } else {
+      window.location.href = `/course/${course_id}/description`;
+    }
+  };
+  
+  const handleNext = () => {
+    console.log("next");
+    const currentIndex = section.findIndex((section) => section.id === material_idInt);
+    const nextMaterialId = currentIndex < section.length - 1 ? section[currentIndex + 1].id : null;
+    // return `/course/${course_id}/${nextMaterialId}`
+    // router.push(`/course/${course_id}/${nextMaterialId}`);
+    if(nextMaterialId){
+      window.location.href = `/course/${course_id}/${nextMaterialId}`;
+    }else{
+      // bingung mau redirect ke mana
+      window.location.href = `/course/${course_id}/description`;
+    }
   };
 
   useEffect(() => {
@@ -118,18 +146,6 @@ export default function UserCourseDetail() {
                 {course?.title}
               </Typography>
             </Box>
-
-            <Box sx={{ display: "flex", alignItems: "center" }}>
-              <Button
-                variant="text"
-                style={{ marginRight: "10px", textAlign: "right" }}
-                onClick={handleOpenModal}
-              >
-                Rate This Course
-              </Button>
-                <RatingModal isOpen={isModalOpen} onClose={handleCloseModal} courseId={parseInt(course_id)} />
-            </Box>
-
           </Grid>
           <hr className="border-t-2 border-black border-opacity-20 " />
         </Grid>
@@ -224,6 +240,26 @@ export default function UserCourseDetail() {
             </Grid>
           </Grid>
         </Grid>
+        <div style={{ position: "fixed", bottom: 0, width: "100%", backgroundColor: "#f5f5f5", padding: "25px"}}>
+          <Grid container spacing={2} alignItems="center">
+            <Grid item xs={2}>
+              <Button variant="outlined" color="primary" startIcon={<ArrowBackIcon />} disabled={true}>
+                Modul Sebelumnya
+              </Button>
+              
+            </Grid>
+            <Grid item xs={8}>
+              <Typography variant="h6" align="center">
+                {section[material_idInt - 1]?.title}
+              </Typography>
+            </Grid>
+            <Grid item xs={2}>
+              <Button variant="outlined" color="primary" endIcon={<ArrowForwardIcon />} onClick={handleNext}>
+                Modul Berikutnya
+              </Button>
+            </Grid>
+          </Grid>
+        </div>
       </main>
     </ThemeProvider>
   );
