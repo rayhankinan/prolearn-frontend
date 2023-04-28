@@ -4,17 +4,18 @@ import Navbar from "@/components/navbar";
 import Swiper from "swiper";
 import { AuthContext } from "@/contexts/AuthContext";
 import "swiper/swiper-bundle.css";
+import { FaFacebook, FaTwitter, FaLinkedin, FaInstagram } from "react-icons/fa";
 
 const ourTeam = [
   {
     name: "Rizky Akbar Asmaran",
     role: "Frontend Developer",
-    image: "../test-team.png",
+    image: "../kibar.jpeg",
   },
   {
     name: "Azka Syauqy Irsyad",
     role: "Backend Developer",
-    image: "../test-team.png",
+    image: "../azka.jpg",
   },
   {
     name: "Aira Thalca Avila Putra",
@@ -88,7 +89,7 @@ const AboutUs = () => {
               key={index}
               className="swiper-slide flex flex-col items-center"
             >
-              <img src={team.image} alt="team" className="rounded-lg" />
+              <img src={team.image} alt="team" className="rounded-lg" style={{ width: '400px', height: '550px' }} />
               <h1 className="text-2xl font-bold mt-5">{team.name}</h1>
               <h1 className="text-xl mt-2">{team.role}</h1>
             </div>
@@ -131,46 +132,48 @@ const AboutUs = () => {
 
       <div className="mt-28 mb-14">
         <h1 className="text-6xl font-bold text-center mt-10 font-mono">
-          Get In Touch
+          Contact Info
         </h1>
         <h2 className="text-xl font-bold text-center mt-2 font-mono">
-          We'd love to hear from you. Please fill out this form.
+          We'd love to hear from you. Please Contact Us With Our Social Media
         </h2>
         <div className="flex justify-center">
           <div className="flex flex-col mt-10">
             <div className="flex flex-row">
               <div className="flex flex-col mr-10">
-                <h1 className="font-bold">Name</h1>
-                <input
-                  type="text"
-                  className="border-2 border-black rounded-lg mt-2 w-96 h-10 placeholder:text-gray-500 pl-[14px]"
-                  placeholder="John Doe"
-                />
-
-                <h1 className="font-bold mt-5">Email</h1>
-                <input
-                  type="text"
-                  className="border-2 border-black rounded-lg mt-2 w-96 h-10 placeholder:text-gray-500 pl-[14px]"
-                  placeholder="iloveyourmom@gmail.com"
-                />
-
-                <h1 className="font-bold mt-5">Subject</h1>
-                <input
-                  type="text"
-                  className="border-2 border-black rounded-lg mt-2 w-96 h-10 placeholder:text-gray-500 pl-[14px]"
-                  placeholder="Complaint"
-                />
-
-                <h1 className="font-bold mt-5">Message</h1>
-                <input
-                  type="text"
-                  className="border-2 border-black rounded-lg mt-2 w-96 h-10 placeholder:text-gray-500 pl-[14px]"
-                  placeholder="Text Message"
-                />
-
-                <button className="bg-black text-white font-bold mt-5 w-96 h-10 rounded-lg">
-                  Send
-                </button>
+                <div className="flex">
+                  <a
+                    href="https://www.facebook.com/"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="mr-12"
+                  >
+                    <FaFacebook size={60} />
+                  </a>
+                  <a
+                    href="https://twitter.com/"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="mr-12"
+                  >
+                    <FaTwitter size={60} />
+                  </a>
+                  <a
+                    href="https://www.linkedin.com/"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="mr-12"
+                  >
+                    <FaLinkedin size={60} />
+                  </a>
+                  <a
+                    href="https://www.instagram.com/"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <FaInstagram size={60} />
+                  </a>
+                </div>
               </div>
             </div>
           </div>
