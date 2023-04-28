@@ -1,10 +1,7 @@
 # File: .gitlab-ci.yml
 variables:
-<<<<<<< HEAD
   SERVICE_NAME: "prolearn-frontend-production"
-=======
-  SERVICE_NAME: "prolearn-frontend-staging"
->>>>>>> 260dcca5d2ca5d723eff03c6628242e74923092a
+
 
 stages:
   - deploy
@@ -12,11 +9,7 @@ stages:
 deploy:
   stage: deploy
   only:
-<<<<<<< HEAD
     - prod # This pipeline stage will run on this branch alone
-=======
-    - staging # This pipeline stage will run on this branch alone
->>>>>>> 260dcca5d2ca5d723eff03c6628242e74923092a
 
   image: google/cloud-sdk:latest # We'll use Google Cloud SDK for Cloud Run related commands
   script:
@@ -25,8 +18,4 @@ deploy:
     - gcloud auth configure-docker # Configure docker environment
     - gcloud config set project $GCP_PROJECT_ID # Set the GCP Project ID to the variable name
     - gcloud builds submit --tag gcr.io/$GCP_PROJECT_ID/$SERVICE_NAME # Run the gcloud build command to build our image
-<<<<<<< HEAD
     - gcloud run deploy $SERVICE_NAME --image gcr.io/$GCP_PROJECT_ID/$SERVICE_NAME --region=asia-southeast2 --platform managed --allow-unauthenticated # Run the gcloud run deploy command to deploy our new service
-=======
-    - gcloud run deploy $SERVICE_NAME --image gcr.io/$GCP_PROJECT_ID/$SERVICE_NAME --region=asia-southeast2 --platform managed --allow-unauthenticated # Run the gcloud run deploy command to deploy our new service
->>>>>>> 260dcca5d2ca5d723eff03c6628242e74923092a
