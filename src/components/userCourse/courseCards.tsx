@@ -15,7 +15,6 @@ const CourseCards: React.FC<CourseCardsProps> = ({
   subscribedCourses,
   isLoggedIn,
 }) => {
-  console.log(isLoggedIn);
   return (
     <Grid container spacing={3}>
       {courses.map((course) => (
