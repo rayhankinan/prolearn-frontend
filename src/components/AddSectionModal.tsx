@@ -262,7 +262,7 @@ const AddSectionModal = ({ open, onClose, material, courseId }: AddSectionModalP
               <label>Material Text*</label>
             </Grid>
             <Grid item xs={9} className="flex items-center">
-              <div style={{ overflow: "auto", maxHeight: "350px" }}>
+              <div style={{ overflow: "auto", height: "auto" }}>
                 <DynamicReactQuill
                   placeholder="Write your material here..."
                   modules={AddSectionModal.modules}
@@ -316,7 +316,7 @@ const AddSectionModal = ({ open, onClose, material, courseId }: AddSectionModalP
                 <label>Description*</label>
               </Grid>
               <Grid item xs={9} className="flex items-center">
-                <div style={{ overflow: "auto", maxHeight: "350px" }}>
+                <div style={{ overflow: "auto", height: "auto" }}>
                   <DynamicReactQuill
                     placeholder="Write your quiz description here..."
                     modules={AddSectionModal.modules}
@@ -356,7 +356,7 @@ const AddSectionModal = ({ open, onClose, material, courseId }: AddSectionModalP
                       <label>Question No. {i+1}*</label>
                     </Grid>
                     <Grid item xs={9}>
-                      <div style={{overflow: "auto", maxHeight : "350px" }} className="flex items-center">
+                      <div style={{overflow: "auto", height: "auto"}} className="flex items-center">
                         <DynamicReactQuill
                           placeholder="Write your question here..."
                           modules={AddSectionModal.modules}
@@ -491,8 +491,6 @@ AddSectionModal.modules = {
     ["link", "image", "video"],
     ["clean"],
     ["code-block"],
-    //set min height for quill editor
-    [{ height: "350px" }],
   ],
 };
 

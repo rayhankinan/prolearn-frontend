@@ -25,12 +25,12 @@ type options = {
   isCorrect: boolean;
 };
 
-const QuizSectionAdm: React.FC<QuizSectionProps> = ({
+const QuizSectionAdm = ({
   quizContent,
   title,
   courseId,
   materialId,
-}) => {
+}: QuizSectionProps) => {
   const [name, setName] = useState(title || "");
   const [questions, setQuestions] = useState<Quiz>(quizContent);
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -369,6 +369,8 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({
               <DynamicReactQuill
                 placeholder="Write your new question here"
                 value={newQuestion}
+                modules={QuizSectionAdm.modules}
+                formats={QuizSectionAdm.formats}
                 onChange={handleQuestionChange}
               />
             </div>
@@ -568,10 +570,12 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({
             <h1 className="text-2xl font-semibold pt-1">Add Question</h1>
             <div className="p-2">
               <h2 className="font-medium">Question:</h2>
-              <div style={{ overflow: "auto", height: "auto", width: "30vw", marginBottom: "0.25rem" }}>
+              <div style={{ overflow: "auto", maxHeight: "300px", width: "30vw", marginBottom: "0.25rem" }}>
                 <DynamicReactQuill
                   placeholder="Write your question here"
                   value={newQuestion}
+                  modules={QuizSectionAdm.modules}
+                  formats={QuizSectionAdm.formats}
                   onChange={handleQuestionChange}
                 />
               </div>
@@ -644,5 +648,34 @@ const QuizSectionAdm: React.FC<QuizSectionProps> = ({
     </div>
   );
 };
+
+QuizSectionAdm.modules = {
+  toolbar: [
+    [{ header: "1" }, { header: "2" }, { header: [3, 4, 5, 6] }, { font: [] }],
+    [{ size: [] }],
+    ["bold", "italic", "underline", "strike", "blockquote"],
+    [{ list: "ordered" }, { list: "bullet" }],
+    ["link", "image", "video"],
+    ["clean"],
+    ["code-block"],
+  ],
+};
+
+QuizSectionAdm.formats = [
+  "header",
+  "font",
+  "size",
+  "bold",
+  "italic",
+  "underline",
+  "strike",
+  "blockquote",
+  "list",
+  "bullet",
+  "link",
+  "image",
+  "video",
+  "code-block",
+];
 
 export default QuizSectionAdm;
