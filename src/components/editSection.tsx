@@ -37,6 +37,13 @@ export const EditSectionModal = ({ open, onClose, section }: EditSectionProps) =
   }, [router.isReady]);
 
   useEffect(() => {
+    setName(section?.title || "");
+    setFileId(section?.__file__?.id);
+    setDuration(section?.duration || 0);
+    setObjective(section?.objective || "");
+  }, [section]);
+
+  useEffect(() => {
     if (file_id != null) {
       FileService.getFile(file_id)
         .then((response) => {
