@@ -431,8 +431,6 @@ const AddSectionModal = ({ open, onClose, material, courseId }: AddSectionModalP
               if(type === "material") {
                 if (body === "") {
                   alert("Material Text is required");
-                } else if (objective === "") {
-                  alert("Objective is required"); 
                 } else {
                   handleSave();
                 }
