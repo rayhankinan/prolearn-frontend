@@ -216,7 +216,7 @@ export default function UserCourseDetail() {
             <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", flexGrow: 1 }}>
               <Typography
                 variant="h6"
-                sx={{ textAlign: "center", fontWeight: "bold", marginRight: "0px"}}
+                sx={{ textAlign: "center", fontWeight: "bold", marginRight: "210px"}}
               >
                 {course?.title}
               </Typography>
@@ -226,7 +226,7 @@ export default function UserCourseDetail() {
           </Grid>
           <hr className="border-t-2 border-black border-opacity-20 " />
         </Grid>
-        <Grid sx={{ width: "100%", margin: "0 auto", marginTop: "100px" }}>
+        <Grid sx={{ width: "100%", margin: "0 auto", marginTop: "120px", marginBottom: "150px"}}>
           <Grid item xs={3} sx={{marginBottom: "30px", marginLeft: "15px"}}>
             <Button 
               variant="contained" 
@@ -358,13 +358,13 @@ export default function UserCourseDetail() {
           <Grid container spacing={2} alignItems="center">
             <Grid item xs={2}>
               <Button variant="outlined" color="primary" startIcon={<ArrowBackIcon />} onClick={handlePrevious}>
-                Previous Module
+                Previous Section
               </Button>
               
             </Grid>
             <Grid item xs={8}>
               <Typography variant="h6" align="center">
-                {section[material_idInt - 1]?.title}
+                {section.find(material => material.id === material_idInt)?.title}
               </Typography>
             </Grid>
             <Grid item xs={2}>
