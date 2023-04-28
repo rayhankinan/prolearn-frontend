@@ -151,7 +151,7 @@ export default function UserCourseDetail() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <main>
-      <Grid
+        <Grid
           sx={{
             width: "100%",
             margin: "0 auto",
@@ -186,8 +186,7 @@ export default function UserCourseDetail() {
                 variant="h6"
                 sx={{ textAlign: "center", fontWeight: "bold", marginRight: "0px"}}
               >
-                {/* {course?.title} */}
-                JavaScript Basic
+                {course?.title}
               </Typography>
             </Box>
 
