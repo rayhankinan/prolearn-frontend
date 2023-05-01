@@ -6,7 +6,9 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import AddSectionModal from "@/components/AddSectionModal";
 import { EditCourseModal } from "@/components/adminCourse/editCourseModal";
 import { EditSectionModal } from "@/components/editSection";
-import { Button, Grid, Typography } from "@mui/material";
+import Button from "@mui/material/Button";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
 import { useRouter } from "next/router";
 import CategoryService from "@/services/category-service";
 import SectionService from "@/services/section-service";
@@ -15,7 +17,6 @@ import Category from "@/interfaces/category-interface";
 import Section from "@/interfaces/section-interface";
 import Course from "@/interfaces/course-interface";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import MenuIcon from '@mui/icons-material/Menu';
 import Head from "next/head";
 

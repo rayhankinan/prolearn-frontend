@@ -137,13 +137,9 @@ export default function Register() {
                 alignItems: "center",
               }}
             >
-              <Image
-                src="/logo.png"
-                alt="Logo"
-                className="h-12 mt-5 mb-5"
-                width={250}
-                height={61}
-              />
+              <a href="/">
+                <Image src="/logo.png" alt="Logo" className="h-12 mt-5 mb-5" width={250} height={61} />
+              </a> 
               <Typography
                 component="h1"
                 variant="h4"

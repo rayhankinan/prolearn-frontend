@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import CardMedia from "@mui/material/CardMedia";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import CourseService from "@/services/course-service";
