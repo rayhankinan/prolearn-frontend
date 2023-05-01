@@ -6,6 +6,7 @@ import CategoryService from "@/services/category-service";
 import Course from "@/interfaces/course-interface";
 import Category from "@/interfaces/category-interface";
 import { AuthContext } from "@/contexts/AuthContext";
+import Link from "next/link";
 import Head from "next/head";
 
 export default function CourseLanding() {
@@ -72,22 +73,22 @@ export default function CourseLanding() {
             resources.
           </p>
           <div className="flex flex-row justify-start ml-14 mt-10">
-            <a
+            <Link
               href="/auth/register"
               className="inline-block w-auto h-16 text-xl px-4 py-5 
               leading-none border border-gray-300 shadow-xl text-black bg-white mt-4 lg:mt-0
               mr-12 ml-10 hover:transition ease-in-out hover:scale-110 duration-300"
             >
               Get Started
-            </a>
-            <a
+            </Link>
+            <Link
               href="/aboutUs"
               className="inline-block w-auto h-16 text-xl px-4 py-5 leading-none 
               border border-gray-300 shadow-xl text-black bg-gray-400 mt-4 lg:mt-0 mr-5
               hover:transition ease-in-out hover:scale-110 duration-300"
             >
               Learn More
-            </a>
+            </Link>
           </div>
         </div>
         <div className="flex justify-end ">

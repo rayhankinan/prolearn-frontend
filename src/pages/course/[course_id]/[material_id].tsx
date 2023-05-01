@@ -332,7 +332,7 @@ export default function UserCourseDetail() {
                     quizContent.content.questions.length <= 0 && (
                       <div style={{ width: "70%", marginTop: "20px", margin: "auto" }} className="flex flex-col md:flex-row justify-between items-center bg-gray-200 p-4 rounded-lg shadow-md">
                         <div className="font-bold text-lg mb-2 md:mb-0 md:mr-2">
-                          Quiz's questions are not available
+                          {"Quiz\'s questions are not available"}
                         </div>
                       </div>
                     )}

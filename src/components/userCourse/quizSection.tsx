@@ -90,7 +90,7 @@ const QuizSection: React.FC<QuizSectionProps> = ({ quizContent }) => {
             <div className="flex flex-col">
               {quizContent.content.questions[currentQuestion].options.map(
                 (answer, index) => (
-                  <div className="flex flex-row mt-2 hover:bg-gray-300 hover:rounded-lg hover:shadow-md">
+                  <div className="flex flex-row mt-2 hover:bg-gray-300 hover:rounded-lg hover:shadow-md" key = {index}>
                     <div className="flex w-10 pl-3 items-center cursor-pointer">
                       <input
                         type="radio"

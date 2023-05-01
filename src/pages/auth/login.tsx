@@ -19,6 +19,7 @@ import ModalFailed from "@/pages/user/modalFailed";
 import ModalSuccess from "@/pages/user/modalSucess";
 import { AuthContext } from "@/contexts/AuthContext";
 import Image from "next/image";
+import Link from "next/link";
 import IconButton from "@mui/material/IconButton";
 import Head from "next/head";
 
@@ -209,10 +210,10 @@ export default function Login() {
                 </Button>
               </Box>
               <div className="text-md font-medium">
-                Don't have an account?{" "} 
-                <a href="/auth/register" className="text-blue-700">
+                {"Don\'t have an account? "} 
+                <Link href="/auth/register" className="text-blue-700">
                   Register here
-                </a>
+                </Link>
               </div>
             </Box>
           </Container>
