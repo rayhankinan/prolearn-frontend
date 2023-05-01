@@ -138,9 +138,9 @@ export default function Register() {
                 alignItems: "center",
               }}
             >
-              <a href="/">
+              <Link href="/">
                 <Image src="/logo.png" alt="Logo" className="h-12 mt-5 mb-5" width={250} height={61} />
-              </a> 
+              </Link> 
               <Typography
                 component="h1"
                 variant="h4"

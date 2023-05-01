@@ -117,9 +117,9 @@ export default function Login() {
                 alignItems: "center",
               }}
             >
-              <a href="/">
+              <Link href="/">
                 <Image src="/logo.png" alt="Logo" className="h-12 mt-5 mb-10" width={250} height={61} />
-              </a> 
+              </Link> 
               <Typography
                 component="h1"
                 variant="h4"
