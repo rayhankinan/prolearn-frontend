@@ -43,7 +43,6 @@ const nextConfig = {
             "yaml"
           ],
           filename: "static/[name].worker.js",
-          outputFileTracing: false 
         })
       );
     }
