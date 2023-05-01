@@ -204,12 +204,12 @@ export default function UserCourseDetail() {
             sx={{ padding: "25px" }}
             display={"flex"}
           >
-            <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Box sx={{ display: "flex", alignItems: "center", flexGrow: 1 }}>
               <Button
                 onClick={() => router.push("/course")}
-                variant="text"
-                style={{ marginRight: "10px", textAlign: "left"}}
-                // sx={{ textAlign: "left" }}
+                variant="contained"
+                color="primary"
+                style={{textAlign: "left" }}
               >
                 <ArrowBackIcon sx={{ marginRight: "5px" }} />
                 Back to Course List
@@ -219,16 +219,26 @@ export default function UserCourseDetail() {
             <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", flexGrow: 1 }}>
               <Typography
                 variant="h6"
-                sx={{ textAlign: "center", fontWeight: "bold", marginRight: "210px"}}
+                sx={{ textAlign: "center", fontWeight: "bold", marginRight: "30px" }}
               >
                 {course?.title}
               </Typography>
             </Box>
-            <Box sx={{ display: "flex", alignItems: "center" }}></Box>
 
+            <Box sx={{ display: "flex", alignItems: "center", flexGrow: 1, justifyContent: "flex-end" }}>
+              <Button
+                variant="contained"
+                color="primary"
+                style={{ marginRight: "10px", textAlign: "right" }}
+                onClick={() => router.push("/compiler")}
+              >
+                Online Compiler
+              </Button>
+            </Box>
           </Grid>
           <hr className="border-t-2 border-black border-opacity-20 " />
         </Grid>
+
         <Grid sx={{ width: "100%", margin: "0 auto", marginTop: "120px", marginBottom: "150px"}}>
           <Grid item xs={3} sx={{marginBottom: "30px", marginLeft: "15px"}}>
             <Button 
@@ -304,7 +314,6 @@ export default function UserCourseDetail() {
                   {fileString && !quizStarted && (
                     <div style={{
                       display: "flex",
-                      alignItems: "center",
                       margin: "0 200px",
                       textAlign: "justify",
                       flexWrap: "wrap",
