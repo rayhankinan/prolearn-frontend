@@ -11,11 +11,10 @@ import SectionService from "@/services/section-service";
 import CategoryService from "@/services/category-service";
 import CourseService from "@/services/course-service";
 import Course from "@/interfaces/course-interface";
-import { Button, IconButton } from "@material-ui/core";
+import Button from "@material-ui/core/Button";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import MenuIcon from '@mui/icons-material/Menu';
-import RatingModal from "@/components/rating";
 
 const theme = createTheme();
 

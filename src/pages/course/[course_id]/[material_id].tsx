@@ -15,13 +15,11 @@ import fileService from "@/services/file-service";
 import CategoryService from "@/services/category-service";
 import QuizSection from "@/components/userCourse/quizSection";
 import Course from "@/interfaces/course-interface";
-import { Button, IconButton, Icon } from "@material-ui/core";
+import Button from "@material-ui/core/Button";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import MenuIcon from '@mui/icons-material/Menu';
 import RatingModal from "@/components/rating";
-import StarIcon from '@mui/icons-material/Star';
-import RatingService from "@/services/rating-service";
 
 const theme = createTheme();
 

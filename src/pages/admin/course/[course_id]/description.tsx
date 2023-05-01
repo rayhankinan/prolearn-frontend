@@ -6,7 +6,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import AddSectionModal from "@/components/AddSectionModal";
 import { EditCourseModal } from "@/components/adminCourse/editCourseModal";
 import { EditSectionModal } from "@/components/editSection";
-import { Button, Grid, Typography, IconButton } from "@mui/material";
+import { Button, Grid, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import CategoryService from "@/services/category-service";
 import SectionService from "@/services/section-service";

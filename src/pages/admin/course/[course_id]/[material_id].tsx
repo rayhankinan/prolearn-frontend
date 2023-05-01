@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import Link from "@mui/material/Link";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import AddSectionModal from "@/components/AddSectionModal";
-import { Button, Grid, Typography, IconButton } from "@mui/material";
+import { Button, Grid, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import CourseService from "@/services/course-service";
 import CategoryService from "@/services/category-service";
@@ -17,7 +17,6 @@ import fileService from "@/services/file-service";
 import { EditCourseModal } from "@/components/adminCourse/editCourseModal";
 import QuizSectionAdm from "@/components/adminCourse/quizSectionAdm";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import MenuIcon from '@mui/icons-material/Menu';
 import { EditSectionModal } from "@/components/editSection";
 
