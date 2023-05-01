@@ -246,7 +246,7 @@ const QuizSectionAdm = ({
                 </div>
                 <div className="flex justify-between">
                   <div className="flex flex-col w-4/5 mt-1">
-                    {questions.content.questions[currentQuestion].answers.map(
+                    {questions.content.questions[currentQuestion].options.map(
                       (answer, index) => (
                         <div className="flex flex-row mt-5">
                           <div style={{ borderRight: '3px solid gray' }} className="flex w-24">
