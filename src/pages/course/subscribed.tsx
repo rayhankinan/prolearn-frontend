@@ -8,9 +8,10 @@ import CourseService from "@/services/course-service";
 import RecommendService from "@/services/recommend-service";
 import Navbar from "@/components/navbar";
 import SearchBar from "@/components/adminCourse/search";
-import { Grid } from "@mui/material";
-import { Pagination } from "@mui/material";
+import Grid from "@mui/material/Grid";
+import Pagination from "@mui/material/Pagination";
 import { AuthContext } from "@/contexts/AuthContext";
+import Head from "next/head";
 
 export default function Courses() {
   const [courses, setCourses] = useState<Course[]>([]);
@@ -89,6 +90,9 @@ export default function Courses() {
   return (
     <>
       <Navbar isLoggedIn={isLoggedIn} />
+      <Head>
+        <title>My Courses</title>
+      </Head>
       <div className="container mx-auto justify-center custom-Montserrat ">
         <Hero
           title="Courses"

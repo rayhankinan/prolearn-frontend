@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Modal from "@mui/material/Modal";
 import Rating from "@mui/material/Rating";
-import { IconButton } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import RatingService from "@/services/rating-service";
 import { useRouter } from "next/router";

@@ -3,7 +3,8 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
 import Link from "@mui/material/Link";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { Grid, Typography } from "@mui/material";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
 import { useRouter } from "next/router";
 import Section from "@/interfaces/section-interface";
 import Category from "@/interfaces/category-interface";
@@ -20,6 +21,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import MenuIcon from '@mui/icons-material/Menu';
 import RatingModal from "@/components/rating";
+import Head from "next/head";
 
 const theme = createTheme();
 
@@ -181,6 +183,9 @@ export default function UserCourseDetail() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <main>
+        <Head>
+          <title>Course</title>
+        </Head>
         <Grid
           sx={{
             width: "100%",

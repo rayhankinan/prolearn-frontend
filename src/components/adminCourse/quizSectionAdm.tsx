@@ -5,7 +5,8 @@ import dynamic from "next/dynamic";
 import "react-quill/dist/quill.snow.css";
 import sectionService from "@/services/section-service";
 import EditIcon from '@mui/icons-material/Edit';
-import { Button, IconButton } from "@material-ui/core";
+import Button from "@material-ui/core/Button";
+import IconButton from "@material-ui/core/IconButton";
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 

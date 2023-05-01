@@ -1,13 +1,15 @@
 import Image from "next/image";
 import Course from "@/interfaces/course-interface";
-import { Chip, Skeleton } from "@mui/material";
-import { Card, CardContent, CardActions, Typography } from "@mui/material";
-import { Button } from "@mui/material";
+import Chip from "@mui/material/Chip";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardActions from "@mui/material/CardActions";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import Skeleton from "@mui/material/Skeleton";
 import Link from "next/link";
 import fileService from "@/services/file-service";
 import { useState, useEffect } from "react";
-import Rating from "@mui/material/Rating";
-import { IconButton, Icon } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
 
 interface SubcribedCardProps {

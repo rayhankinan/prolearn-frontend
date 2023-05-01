@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import quizService from "@/services/quiz-service";
 import Quiz from "@/interfaces/quiz-interface";
-import { Button } from "@material-ui/core";
+import Button from "@mui/material/Button";
 
 interface QuizSectionProps {
   quizContent: Quiz;
