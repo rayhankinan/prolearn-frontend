@@ -230,7 +230,7 @@ export default function UserCourseDetail() {
                 variant="contained"
                 color="primary"
                 style={{ marginRight: "10px", textAlign: "right" }}
-                onClick={() => router.push("/profile")}
+                onClick={() => router.push("/compiler")}
               >
                 Online Compiler
               </Button>
