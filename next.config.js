@@ -27,7 +27,7 @@ const nextConfig = {
         /[\\/]node_modules[\\/]monaco-editor[\\/]/
       ];
     }
-    if(!OptionUnstyled.isServer) {
+    if(!options.isServer) {
       config.plugins.push(
         new MonacoWebpackPlugin({
           languages: [
