@@ -1,12 +1,9 @@
 import React from "react";
-import {
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-  Icon,
-} from "@mui/material";
+import FormControl from "@mui/material/FormControl";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+import Icon from "@mui/material/Icon";
+import { SelectChangeEvent } from "@mui/material";
 import { Fragment } from "react";
 
 const difficulties = ["Beginner", "Intermediate", "Advanced"];

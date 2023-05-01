@@ -5,6 +5,7 @@ import Swiper from "swiper";
 import { AuthContext } from "@/contexts/AuthContext";
 import "swiper/swiper-bundle.css";
 import { FaFacebook, FaTwitter, FaLinkedin, FaInstagram } from "react-icons/fa";
+import Head from "next/head";
 
 const ourTeam = [
   {
@@ -57,6 +58,9 @@ const AboutUs = () => {
   return (
     <div>
       <Navbar isLoggedIn={isLoggedIn} />
+      <Head>
+        <title>About Us</title>
+      </Head>
       <div className="text-center mt-10 font-mono">
         <h1 className="text-6xl font-bold ">ProLearn</h1>
         <h2 className="text-4xl mt-10">{"We\'re Here to"}</h2>

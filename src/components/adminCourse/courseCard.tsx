@@ -1,19 +1,14 @@
 import { useState, useEffect } from "react";
 import Course from "@/interfaces/course-interface";
-import {
-  Grid,
-  Card,
-  CardMedia,
-  CardContent,
-  Button,
-  Typography,
-  Box,
-  CardActions,
-  Skeleton,
-} from "@mui/material";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import CardActions from "@mui/material/CardActions";
+import Skeleton from "@mui/material/Skeleton";
 import FileService from "@/services/file-service";
 import Image from "next/image";
-import { Chip } from "@mui/material"; 
+import Chip from "@mui/material/Chip";
 
 interface CourseCardProps {
   course: Course;
