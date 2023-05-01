@@ -6,11 +6,8 @@ import CategoryService from "@/services/category-service";
 import Course from "@/interfaces/course-interface";
 import Category from "@/interfaces/category-interface";
 import { AuthContext } from "@/contexts/AuthContext";
-<<<<<<< HEAD
 import Link from "next/link";
-=======
 import Head from "next/head";
->>>>>>> 95cb6f65ecfbe56a4947021b18093653e97aea59
 
 export default function CourseLanding() {
   const { isLoggedIn } = React.useContext(AuthContext);

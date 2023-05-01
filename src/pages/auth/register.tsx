@@ -19,11 +19,8 @@ import React, { useState } from "react";
 import ModalFailed from "../user/modalFailed";
 import ModalSuccess from "../user/modalSucess";
 import Image from "next/image";
-<<<<<<< HEAD
 import Link from "next/link";
-=======
 import Head from "next/head";
->>>>>>> 95cb6f65ecfbe56a4947021b18093653e97aea59
 
 const theme = createTheme();
 
