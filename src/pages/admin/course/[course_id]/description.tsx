@@ -17,6 +17,7 @@ import Course from "@/interfaces/course-interface";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import MenuIcon from '@mui/icons-material/Menu';
+import Head from "next/head";
 
 const theme = createTheme();
 
@@ -101,6 +102,9 @@ export default function CourseDetailAdmin() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
+      <Head>
+        <title>Course Description</title>
+      </Head>
       <main>
         {/* Header, contains logo and page name */}
         <Grid sx={{ width: "100%", margin: "0 auto", top: 0, zIndex: 1}}>

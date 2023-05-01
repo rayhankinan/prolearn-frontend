@@ -7,6 +7,7 @@ import CategoryService from "@/services/category-service";
 import Course from "@/interfaces/course-interface";
 import Category from "@/interfaces/category-interface";
 import { AuthContext } from "@/contexts/AuthContext";
+import Head from "next/head";
 
 export default function CourseLanding() {
   const { isLoggedIn } = React.useContext(AuthContext);
@@ -57,6 +58,9 @@ export default function CourseLanding() {
   return (
     <div>
       {/* <Login_navbar />1 */}
+      <Head>
+        <title>ProLearn</title>
+      </Head>
       <Navbar isLoggedIn={isLoggedIn} />
       <div className="flex flex-row justify-between">
         <div className="flex flex-col justify-center">

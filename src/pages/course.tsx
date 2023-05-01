@@ -9,6 +9,7 @@ import { Grid } from "@mui/material";
 import { Pagination } from "@mui/material";
 import Navbar from "@/components/navbar";
 import { AuthContext } from "@/contexts/AuthContext";
+import Head from "next/head";
 
 export default function Courses() {
   const [courses, setCourses] = useState<Course[]>([]);
@@ -101,6 +102,9 @@ export default function Courses() {
     <>
       <Navbar isLoggedIn={isLoggedIn} />
       <div className="container mx-auto justify-center custom-Poppins ">
+        <Head>
+          <title>Courses</title>
+        </Head>
         <Hero
           title="Courses"
           breadcrumbs={[

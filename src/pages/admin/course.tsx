@@ -17,6 +17,7 @@ import { useRouter } from "next/router";
 import CourseCard from "@/components/adminCourse/courseCard";
 import Hero from "@/components/adminCourse/courseHero";
 import Sidebar from "@/components/userCourse/courseSidebar";
+import Head from "next/head";
 
 const theme = createTheme();
 
@@ -220,6 +221,9 @@ export default function Album() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
+      <Head>
+        <title>Admin | Courses</title>
+      </Head>
       <main>
       <Hero
           title="Edit Courses"

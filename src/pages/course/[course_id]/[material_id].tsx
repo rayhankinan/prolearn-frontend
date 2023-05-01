@@ -20,6 +20,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import MenuIcon from '@mui/icons-material/Menu';
 import RatingModal from "@/components/rating";
+import Head from "next/head";
 
 const theme = createTheme();
 
@@ -181,6 +182,9 @@ export default function UserCourseDetail() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <main>
+        <Head>
+          <title>Course</title>
+        </Head>
         <Grid
           sx={{
             width: "100%",

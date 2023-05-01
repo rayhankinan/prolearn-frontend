@@ -19,6 +19,7 @@ import React, { useState } from "react";
 import ModalFailed from "../user/modalFailed";
 import ModalSuccess from "../user/modalSucess";
 import Image from "next/image";
+import Head from "next/head";
 
 const theme = createTheme();
 
@@ -122,6 +123,9 @@ export default function Register() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
+      <Head>
+        <title>Register</title>
+      </Head>
       <Grid container spacing={1}>
         <Grid item xs={12} sm={6}>
           <Container component="main" maxWidth="xl">

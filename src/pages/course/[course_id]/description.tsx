@@ -15,6 +15,7 @@ import Button from "@material-ui/core/Button";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import MenuIcon from '@mui/icons-material/Menu';
+import Head from "next/head";
 
 const theme = createTheme();
 
@@ -105,6 +106,9 @@ export default function UserCourseDetail() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <main>
+      <Head>
+        <title>Course Description</title>
+      </Head>
       <Grid
           sx={{
             width: "100%",

@@ -19,6 +19,7 @@ import QuizSectionAdm from "@/components/adminCourse/quizSectionAdm";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import MenuIcon from '@mui/icons-material/Menu';
 import { EditSectionModal } from "@/components/editSection";
+import Head from "next/head";
 
 const theme = createTheme();
 
@@ -146,6 +147,9 @@ export default function CourseDetailAdmin() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
+      <Head>
+        <title>Course Detail</title>
+      </Head>
       <main>
         {/* Header, contains logo and page name */}
         <Grid sx={{ width: "100%", margin: "0 auto", top: 0, zIndex: 1}}>
