@@ -42,7 +42,8 @@ const nextConfig = {
           "scss",
           "yaml"
         ],
-        filename: "static/[name].worker.js"
+        filename: "static/[name].worker.js",
+        outputFileTracing: false 
       })
     );
     return config;
