@@ -1,27 +1,26 @@
 import userService from "@/services/user-service";
-import {
-  createTheme,
-  InputAdornment,
-  ThemeProvider,
-} from "@material-ui/core";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import InputAdornment from "@mui/material/InputAdornment";
 import CssBaseline from "@mui/material/CssBaseline";
-import { PersonOutlined, Visibility, VisibilityOff } from "@mui/icons-material";
+import PersonOutlined from "@mui/icons-material/PersonOutlined";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import {
-  Box,
-  Button,
-  Container,
-  Grid,
-  TextField,
-  Typography,
-  Modal,
-  IconButton,
-} from "@mui/material";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+import Grid from "@mui/material/Grid";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import Modal from "@mui/material/Modal";
+import IconButton from "@mui/material/IconButton";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import ModalFailed from "../user/modalFailed";
 import ModalSuccess from "../user/modalSucess";
 import Image from "next/image";
+import Link from "next/link";
+import Head from "next/head";
 
 const theme = createTheme();
 
@@ -113,8 +112,11 @@ export default function Register() {
         router.push("/auth/login");
       })
       .catch((error) => {
-
-        setErrorMessage("Error: Please try another username" + error.message);
+        if (error.response.status === 400) {
+          setErrorMessage("Error: Please try another username");
+        } else {
+          setErrorMessage("Error: " + error.message);
+        }
         setModalOpen(true);
       });
   };
@@ -122,6 +124,9 @@ export default function Register() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
+      <Head>
+        <title>Register</title>
+      </Head>
       <Grid container spacing={1}>
         <Grid item xs={12} sm={6}>
           <Container component="main" maxWidth="xl">
@@ -133,13 +138,9 @@ export default function Register() {
                 alignItems: "center",
               }}
             >
-              <Image
-                src="/logo.png"
-                alt="Logo"
-                className="h-12 mt-5 mb-5"
-                width={250}
-                height={61}
-              />
+              <a href="/">
+                <Image src="/logo.png" alt="Logo" className="h-12 mt-5 mb-5" width={250} height={61} />
+              </a> 
               <Typography
                 component="h1"
                 variant="h4"
@@ -265,9 +266,9 @@ export default function Register() {
               </Box>
               <div className="text-md font-medium">
                 Already have an account?{" "}
-                <a href="/auth/login" className="text-blue-700">
+                <Link href="/auth/login" className="text-blue-700">
                   Login here
-                </a>
+                </Link>
               </div>
             </Box>
           </Container>

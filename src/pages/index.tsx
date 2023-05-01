@@ -1,62 +1,18 @@
-import React, { useEffect, useState } from "react";
-import CardMedia from "@mui/material/CardMedia";
+import React from "react";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
-import CourseService from "@/services/course-service";
-import CategoryService from "@/services/category-service";
-import Course from "@/interfaces/course-interface";
-import Category from "@/interfaces/category-interface";
 import { AuthContext } from "@/contexts/AuthContext";
+import Link from "next/link";
+import Head from "next/head";
 
 export default function CourseLanding() {
   const { isLoggedIn } = React.useContext(AuthContext);
-  const [courses, setCourses] = useState<Course[]>([]);
-  useEffect(() => {
-    CourseService.getAllForVisitor({
-      page: 1,
-      limit: 7,
-    })
-      .then((response) => {
-        setCourses(response.data.data);
-      })
-      .catch((error) => console.log(error));
-  }, []);
-
-  const [categories, setCategories] = useState<Category[]>([]);
-  useEffect(() => {
-    CategoryService.getAll()
-      .then((response) => {
-        setCategories(response.data.data);
-      })
-      .catch((error) => console.log(error));
-  }, []);
-  const [categorySelected, setCategorySelected] = useState<number[]>([]);
-  const handleCategoryClicked = (id: number) => {
-    setCategorySelected([id]);
-  };
-
-  const search = (categorySelected: number[] | undefined) => {
-    CourseService.getAllForVisitor({
-      page: 1,
-      limit: 7,
-      categoryId: categorySelected,
-    })
-      .then((response) => {
-        setCourses(response.data.data);
-      })
-      .catch((error) => console.log(error));
-  };
-
-  useEffect(() => {
-    const delayDebounceFn = setTimeout(() => {
-      search(categorySelected);
-    }, 500);
-    return () => clearTimeout(delayDebounceFn);
-  }, [categorySelected]);
 
   return (
     <div>
-      {/* <Login_navbar />1 */}
+      <Head>
+        <title>ProLearn</title>
+      </Head>
       <Navbar isLoggedIn={isLoggedIn} />
       <div className="flex flex-row justify-between">
         <div className="flex flex-col justify-center">
@@ -69,22 +25,22 @@ export default function CourseLanding() {
             resources.
           </p>
           <div className="flex flex-row justify-start ml-14 mt-10">
-            <a
+            <Link
               href="/auth/register"
               className="inline-block w-auto h-16 text-xl px-4 py-5 
               leading-none border border-gray-300 shadow-xl text-black bg-white mt-4 lg:mt-0
               mr-12 ml-10 hover:transition ease-in-out hover:scale-110 duration-300"
             >
               Get Started
-            </a>
-            <a
+            </Link>
+            <Link
               href="/aboutUs"
               className="inline-block w-auto h-16 text-xl px-4 py-5 leading-none 
               border border-gray-300 shadow-xl text-black bg-gray-400 mt-4 lg:mt-0 mr-5
               hover:transition ease-in-out hover:scale-110 duration-300"
             >
               Learn More
-            </a>
+            </Link>
           </div>
         </div>
         <div className="flex justify-end ">

@@ -3,7 +3,8 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
 import Link from "@mui/material/Link";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { Grid, Typography } from "@mui/material";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
 import { useRouter } from "next/router";
 import Section from "@/interfaces/section-interface";
 import Category from "@/interfaces/category-interface";
@@ -15,13 +16,12 @@ import fileService from "@/services/file-service";
 import CategoryService from "@/services/category-service";
 import QuizSection from "@/components/userCourse/quizSection";
 import Course from "@/interfaces/course-interface";
-import { Button, IconButton, Icon } from "@material-ui/core";
+import Button from "@material-ui/core/Button";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import MenuIcon from '@mui/icons-material/Menu';
 import RatingModal from "@/components/rating";
-import StarIcon from '@mui/icons-material/Star';
-import RatingService from "@/services/rating-service";
+import Head from "next/head";
 
 const theme = createTheme();
 
@@ -183,6 +183,9 @@ export default function UserCourseDetail() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <main>
+        <Head>
+          <title>Course</title>
+        </Head>
         <Grid
           sx={{
             width: "100%",
@@ -329,7 +332,7 @@ export default function UserCourseDetail() {
                     quizContent.content.questions.length <= 0 && (
                       <div style={{ width: "70%", marginTop: "20px", margin: "auto" }} className="flex flex-col md:flex-row justify-between items-center bg-gray-200 p-4 rounded-lg shadow-md">
                         <div className="font-bold text-lg mb-2 md:mb-0 md:mr-2">
-                          Quiz's questions are not available
+                          {"Quiz\'s questions are not available"}
                         </div>
                       </div>
                     )}

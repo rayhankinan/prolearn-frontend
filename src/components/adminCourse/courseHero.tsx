@@ -1,5 +1,5 @@
 import React from "react";
-import { Breadcrumbs, Link, Typography } from "@material-ui/core";
+import Typography from "@mui/material/Typography";
 
 type Props = {
   title: string;

@@ -7,17 +7,21 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Modal from "@mui/material/Modal";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { TextField } from "@mui/material";
+import TextField from "@mui/material/TextField";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import { InputAdornment } from "@material-ui/core";
+import InputAdornment from "@mui/material/InputAdornment";
 import userService from "@/services/user-service";
-import { PersonOutlined, Visibility, VisibilityOff } from "@mui/icons-material";
+import PersonOutlined from "@mui/icons-material/PersonOutlined";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useRouter } from "next/router";
 import ModalFailed from "@/pages/user/modalFailed";
 import ModalSuccess from "@/pages/user/modalSucess";
 import { AuthContext } from "@/contexts/AuthContext";
 import Image from "next/image";
-import { IconButton } from "@mui/material";
+import Link from "next/link";
+import IconButton from "@mui/material/IconButton";
+import Head from "next/head";
 
 // create login page
 const theme = createTheme();
@@ -99,6 +103,9 @@ export default function Login() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
+      <Head>
+        <title>Login</title>
+      </Head>
       <Grid container spacing={1}>
         <Grid item xs={12} sm={6}>
           <Container component="main" maxWidth="xl">
@@ -110,7 +117,9 @@ export default function Login() {
                 alignItems: "center",
               }}
             >
-              <Image src="/logo.png" alt="Logo" className="h-12 mt-5 mb-10" width={250} height={61} />
+              <a href="/">
+                <Image src="/logo.png" alt="Logo" className="h-12 mt-5 mb-10" width={250} height={61} />
+              </a> 
               <Typography
                 component="h1"
                 variant="h4"
@@ -201,10 +210,10 @@ export default function Login() {
                 </Button>
               </Box>
               <div className="text-md font-medium">
-                Don't have an account?{" "} 
-                <a href="/auth/register" className="text-blue-700">
+                {"Don\'t have an account? "} 
+                <Link href="/auth/register" className="text-blue-700">
                   Register here
-                </a>
+                </Link>
               </div>
             </Box>
           </Container>
