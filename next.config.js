@@ -12,7 +12,7 @@ const nextConfig = {
   publicRuntimeConfig: {
     apiURL: process.env.API_HOSTNAME || "http://localhost/api",
   },
-  webpack: config => {
+  webpack: (config, options) => {
     const rule = config.module.rules
       .find(rule => rule.oneOf)
       .oneOf.find(
