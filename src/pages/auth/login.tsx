@@ -7,17 +7,19 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Modal from "@mui/material/Modal";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { TextField } from "@mui/material";
+import TextField from "@mui/material/TextField";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import { InputAdornment } from "@material-ui/core";
+import InputAdornment from "@mui/material/InputAdornment";
 import userService from "@/services/user-service";
-import { PersonOutlined, Visibility, VisibilityOff } from "@mui/icons-material";
+import PersonOutlined from "@mui/icons-material/PersonOutlined";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useRouter } from "next/router";
 import ModalFailed from "@/pages/user/modalFailed";
 import ModalSuccess from "@/pages/user/modalSucess";
 import { AuthContext } from "@/contexts/AuthContext";
 import Image from "next/image";
-import { IconButton } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
 
 // create login page
 const theme = createTheme();
