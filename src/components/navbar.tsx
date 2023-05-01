@@ -1,5 +1,6 @@
 import React from "react";
 import { AuthContext } from "@/contexts/AuthContext";
+import Link from "next/link";
 
 const Navbar = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
   const { setIsLoggedIn } = React.useContext(AuthContext);
@@ -11,51 +12,51 @@ const Navbar = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
       </div>
       <div className="w-full block flex-grow lg:flex lg:items-center lg:w-auto justify-end">
         <div className="text-xl lg:flex-end space-x-16 mr-16">
-          <a
+          <Link
             href="/course"
             className="block mt-4 lg:inline-block lg:mt-0 text-black-200 hover:transition 
             ease-in-out hover:scale-110 duration-300"
           >
             Course
-          </a>
+          </Link>
           {
             isLoggedIn ? (
-              <a
+              <Link
                 href="/course/subscribed"
                 className="block mt-4 lg:inline-block lg:mt-0 text-black-200 hover:transition
                 ease-in-out hover:scale-110 duration-300"
               >
                 My Course
-              </a>
+              </Link>
             ) : (
-              <a
+              <Link
                 href="/auth/login"
                 className="block mt-4 lg:inline-block lg:mt-0 text-black-200 hover:transition
                 ease-in-out hover:scale-110 duration-300"
               >
                 My Course
-              </a>
+              </Link>
             )
           }
-          <a
+          <Link
             href="/compiler"
             className="block mt-4 lg:inline-block lg:mt-0 text-black-200 hover:transition 
             ease-in-out hover:scale-110 duration-300"
           >
             Compiler
-          </a>
-          <a
+          </Link>
+          <Link
             href="/aboutUs"
             className="block mt-4 lg:inline-block lg:mt-0 text-black-200 hover:transition 
             ease-in-out hover:scale-110 duration-300"
           >
             About Us
-          </a>
+          </Link>
         </div>
         <div className="mr-10">
           {isLoggedIn ? (
             <div>
-              <a
+              <Link
                 href="/auth/login"
                 className="inline-block w-32 h-auto text-xl px-4 py-2 leading-none border
               rounded-xl text-black bg-red-400 mt-4 lg:mt-0 mr-5 text-center align-middle
@@ -66,26 +67,26 @@ const Navbar = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
                 }}
               >
                 Logout
-              </a>
+              </Link>
             </div>
           ) : (
             <div className="mr-10">
-              <a
+              <Link
                 href="/auth/login"
                 className="inline-block w-32 h-auto text-xl px-4 py-2 leading-none border 
                 rounded-xl text-black bg-white mt-4 lg:mt-0 mr-12 ml-10 text-center align-middle 
                 hover:transition ease-in-out hover:scale-110 duration-300"
               >
                 Login
-              </a>
-              <a
+              </Link>
+              <Link
                 href="/auth/register"
                 className="inline-block w-32 h-auto text-xl px-4 py-2 leading-none border 
                 rounded-xl text-black bg-gray-400 mt-4 lg:mt-0 mr-5 text-center align-middle 
                 hover:transition ease-in-out hover:scale-110 duration-300"
               >
                 Register
-              </a>
+              </Link>
             </div>
           )}
         </div>

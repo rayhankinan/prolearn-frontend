@@ -59,7 +59,7 @@ const AboutUs = () => {
       <Navbar isLoggedIn={isLoggedIn} />
       <div className="text-center mt-10 font-mono">
         <h1 className="text-6xl font-bold ">ProLearn</h1>
-        <h2 className="text-4xl mt-10">We're Here to to</h2>
+        <h2 className="text-4xl mt-10">{"We\'re Here to"}</h2>
         <h2 className="text-4xl underline">Create a Professional</h2>
       </div>
 
@@ -135,7 +135,7 @@ const AboutUs = () => {
           Contact Info
         </h1>
         <h2 className="text-xl font-bold text-center mt-2 font-mono">
-          We'd love to hear from you. Please Contact Us With Our Social Media
+          {"We\'d love to hear from you. Please Contact Us With Our Social Media"}
         </h2>
         <div className="flex justify-center">
           <div className="flex flex-col mt-10">
