@@ -27,25 +27,26 @@ const nextConfig = {
         /[\\/]node_modules[\\/]monaco-editor[\\/]/
       ];
     }
-
-    config.plugins.push(
-      new MonacoWebpackPlugin({
-        languages: [
-          "json",
-          "markdown",
-          "css",
-          "typescript",
-          "javascript",
-          "html",
-          "graphql",
-          "python",
-          "scss",
-          "yaml"
-        ],
-        filename: "static/[name].worker.js",
-        outputFileTracing: false 
-      })
-    );
+    if(!OptionUnstyled.isServer) {
+      config.plugins.push(
+        new MonacoWebpackPlugin({
+          languages: [
+            "json",
+            "markdown",
+            "css",
+            "typescript",
+            "javascript",
+            "html",
+            "graphql",
+            "python",
+            "scss",
+            "yaml"
+          ],
+          filename: "static/[name].worker.js",
+          outputFileTracing: false 
+        })
+      );
+    }
     return config;
   }
 };
