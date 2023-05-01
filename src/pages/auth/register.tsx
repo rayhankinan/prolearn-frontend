@@ -19,6 +19,7 @@ import React, { useState } from "react";
 import ModalFailed from "../user/modalFailed";
 import ModalSuccess from "../user/modalSucess";
 import Image from "next/image";
+import Link from "next/link";
 import Head from "next/head";
 
 const theme = createTheme();
@@ -265,9 +266,9 @@ export default function Register() {
               </Box>
               <div className="text-md font-medium">
                 Already have an account?{" "}
-                <a href="/auth/login" className="text-blue-700">
+                <Link href="/auth/login" className="text-blue-700">
                   Login here
-                </a>
+                </Link>
               </div>
             </Box>
           </Container>

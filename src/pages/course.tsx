@@ -72,7 +72,7 @@ export default function Courses() {
         difficulty: difficultyList.includes(difficulty.toLowerCase())
           ? difficulty.toLowerCase()
           : undefined,
-        categoryId: selected,
+        categoryIDs: selected,
       })
       .then((response) => {
         setCourses(response.data.data);
@@ -88,7 +88,7 @@ export default function Courses() {
         difficulty: difficultyList.includes(difficulty.toLowerCase())
           ? difficulty.toLowerCase()
           : undefined,
-        categoryId: selected,
+        categoryIDs: selected,
       })
       .then((response) => {
         setCourses(response.data.data);
@@ -103,7 +103,7 @@ export default function Courses() {
         difficulty: difficultyList.includes(difficulty.toLowerCase())
           ? difficulty.toLowerCase()
           : undefined,
-        categoryId: selected,
+        categoryIDs: selected,
         subscribed: true,
       })
       .then((response) => {
