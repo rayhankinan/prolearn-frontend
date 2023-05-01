@@ -1,63 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
-import CourseService from "@/services/course-service";
-import CategoryService from "@/services/category-service";
-import Course from "@/interfaces/course-interface";
-import Category from "@/interfaces/category-interface";
 import { AuthContext } from "@/contexts/AuthContext";
 import Link from "next/link";
 import Head from "next/head";
 
 export default function CourseLanding() {
   const { isLoggedIn } = React.useContext(AuthContext);
-  const [courses, setCourses] = useState<Course[]>([]);
-  useEffect(() => {
-    CourseService.getAllForVisitor({
-      page: 1,
-      limit: 7,
-    })
-      .then((response) => {
-        setCourses(response.data.data);
-      })
-      .catch((error) => console.log(error));
-  }, []);
-
-  const [categories, setCategories] = useState<Category[]>([]);
-  useEffect(() => {
-    CategoryService.getAll()
-      .then((response) => {
-        setCategories(response.data.data);
-      })
-      .catch((error) => console.log(error));
-  }, []);
-  const [categorySelected, setCategorySelected] = useState<number[]>([]);
-  const handleCategoryClicked = (id: number) => {
-    setCategorySelected([id]);
-  };
-
-  const search = (categorySelected: number[] | undefined) => {
-    CourseService.getAllForVisitor({
-      page: 1,
-      limit: 7,
-      categoryId: categorySelected,
-    })
-      .then((response) => {
-        setCourses(response.data.data);
-      })
-      .catch((error) => console.log(error));
-  };
-
-  useEffect(() => {
-    const delayDebounceFn = setTimeout(() => {
-      search(categorySelected);
-    }, 500);
-    return () => clearTimeout(delayDebounceFn);
-  }, [categorySelected]);
 
   return (
     <div>
-      {/* <Login_navbar />1 */}
       <Head>
         <title>ProLearn</title>
       </Head>
