@@ -35,7 +35,7 @@ const ourTeam = [
   {
     name: "Louis Yanggara",
     role: "Frontend Developer",
-    image: "../test-team.png",
+    image: "../louis.jpg",
   },
 ];
 
