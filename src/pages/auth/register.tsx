@@ -110,8 +110,11 @@ export default function Register() {
         router.push("/auth/login");
       })
       .catch((error) => {
-
-        setErrorMessage("Error: Please try another username" + error.message);
+        if (error.response.status === 400) {
+          setErrorMessage("Error: Please try another username");
+        } else {
+          setErrorMessage("Error: " + error.message);
+        }
         setModalOpen(true);
       });
   };
