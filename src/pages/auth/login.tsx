@@ -20,7 +20,7 @@ import ModalSuccess from "@/pages/user/modalSucess";
 import { AuthContext } from "@/contexts/AuthContext";
 import Image from "next/image";
 import Link from "next/link";
-import { IconButton } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
 import Head from "next/head";
 
 // create login page
