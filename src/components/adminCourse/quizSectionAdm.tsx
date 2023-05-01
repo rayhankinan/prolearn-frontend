@@ -5,7 +5,8 @@ import dynamic from "next/dynamic";
 import "react-quill/dist/quill.snow.css";
 import sectionService from "@/services/section-service";
 import EditIcon from '@mui/icons-material/Edit';
-import { Button, IconButton } from "@material-ui/core";
+import Button from "@material-ui/core/Button";
+import IconButton from "@material-ui/core/IconButton";
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 
@@ -247,7 +248,7 @@ const QuizSectionAdm = ({
                   <div className="flex flex-col w-4/5 mt-1">
                     {questions.content.questions[currentQuestion].options.map(
                       (answer, index) => (
-                        <div className="flex flex-row mt-5">
+                        <div className="flex flex-row mt-5" key = {index}>
                           <div style={{ borderRight: '3px solid gray' }} className="flex w-24">
                             <div>
                               <div style={{ color: "gray" }} className="text-lg font-medium">
@@ -327,7 +328,7 @@ const QuizSectionAdm = ({
           ) : (
             <div className="flex flex-col justify-center items-center mt-2">
               <p className="text-2xl font-semibold">
-                There aren't any questions in this quiz.
+                {"There aren\'t any questions in this quiz."}
               </p>
               <div className="w-fit mt-3 mb-3">
                   <Button

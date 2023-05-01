@@ -10,6 +10,7 @@ import Navbar from "@/components/navbar";
 import CodeSubmit from "@/interfaces/code-submit-interface";
 import jobsService from "@/services/jobs-service";
 import { AuthContext } from "@/contexts/AuthContext";
+import Head from "next/head";
 
 const languages: {
   [key: string]: string;
@@ -90,6 +91,9 @@ const Compiler = () => {
   return (
     <div className="flex flex-col h-screen">
       <Navbar isLoggedIn={isLoggedIn} />
+      <Head>
+        <title>Online Compiler</title>
+      </Head>
       <h1 className="text-3xl font-bold mt-6 text-center font-mono mb-6">
         Online Compiler
       </h1>

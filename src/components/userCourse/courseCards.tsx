@@ -1,5 +1,6 @@
 import React from "react";
-import { Grid, Typography } from "@material-ui/core";
+import Grid from "@material-ui/core/Grid";
+import Typography from "@material-ui/core/Typography";
 import Course from "@/interfaces/course-interface";
 import CourseCard from "@/components/userCourse/courseCard";
 import SubscribedCard from "@/components/userCourse/subscribedCard";

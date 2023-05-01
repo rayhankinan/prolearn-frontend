@@ -1,5 +1,6 @@
 import React, { ChangeEvent, useState, useEffect } from "react";
-import { Grid, TextField } from "@material-ui/core";
+import Grid from "@material-ui/core/Grid";
+import TextField from "@material-ui/core/TextField";
 import Section from "@/interfaces/section-interface";
 import dynamic from "next/dynamic";
 import SectionService from "@/services/section-service";

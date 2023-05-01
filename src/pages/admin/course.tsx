@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
-import { Pagination } from "@mui/material";
+import Pagination from "@mui/material/Pagination";
 import CssBaseline from "@mui/material/CssBaseline";
 import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
 import Link from "@mui/material/Link";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import SearchBar from "@/components/adminCourse/search";
@@ -15,11 +13,11 @@ import CourseService from "@/services/course-service";
 import CategoryService from "@/services/category-service";
 import Course from "@/interfaces/course-interface";
 import Category from "@/interfaces/category-interface";
-import FilterBar from "@/components/adminCourse/filterBar";
 import { useRouter } from "next/router";
 import CourseCard from "@/components/adminCourse/courseCard";
 import Hero from "@/components/adminCourse/courseHero";
 import Sidebar from "@/components/userCourse/courseSidebar";
+import Head from "next/head";
 
 const theme = createTheme();
 
@@ -223,6 +221,9 @@ export default function Album() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
+      <Head>
+        <title>Admin | Courses</title>
+      </Head>
       <main>
       <Hero
           title="Edit Courses"

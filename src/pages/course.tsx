@@ -5,10 +5,11 @@ import CourseCards from "@/components/userCourse/courseCards";
 import Course from "@/interfaces/course-interface";
 import CourseService from "@/services/course-service";
 import SearchBar from "@/components/adminCourse/search";
-import { Grid } from "@mui/material";
-import { Pagination } from "@mui/material";
+import Grid from "@mui/material/Grid";
+import Pagination from "@mui/material/Pagination";
 import Navbar from "@/components/navbar";
 import { AuthContext } from "@/contexts/AuthContext";
+import Head from "next/head";
 
 export default function Courses() {
   const [courses, setCourses] = useState<Course[]>([]);
@@ -21,22 +22,34 @@ export default function Courses() {
   const { isLoggedIn } = React.useContext(AuthContext);
 
   useEffect(() => {
-    CourseService.getAll({
-      page: page,
-      limit: perPage,
-      title: search,
-    })
+    if (!isLoggedIn) {
+      CourseService.getAllForVisitor({
+        page: page,
+        limit: perPage,
+        title: search,
+      })
       .then((response) => {
         setCourses(response.data.data);
         setCount(response.data.meta.totalPage);
       })
       .catch((error) => console.log(error));
-    CourseService.getAll({
-      page: page,
-      limit: perPage,
-      title: search,
-      subscribed: true,
-    })
+    } else {
+      CourseService.getAll({
+        page: page,
+        limit: perPage,
+        title: search,
+      })
+      .then((response) => {
+        setCourses(response.data.data);
+        setCount(response.data.meta.totalPage);
+      })
+      .catch((error) => console.log(error));
+      CourseService.getAll({
+        page: page,
+        limit: perPage,
+        title: search,
+        subscribed: true,
+      })
       .then((response) => {
         const subscribedCourseId = response.data.data.map(
           (course: Course) => course.id
@@ -44,37 +57,55 @@ export default function Courses() {
         setSubscribedCourses(subscribedCourseId);
       })
       .catch((error) => console.log(error));
+    }
   }, [page, perPage]);
 
   const [difficulty, setDifficulty] = useState("All Difficulty");
   const [selected, setSelected] = useState<number[] | undefined>(undefined);
   const difficultyList = ["beginner", "intermediate", "advanced"];
   const searchQuery = (search: string) => {
-    CourseService.getAll({
-      page: page,
-      limit: perPage,
-      title: search,
-      difficulty: difficultyList.includes(difficulty.toLowerCase())
-        ? difficulty.toLowerCase()
-        : undefined,
-      categoryIDs: selected,
-    })
+    if (!isLoggedIn) {
+      CourseService.getAllForVisitor({
+        page: page,
+        limit: perPage,
+        title: search,
+        difficulty: difficultyList.includes(difficulty.toLowerCase())
+          ? difficulty.toLowerCase()
+          : undefined,
+        categoryIDs: selected,
+      })
       .then((response) => {
         setCourses(response.data.data);
         setPage(1);
         setCount(response.data.meta.totalPage);
       })
       .catch((error) => console.log(error));
-    CourseService.getAll({
-      page: page,
-      limit: perPage,
-      title: search,
-      difficulty: difficultyList.includes(difficulty.toLowerCase())
-        ? difficulty.toLowerCase()
-        : undefined,
-      categoryIDs: selected,
-      subscribed: true,
-    })
+    } else {
+      CourseService.getAll({
+        page: page,
+        limit: perPage,
+        title: search,
+        difficulty: difficultyList.includes(difficulty.toLowerCase())
+          ? difficulty.toLowerCase()
+          : undefined,
+        categoryIDs: selected,
+      })
+      .then((response) => {
+        setCourses(response.data.data);
+        setPage(1);
+        setCount(response.data.meta.totalPage);
+      })
+      .catch((error) => console.log(error));
+      CourseService.getAll({
+        page: page,
+        limit: perPage,
+        title: search,
+        difficulty: difficultyList.includes(difficulty.toLowerCase())
+          ? difficulty.toLowerCase()
+          : undefined,
+        categoryIDs: selected,
+        subscribed: true,
+      })
       .then((response) => {
         const subscribedCourseId = response.data.data.map(
           (course: Course) => course.id
@@ -82,6 +113,7 @@ export default function Courses() {
         setSubscribedCourses(subscribedCourseId);
       })
       .catch((error) => console.log(error));
+    }
   };
 
   useEffect(() => {
@@ -101,6 +133,9 @@ export default function Courses() {
     <>
       <Navbar isLoggedIn={isLoggedIn} />
       <div className="container mx-auto justify-center custom-Poppins ">
+        <Head>
+          <title>Courses</title>
+        </Head>
         <Hero
           title="Courses"
           breadcrumbs={[
