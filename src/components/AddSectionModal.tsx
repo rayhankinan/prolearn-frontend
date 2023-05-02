@@ -177,7 +177,13 @@ const AddSectionModal = ({ open, onClose, material, courseId }: AddSectionModalP
   };
 
   const handleSave = () => {
-    const html = document.querySelector(".ql-editor")?.innerHTML;
+    let html = document.querySelector(".ql-editor")?.innerHTML;
+    if (html?.includes("<iframe")) {
+      html = html.replace(
+        '<iframe',
+        '<iframe style="width: 1280px; height: 720px;'
+      );
+    }
 
     const formData = new FormData();
 

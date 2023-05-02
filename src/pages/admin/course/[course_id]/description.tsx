@@ -230,19 +230,20 @@ export default function CourseDetailAdmin() {
                               backgroundColor: "#e5e7eb",
                               borderRadius: "5px",
                             },
-                            textDecoration: "none"
+                            textDecoration: "none",
+                            width: "230px"
                           }}
                         >
                           {material.id == material_idInt && (
                             <Link href={`/admin/course/${course_id}/${material.id}`} style={{ color: "black", textDecoration: "none"}}>
-                              <Typography variant="subtitle1" sx={{ fontWeight: "bold", ml: 2, mr: 1}}>
+                              <Typography variant="subtitle1" sx={{ fontWeight: "bold", ml: 2, mr: 1, textOverflow: "ellipsis", overflow: "hidden", width: "150px" }}>
                                 {material.title}
                               </Typography>
                             </Link>
                           )}
                           {material.id != material_idInt && (
                             <Link href={`/admin/course/${course_id}/${material.id}`} style={{ color: "black", textDecoration: "none"}}>
-                              <Typography variant="subtitle1" sx={{ ml: 2, mr: 1 }}>{material.title}</Typography>
+                              <Typography variant="subtitle1" sx={{ ml: 2, mr: 1, textOverflow: "ellipsis", overflow: "hidden", width: "150px" }}>{material.title}</Typography>
                             </Link>
                           )}
                           {showEditButton && (

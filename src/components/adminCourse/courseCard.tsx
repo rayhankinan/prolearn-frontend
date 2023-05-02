@@ -95,7 +95,7 @@ const CourseCard = ({ course, handleEdit, handleDelete }: CourseCardProps) => {
             className="font-bold custom-Montserrat-Bold "
             sx={{
               fontWeight: "bold",
-              fontSize: "1.5rem",
+              fontSize: "1.3rem",
               mb: "1rem",
               maxHeight: 64,
               overflow: "hidden",
