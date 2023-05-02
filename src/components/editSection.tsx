@@ -77,8 +77,13 @@ export const EditSectionModal = ({ open, onClose, section }: EditSectionProps) =
     //update
     if (section != null) {
       if (section.id != null && file_id != null) {
-        const html = document.querySelector(".ql-editor")?.innerHTML;
-
+        let html = document.querySelector(".ql-editor")?.innerHTML;
+        if (html?.includes("<iframe")) {
+          html = html.replace(
+            '<iframe',
+            '<iframe style="width: 1280px; height: 720px;'
+          );
+        }
         const formData = new FormData();
         formData.append("courseId", course_id);
         formData.append("title", name);
