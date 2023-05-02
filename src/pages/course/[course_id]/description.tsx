@@ -205,14 +205,14 @@ export default function UserCourseDetail() {
                         >
                           {material.id == material_idInt && (
                             <Link href={`/course/${course_id}/${material.id}`} style={{ color: "black", textDecoration: "none"}}>
-                              <Typography variant="subtitle1" sx={{ fontWeight: "bold", ml: 2, mr: 1}}>
+                              <Typography variant="subtitle1" sx={{ fontWeight: "bold", ml: 2, mr: 1, textOverflow: "ellipsis", overflow: "hidden", width: "200px" }}>
                                 {material.title}
                               </Typography>
                             </Link>
                           )}
                           {material.id != material_idInt && (
                             <Link href={`/course/${course_id}/${material.id}`} style={{ color: "black", textDecoration: "none"}}>
-                              <Typography variant="subtitle1" sx={{ ml: 2, mr: 1 }}>{material.title}</Typography>
+                              <Typography variant="subtitle1" sx={{ ml: 2, mr: 1, textOverflow: "ellipsis", overflow: "hidden", width: "200px" }}>{material.title}</Typography>
                             </Link>
                           )}
                         </Box>
