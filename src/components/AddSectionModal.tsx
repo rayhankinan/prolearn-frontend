@@ -1,5 +1,7 @@
 import React, { ChangeEvent, useState } from "react";
-import { Button, Container, Grid, TextField } from "@material-ui/core";
+import Button from "@material-ui/core/Button";
+import Grid from "@material-ui/core/Grid";
+import TextField from "@material-ui/core/TextField";
 import Section from "@/interfaces/section-interface";
 import dynamic from "next/dynamic";
 import SectionService from "@/services/section-service";
@@ -175,7 +177,13 @@ const AddSectionModal = ({ open, onClose, material, courseId }: AddSectionModalP
   };
 
   const handleSave = () => {
-    const html = document.querySelector(".ql-editor")?.innerHTML;
+    let html = document.querySelector(".ql-editor")?.innerHTML;
+    if (html?.includes("<iframe")) {
+      html = html.replace(
+        '<iframe',
+        '<iframe style="width: 1280px; height: 720px;'
+      );
+    }
 
     const formData = new FormData();
 

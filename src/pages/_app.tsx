@@ -16,23 +16,6 @@ export default function App({ Component, pageProps }: AppProps) {
       return response;
     },
     (error) => {
-      if (error.response && error.response.status === 401) {
-        const token = localStorage.getItem("token");
-        if (token) {
-          localStorage.removeItem("token");
-          if (!showAlert) {
-            setShowAlert(true);
-            alert("Your session has expired. Please login again");
-            router.replace("/auth/login").then(() => setShowAlert(false));
-          }
-        } else {
-            if (!showAlert) {
-              setShowAlert(true);
-              alert("You are not authorized to access this page. Please login first");
-              router.replace("/auth/login").then(() => setShowAlert(false));
-            };
-        }
-      }
       return Promise.reject(error);
     }
   );

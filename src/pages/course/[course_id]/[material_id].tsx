@@ -3,7 +3,8 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
 import Link from "@mui/material/Link";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { Grid, Typography } from "@mui/material";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
 import { useRouter } from "next/router";
 import Section from "@/interfaces/section-interface";
 import Category from "@/interfaces/category-interface";
@@ -20,6 +21,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import MenuIcon from '@mui/icons-material/Menu';
 import RatingModal from "@/components/rating";
+import Head from "next/head";
 
 const theme = createTheme();
 
@@ -181,6 +183,9 @@ export default function UserCourseDetail() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <main>
+        <Head>
+          <title>Course</title>
+        </Head>
         <Grid
           sx={{
             width: "100%",
@@ -199,12 +204,12 @@ export default function UserCourseDetail() {
             sx={{ padding: "25px" }}
             display={"flex"}
           >
-            <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Box sx={{ display: "flex", alignItems: "center", flexGrow: 1 }}>
               <Button
                 onClick={() => router.push("/course")}
-                variant="text"
-                style={{ marginRight: "10px", textAlign: "left"}}
-                // sx={{ textAlign: "left" }}
+                variant="contained"
+                color="primary"
+                style={{textAlign: "left" }}
               >
                 <ArrowBackIcon sx={{ marginRight: "5px" }} />
                 Back to Course List
@@ -214,16 +219,26 @@ export default function UserCourseDetail() {
             <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", flexGrow: 1 }}>
               <Typography
                 variant="h6"
-                sx={{ textAlign: "center", fontWeight: "bold", marginRight: "210px"}}
+                sx={{ textAlign: "center", fontWeight: "bold", marginRight: "30px" }}
               >
                 {course?.title}
               </Typography>
             </Box>
-            <Box sx={{ display: "flex", alignItems: "center" }}></Box>
 
+            <Box sx={{ display: "flex", alignItems: "center", flexGrow: 1, justifyContent: "flex-end" }}>
+              <Button
+                variant="contained"
+                color="primary"
+                style={{ marginRight: "10px", textAlign: "right" }}
+                onClick={() => router.push("/compiler")}
+              >
+                Online Compiler
+              </Button>
+            </Box>
           </Grid>
           <hr className="border-t-2 border-black border-opacity-20 " />
         </Grid>
+
         <Grid sx={{ width: "100%", margin: "0 auto", marginTop: "120px", marginBottom: "150px"}}>
           <Grid item xs={3} sx={{marginBottom: "30px", marginLeft: "15px"}}>
             <Button 
@@ -277,14 +292,14 @@ export default function UserCourseDetail() {
                         >
                           {material.id == material_idInt && (
                             <Link href={`/course/${course_id}/${material.id}`} style={{ color: "black", textDecoration: "none"}}>
-                              <Typography variant="subtitle1" sx={{ fontWeight: "bold", ml: 2, mr: 1}}>
+                              <Typography variant="subtitle1" sx={{ fontWeight: "bold", ml: 2, mr: 1, textOverflow: "ellipsis", overflow: "hidden", width: "200px" }}>
                                 {material.title}
                               </Typography>
                             </Link>
                           )}
                           {material.id != material_idInt && (
                             <Link href={`/course/${course_id}/${material.id}`} style={{ color: "black", textDecoration: "none"}}>
-                              <Typography variant="subtitle1" sx={{ ml: 2, mr: 1 }}>{material.title}</Typography>
+                              <Typography variant="subtitle1" sx={{ ml: 2, mr: 1, textOverflow: "ellipsis", overflow: "hidden", width: "200px" }}>{material.title}</Typography>
                             </Link>
                           )}
                         </Box>
@@ -299,7 +314,6 @@ export default function UserCourseDetail() {
                   {fileString && !quizStarted && (
                     <div style={{
                       display: "flex",
-                      alignItems: "center",
                       margin: "0 200px",
                       textAlign: "justify",
                       flexWrap: "wrap",
@@ -327,7 +341,7 @@ export default function UserCourseDetail() {
                     quizContent.content.questions.length <= 0 && (
                       <div style={{ width: "70%", marginTop: "20px", margin: "auto" }} className="flex flex-col md:flex-row justify-between items-center bg-gray-200 p-4 rounded-lg shadow-md">
                         <div className="font-bold text-lg mb-2 md:mb-0 md:mr-2">
-                          Quiz's questions are not available
+                          {"Quiz\'s questions are not available"}
                         </div>
                       </div>
                     )}

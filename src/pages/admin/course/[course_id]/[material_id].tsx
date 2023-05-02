@@ -4,7 +4,9 @@ import Box from "@mui/material/Box";
 import Link from "@mui/material/Link";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import AddSectionModal from "@/components/AddSectionModal";
-import { Button, Grid, Typography } from "@mui/material";
+import Button from "@mui/material/Button";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
 import { useRouter } from "next/router";
 import CourseService from "@/services/course-service";
 import CategoryService from "@/services/category-service";
@@ -19,6 +21,7 @@ import QuizSectionAdm from "@/components/adminCourse/quizSectionAdm";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import MenuIcon from '@mui/icons-material/Menu';
 import { EditSectionModal } from "@/components/editSection";
+import Head from "next/head";
 
 const theme = createTheme();
 
@@ -146,6 +149,9 @@ export default function CourseDetailAdmin() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
+      <Head>
+        <title>Course Detail</title>
+      </Head>
       <main>
         {/* Header, contains logo and page name */}
         <Grid sx={{ width: "100%", margin: "0 auto", top: 0, zIndex: 1}}>
@@ -269,19 +275,21 @@ export default function CourseDetailAdmin() {
                               backgroundColor: "#e5e7eb",
                               borderRadius: "5px",
                             },
-                            textDecoration: "none"
+                            textDecoration: "none",
+                            width: "230px"
+
                           }}
                         >
                           {material.id == material_idInt && (
                             <Link href={`/admin/course/${course_id}/${material.id}`} style={{ color: "black", textDecoration: "none"}}>
-                              <Typography variant="subtitle1" sx={{ fontWeight: "bold", ml: 2, mr: 1}}>
+                              <Typography variant="subtitle1" sx={{ fontWeight: "bold", ml: 2, mr: 1, textOverflow: "ellipsis", overflow: "hidden", width: "150px" }}>
                                 {material.title}
                               </Typography>
                             </Link>
                           )}
                           {material.id != material_idInt && (
                             <Link href={`/admin/course/${course_id}/${material.id}`} style={{ color: "black", textDecoration: "none"}}>
-                              <Typography variant="subtitle1" sx={{ ml: 2, mr: 1 }}>{material.title}</Typography>
+                              <Typography variant="subtitle1" sx={{ ml: 2, mr: 1, textOverflow: "ellipsis", overflow: "hidden", width: "150px" }}>{material.title}</Typography>
                             </Link>
                           )}
                           {showEditButton && (

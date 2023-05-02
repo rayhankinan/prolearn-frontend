@@ -5,6 +5,7 @@ import Swiper from "swiper";
 import { AuthContext } from "@/contexts/AuthContext";
 import "swiper/swiper-bundle.css";
 import { FaFacebook, FaTwitter, FaLinkedin, FaInstagram } from "react-icons/fa";
+import Head from "next/head";
 
 const ourTeam = [
   {
@@ -35,7 +36,7 @@ const ourTeam = [
   {
     name: "Louis Yanggara",
     role: "Frontend Developer",
-    image: "../test-team.png",
+    image: "../louis.jpg",
   },
 ];
 
@@ -57,9 +58,12 @@ const AboutUs = () => {
   return (
     <div>
       <Navbar isLoggedIn={isLoggedIn} />
+      <Head>
+        <title>About Us</title>
+      </Head>
       <div className="text-center mt-10 font-mono">
         <h1 className="text-6xl font-bold ">ProLearn</h1>
-        <h2 className="text-4xl mt-10">We're Here to to</h2>
+        <h2 className="text-4xl mt-10">{"We\'re Here to"}</h2>
         <h2 className="text-4xl underline">Create a Professional</h2>
       </div>
 
@@ -135,7 +139,7 @@ const AboutUs = () => {
           Contact Info
         </h1>
         <h2 className="text-xl font-bold text-center mt-2 font-mono">
-          We'd love to hear from you. Please Contact Us With Our Social Media
+          {"We\'d love to hear from you. Please Contact Us With Our Social Media"}
         </h2>
         <div className="flex justify-center">
           <div className="flex flex-col mt-10">

@@ -1,16 +1,18 @@
 import Image from "next/image";
 import Course from "@/interfaces/course-interface";
-import { Chip } from "@mui/material";
+import Chip from "@mui/material/Chip";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { Card, CardContent, CardActions, Typography } from "@mui/material";
-import { Button, Skeleton } from "@mui/material";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardActions from "@mui/material/CardActions";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import Skeleton from "@mui/material/Skeleton";
 import userService from "@/services/user-service";
 import fileService from "@/services/file-service";
-import { AuthContext } from "@/contexts/AuthContext";
 import React from "react";
 import StarIcon from "@mui/icons-material/Star";
-import courseService from "@/services/course-service";
 
 interface CourseCardProps {
   course: Course;

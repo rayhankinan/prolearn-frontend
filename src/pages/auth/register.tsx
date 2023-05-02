@@ -19,6 +19,8 @@ import React, { useState } from "react";
 import ModalFailed from "../user/modalFailed";
 import ModalSuccess from "../user/modalSucess";
 import Image from "next/image";
+import Link from "next/link";
+import Head from "next/head";
 
 const theme = createTheme();
 
@@ -122,6 +124,9 @@ export default function Register() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
+      <Head>
+        <title>Register</title>
+      </Head>
       <Grid container spacing={1}>
         <Grid item xs={12} sm={6}>
           <Container component="main" maxWidth="xl">
@@ -133,13 +138,9 @@ export default function Register() {
                 alignItems: "center",
               }}
             >
-              <Image
-                src="/logo.png"
-                alt="Logo"
-                className="h-12 mt-5 mb-5"
-                width={250}
-                height={61}
-              />
+              <a href="/">
+                <Image src="/logo.png" alt="Logo" className="h-12 mt-5 mb-5" width={250} height={61} />
+              </a> 
               <Typography
                 component="h1"
                 variant="h4"
@@ -265,9 +266,9 @@ export default function Register() {
               </Box>
               <div className="text-md font-medium">
                 Already have an account?{" "}
-                <a href="/auth/login" className="text-blue-700">
+                <Link href="/auth/login" className="text-blue-700">
                   Login here
-                </a>
+                </Link>
               </div>
             </Box>
           </Container>
